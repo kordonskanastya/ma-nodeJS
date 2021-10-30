@@ -1,1 +1,1 @@
-Repo for Masters Academy homework
+Repo for Masters Academy homeworks
