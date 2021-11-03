@@ -10,5 +10,5 @@
   {"item":"pineapple","type":"Red Spanish","quantity":3,"pricePerItem":"$9,99"},
   {"item":"watermelon","type":"Millionaire","quantity":2,"pricePerItem":"$7"},
   {"item":"orange","type":"Tangerine","weight":4,"pricePerKilo":"$4,99"},
-  {"item":"apple","type":"Jazz","weight":4,"pricePerKilo":"$5"},
+  {"item":"apple","type":"Jazz","weight":4,"pricePerKilo":"$5"}
 ]
