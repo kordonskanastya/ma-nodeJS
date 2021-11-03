@@ -1,6 +1,9 @@
 const data = require('./data.json');
-const {helper1:searchFruitByItem, helper2:mostExpensiveFruit, helper3:addKeyPrice} =
- require('./helpers/index');
+const {
+  helper1:searchFruitByItem,
+  helper2:mostExpensiveFruit,
+  helper3:addKeyPrice
+} = require('./helpers/index');
 
 const boot = (goodsArray = data) => {
   console.log(addKeyPrice(goodsArray));
