@@ -1,21 +1,22 @@
 const data = require('../data.json');
 
+const compare = (a, b) => {
+  const pricePerQuantityA = a.pricePerKilo || a.pricePerItem;
+  const weightOfFruitA = a.weight || a.quantity;
+  const priceA = pricePerQuantityA.replace(',', '.').slice(1)
+    * weightOfFruitA;
+
+  const pricePerQuantityB = b.pricePerKilo || b.pricePerItem;
+  const weightOfFruitB = b.weight || b.quantity;
+  const priceB = pricePerQuantityB.replace(',', '.').slice(1)
+    * weightOfFruitB;
+
+  return priceA - priceB;
+};
+
 const mostExpensiveFruit = (goodsArray = data) => {
-    const compare = (a, b) => {
-      const firstPrice = a[Object.keys(a)[3]]
-        .replace(/,/gi, '.').slice(1)
-      *
-      a[Object.keys(a)[2]];
-      const secondPrice = b[Object.keys(b)[3]]
-        .replace(/,/gi, '.').slice(1)
-      *
-      b[Object.keys(b)[2]];
-      return firstPrice - secondPrice;
-    };
   const filteredArray = goodsArray.sort(compare);
   return filteredArray[filteredArray.length - 1];
 };
-
-console.log(mostExpensiveFruit());
 
 module.exports = mostExpensiveFruit;

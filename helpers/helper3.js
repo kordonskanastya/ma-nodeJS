@@ -1,14 +1,12 @@
-const addKeyPrice = (data) => {
-  const addStringPrice = (obj) => {
-    const price = obj[Object.keys(obj)[3]]
-        .replace(/,/gi, '.').slice(1)
-      *
-      obj[Object.keys(obj)[2]];
-    obj.price = price;
-    return obj;
-  };
-  return data.map(addStringPrice);
+const addTotalPriceOfFruit = (obj) => {
+  const pricePerQuantity = obj.pricePerKilo || obj.pricePerItem;
+  const weightOfFruit = obj.weight || obj.quantity;
+  const price = pricePerQuantity.replace(',', '.').slice(1)
+    *
+    weightOfFruit;
+  return { ...obj, price};;
 };
 
+const addKeyPrice = (data) => data.map(addTotalPriceOfFruit);
 
 module.exports = addKeyPrice;
