@@ -1,3 +1,4 @@
+const fs = require('fs');
 const data = require('./data.json');
 const {
   helper1:searchFruitByItem,
@@ -90,6 +91,23 @@ function postCommonprice(serverGoodsArray) {
   };
 }
 
+function postData(serverGoodsArray) {
+  if (!validator(serverGoodsArray)) {
+    return error();
+  }
+  console.log(serverGoodsArray);
+  fs.writeFile(`${__dirname}/data.json`, JSON.stringify(serverGoodsArray),
+    // eslint-disable-next-line consistent-return
+    (err) => {
+      if (err) return console.log(err);
+    });
+
+  return {
+    message: 'rewritten data.json',
+    code: 200,
+  };
+}
+
 function notFound() {
   return {
     code: 404,
@@ -105,5 +123,6 @@ module.exports = {
   getTopprice,
   postTopprice,
   getCommonprice,
-  postCommonprice
+  postCommonprice,
+  postData
 };

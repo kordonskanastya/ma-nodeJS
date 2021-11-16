@@ -47,6 +47,11 @@ function postCommonprice(req, res) {
   messageAndEnd(message, code, res);
 }
 
+function postData(req, res) {
+  const {message, code} = services.postData(JSON.parse(req.body));
+  messageAndEnd(message, code, res);
+}
+
 function notFound(req, res) {
   const { message, code } = services.notFound();
   res.statusCode = code;
@@ -62,5 +67,6 @@ module.exports = {
   getTopprice,
   postTopprice,
   getCommonprice,
-  postCommonprice
+  postCommonprice,
+  postData
 };

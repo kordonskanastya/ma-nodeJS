@@ -24,6 +24,9 @@ module.exports = (req, res) => {
   if (pathname === '/filter' && method === 'POST') {
     return controllers.postCommonprice(req, res);
   }
+  if (pathname === '/data' && method === 'POST') {
+    return controllers.postData(req, res);
+  }
 
 
   return controllers.notFound(req, res);
