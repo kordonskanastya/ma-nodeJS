@@ -28,29 +28,23 @@ function postFilter(req, res) {
 }
 
 function getTopprice(req, res) {
-  const {message, code} = services.getTopprice(req.params);
+  const {message, code} = services.getTopprice();
   messageAndEnd(message, code, res);
 }
 
 function postTopprice(req, res) {
-  const {message, code} = services.postTopprice(
-    req.params,
-    JSON.parse(req.body)
-    );
+  const {message, code} = services.postTopprice(JSON.parse(req.body));
     messageAndEnd(message, code, res);
 }
 
 function getCommonprice(req, res) {
-  const {message, code} = services.getCommonprice(req.params);
+  const {message, code} = services.getCommonprice();
   messageAndEnd(message, code, res);
 }
 
 function postCommonprice(req, res) {
-  const {message, code} = services.postCommonprice(
-    req.params,
-    JSON.parse(req.body)
-    );
-    messageAndEnd(message, code, res);
+  const {message, code} = services.postCommonprice(JSON.parse(req.body));
+  messageAndEnd(message, code, res);
 }
 
 function notFound(req, res) {

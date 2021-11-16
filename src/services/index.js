@@ -54,7 +54,7 @@ function postFilter(params, serverGoodsArray) {
   };
 }
 
-function getTopprice(params) {
+function getTopprice() {
   const goodsArray = data;
   return {
     message: mostExpensiveFruit(goodsArray),
@@ -62,7 +62,7 @@ function getTopprice(params) {
   };
 }
 
-function postTopprice(params, serverGoodsArray) {
+function postTopprice(serverGoodsArray) {
   if (!validator(serverGoodsArray)) {
     return error();
   }
@@ -72,7 +72,7 @@ function postTopprice(params, serverGoodsArray) {
   };
 }
 
-function getCommonprice(params) {
+function getCommonprice() {
   const goodsArray = data;
   return {
     message: addKeyPrice(goodsArray),
@@ -80,7 +80,7 @@ function getCommonprice(params) {
   };
 }
 
-function postCommonprice(params, serverGoodsArray) {
+function postCommonprice(serverGoodsArray) {
   if (!validator(serverGoodsArray)) {
     return error();
   }
