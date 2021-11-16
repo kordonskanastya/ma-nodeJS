@@ -7,13 +7,22 @@ module.exports = (req, res) => {
     return controllers.home(req, res);
   }
   if (pathname === '/filter' && method === 'GET') {
-    return controllers.filter(req, res);
+    return controllers.getFilter(req, res);
+  }
+  if (pathname === '/filter' && method === 'POST') {
+    return controllers.postFilter(req, res);
   }
   if (pathname === '/topprice' && method === 'GET') {
-    return controllers.topprice(req, res);
+    return controllers.getTopprice(req, res);
+  }
+  if (pathname === '/filter' && method === 'POST') {
+    return controllers.postTopprice(req, res);
   }
   if (pathname === '/commonprice' && method === 'GET') {
-    return controllers.commonprice(req, res);
+    return controllers.getCommonprice(req, res);
+  }
+  if (pathname === '/filter' && method === 'POST') {
+    return controllers.postCommonprice(req, res);
   }
 
 

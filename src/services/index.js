@@ -1,8 +1,9 @@
-// const data = require('./helpers/data.json');
+const data = require('./data.json');
 const {
   helper1:searchFruitByItem,
   helper2:mostExpensiveFruit,
-  helper3:addKeyPrice
+  helper3:addKeyPrice,
+  validator
 } = require('./helpers/index');
 
 function home() {
@@ -12,23 +13,79 @@ function home() {
   };
 }
 
-function filter() {
+function error() {
   return {
-    searchFruitByItem,
+    message: 'Error: no content',
+    code: 204,
+  };
+}
+
+function getFilter(params) {
+  const goodsArray = data;
+  let sortedArray = searchFruitByItem(goodsArray);
+  // eslint-disable-next-line no-restricted-syntax
+  for (const key of params.keys()) {
+    sortedArray = searchFruitByItem(sortedArray, key, params.get(key));
+  }
+   if (Object.keys(sortedArray).length === 0) {
+    return error();
+   }
+  return {
+    message: sortedArray,
     code: 200,
   };
 }
 
-function topprice() {
+function postFilter(params, serverGoodsArray) {
+  if (!validator(serverGoodsArray)) {
+    return error();
+  }
+  let sortedArray = searchFruitByItem(serverGoodsArray);
+  // eslint-disable-next-line no-restricted-syntax
+  for (const key of params.keys()) {
+    sortedArray = searchFruitByItem(sortedArray, key, params.get(key));
+  }
+   if (Object.keys(sortedArray).length === 0) {
+    return error();
+   }
   return {
-    mostExpensiveFruit,
+    message: sortedArray,
     code: 200,
   };
 }
 
-function commonprice() {
+function getTopprice(params) {
+  const goodsArray = data;
   return {
-    addKeyPrice,
+    message: mostExpensiveFruit(goodsArray),
+    code: 200,
+  };
+}
+
+function postTopprice(params, serverGoodsArray) {
+  if (!validator(serverGoodsArray)) {
+    return error();
+  }
+  return {
+    message: mostExpensiveFruit(serverGoodsArray),
+    code: 200,
+  };
+}
+
+function getCommonprice(params) {
+  const goodsArray = data;
+  return {
+    message: addKeyPrice(goodsArray),
+    code: 200,
+  };
+}
+
+function postCommonprice(params, serverGoodsArray) {
+  if (!validator(serverGoodsArray)) {
+    return error();
+  }
+  return {
+    message: addKeyPrice(serverGoodsArray),
     code: 200,
   };
 }
@@ -43,7 +100,10 @@ function notFound() {
 module.exports = {
   home,
   notFound,
-  filter,
-  topprice,
-  commonprice
+  getFilter,
+  postFilter,
+  getTopprice,
+  postTopprice,
+  getCommonprice,
+  postCommonprice
 };

@@ -1,5 +1,4 @@
 const services = require('../services');
-const data = require('../services/data.json');
 
 function home(req, res) {
   const { message, code } = services.home();
@@ -8,31 +7,50 @@ function home(req, res) {
   res.end();
 }
 
-function filter(req, res) {
-  // const { params } = req;
-  const {code, searchFruitByItem} = services.filter();
+function messageAndEnd(message, code, res) {
   res.setHeader('Content-Type', 'application/json');
-  // res.write(JSON.stringify(params));
-  // console.log(params);
-  res.write(JSON.stringify(searchFruitByItem(data)));
+  res.write(JSON.stringify(message));
   res.statusCode = code;
   res.end();
 }
 
-function topprice(req, res) {
-  const { code, mostExpensiveFruit } = services.topprice();
-  res.setHeader('Content-Type', 'application/json');
-  res.write(JSON.stringify(mostExpensiveFruit()));
-  res.statusCode = code;
-  res.end();
+function getFilter(req, res) {
+  const {message, code} = services.getFilter(req.params);
+  messageAndEnd(message, code, res);
 }
 
-function commonprice(req, res) {
-  const { code, addKeyPrice } = services.commonprice();
-  res.setHeader('Content-Type', 'application/json');
-  res.write(JSON.stringify(addKeyPrice(data)));
-  res.statusCode = code;
-  res.end();
+function postFilter(req, res) {
+  const {message, code} = services.postFilter(
+    req.params,
+    JSON.parse(req.body)
+    );
+  messageAndEnd(message, code, res);
+}
+
+function getTopprice(req, res) {
+  const {message, code} = services.getTopprice(req.params);
+  messageAndEnd(message, code, res);
+}
+
+function postTopprice(req, res) {
+  const {message, code} = services.postTopprice(
+    req.params,
+    JSON.parse(req.body)
+    );
+    messageAndEnd(message, code, res);
+}
+
+function getCommonprice(req, res) {
+  const {message, code} = services.getCommonprice(req.params);
+  messageAndEnd(message, code, res);
+}
+
+function postCommonprice(req, res) {
+  const {message, code} = services.postCommonprice(
+    req.params,
+    JSON.parse(req.body)
+    );
+    messageAndEnd(message, code, res);
 }
 
 function notFound(req, res) {
@@ -45,7 +63,10 @@ function notFound(req, res) {
 module.exports = {
   home,
   notFound,
-  filter,
-  topprice,
-  commonprice
+  getFilter,
+  postFilter,
+  getTopprice,
+  postTopprice,
+  getCommonprice,
+  postCommonprice
 };
