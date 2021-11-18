@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const data = require('../data.json');
+const statusCode = require('../statusCode');
 const {
   helper1:searchFruitByItem,
   helper2:mostExpensiveFruit,
@@ -10,20 +11,20 @@ const {
 
 function successMessage(functionMessage) {
   return {
-    code: 200,
+    code: statusCode.ok,
     message: functionMessage,
   };
 }
 
-function error() {
+function error(errorCode, errorMessage) {
   return {
-    message: 'Error',
-    code: 404,
+    message: errorMessage,
+    code: errorCode
   };
 }
 
 function getHomePage() {
-  return successMessage('hello world!');
+  return successMessage({'result': 'hello world!'});
 }
 
 function getFilter(params) {
@@ -33,14 +34,14 @@ function getFilter(params) {
     sortedArray = searchFruitByItem(sortedArray, key, params.get(key));
   }
    if (sortedArray.length === 0) {
-    return error();
+    return error(statusCode.notFound, {'error': 'Not found'});
    }
-  return successMessage(sortedArray);
+  return successMessage({'result': sortedArray});
 }
 
 function postFilter(params, serverGoodsArray) {
   if (!validator(serverGoodsArray)) {
-    return error();
+    return error(statusCode.notAcceptable, {'error':'Not Acceptable'});
   }
   let sortedArray = searchFruitByItem(serverGoodsArray);
   // eslint-disable-next-line no-restricted-syntax
@@ -48,48 +49,51 @@ function postFilter(params, serverGoodsArray) {
     sortedArray = searchFruitByItem(sortedArray, key, params.get(key));
   }
    if (sortedArray.length === 0) {
-    return error();
+    return error(statusCode.notFound, {'error': 'Not found'});
    }
-   return successMessage(sortedArray);
+   return successMessage({'result': sortedArray});
 }
 
 function getTopprice() {
-  return successMessage(mostExpensiveFruit(data));
+  return successMessage({'result': mostExpensiveFruit(data)});
 }
 
 function postTopprice(serverGoodsArray) {
   if (!validator(serverGoodsArray)) {
-    return error();
+    return error(statusCode.notAcceptable, {'error':'Not Acceptable'});
   }
-  return successMessage(mostExpensiveFruit(serverGoodsArray));
+  return successMessage({'result': mostExpensiveFruit(serverGoodsArray)});
 }
 
 function getCommonprice() {
-  return successMessage(addKeyPrice(data));
+  return successMessage({'result': addKeyPrice(data)});
 }
 
 function postCommonprice(serverGoodsArray) {
   if (!validator(serverGoodsArray)) {
-    return error();
+    return error(statusCode.notAcceptable, {'error':'Not Acceptable'});
   }
-  return successMessage(addKeyPrice(serverGoodsArray));
+  return successMessage({'result': addKeyPrice(serverGoodsArray)});
 }
 
-async function postData(serverGoodsArray) {
+function postData(serverGoodsArray) {
   if (!validator(serverGoodsArray)) {
-    return error();
+    return error(statusCode.notAcceptable, {'error':'Not Acceptable'});
   }
   console.log(serverGoodsArray);
   const dataPath = path.join(__dirname, '../data.json');
-  const res = await fs.writeFile(dataPath, JSON.stringify(serverGoodsArray));
-  if(res){
-    return successMessage('rewritten data.json');
+  try{
+    fs.writeFileSync(dataPath, JSON.stringify(serverGoodsArray));
+  } catch (err) {
+    console.log(err);
+    return error(statusCode.badRequest, {'error':'Unable to write file'});
   }
-  return error();
+
+  return successMessage({'result': 'rewritten data.json'});
 }
 
 function notFound() {
-  return error();
+  return error(statusCode.notFound, {'error':'Not found'});
 }
 
 module.exports = {

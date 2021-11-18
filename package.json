@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint --ignore-path .gitignore . --fix"
+    "lint": "eslint --ignore-path .gitignore . --fix",
+    "start": "node ./src/index.js"
     },
   "author": "Kordonska Anastasiia <kordonskanastya@gmail.com>",
   "license": "ISC",
