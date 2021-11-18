@@ -36,7 +36,7 @@ function getFilter(params) {
    if (sortedArray.length === 0) {
     return error(statusCode.notFound, {'error': 'Not found'});
    }
-  return successMessage({'result': sortedArray});
+  return successMessage(sortedArray);
 }
 
 function postFilter(params, serverGoodsArray) {
@@ -51,29 +51,29 @@ function postFilter(params, serverGoodsArray) {
    if (sortedArray.length === 0) {
     return error(statusCode.notFound, {'error': 'Not found'});
    }
-   return successMessage({'result': sortedArray});
+   return successMessage(sortedArray);
 }
 
 function getTopprice() {
-  return successMessage({'result': mostExpensiveFruit(data)});
+  return successMessage(mostExpensiveFruit(data));
 }
 
 function postTopprice(serverGoodsArray) {
   if (!validator(serverGoodsArray)) {
     return error(statusCode.notAcceptable, {'error':'Not Acceptable'});
   }
-  return successMessage({'result': mostExpensiveFruit(serverGoodsArray)});
+  return successMessage(mostExpensiveFruit(serverGoodsArray));
 }
 
 function getCommonprice() {
-  return successMessage({'result': addKeyPrice(data)});
+  return successMessage(addKeyPrice(data));
 }
 
 function postCommonprice(serverGoodsArray) {
   if (!validator(serverGoodsArray)) {
     return error(statusCode.notAcceptable, {'error':'Not Acceptable'});
   }
-  return successMessage({'result': addKeyPrice(serverGoodsArray)});
+  return successMessage(addKeyPrice(serverGoodsArray));
 }
 
 function postData(serverGoodsArray) {
