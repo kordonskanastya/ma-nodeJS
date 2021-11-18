@@ -4,7 +4,7 @@ module.exports = (req, res) => {
   const { pathname, method } = req;
 
   if (pathname === '/' && method === 'GET') {
-    return controllers.home(req, res);
+    return controllers.getHomePage(req, res);
   }
   if (pathname === '/filter' && method === 'GET') {
     return controllers.getFilter(req, res);
@@ -15,13 +15,13 @@ module.exports = (req, res) => {
   if (pathname === '/topprice' && method === 'GET') {
     return controllers.getTopprice(req, res);
   }
-  if (pathname === '/filter' && method === 'POST') {
+  if (pathname === '/topprice' && method === 'POST') {
     return controllers.postTopprice(req, res);
   }
   if (pathname === '/commonprice' && method === 'GET') {
     return controllers.getCommonprice(req, res);
   }
-  if (pathname === '/filter' && method === 'POST') {
+  if (pathname === '/commonprice' && method === 'POST') {
     return controllers.postCommonprice(req, res);
   }
   if (pathname === '/data' && method === 'POST') {

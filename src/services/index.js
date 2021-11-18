@@ -1,5 +1,6 @@
 const fs = require('fs');
-const data = require('./data.json');
+const path = require('path');
+const data = require('../data.json');
 const {
   helper1:searchFruitByItem,
   helper2:mostExpensiveFruit,
@@ -7,34 +8,34 @@ const {
   validator
 } = require('./helpers/index');
 
-function home() {
+function successMessage(functionMessage) {
   return {
     code: 200,
-    message: 'hello world',
+    message: functionMessage,
   };
 }
 
 function error() {
   return {
-    message: 'Error: no content',
-    code: 204,
+    message: 'Error',
+    code: 404,
   };
 }
 
+function getHomePage() {
+  return successMessage('hello world!');
+}
+
 function getFilter(params) {
-  const goodsArray = data;
-  let sortedArray = searchFruitByItem(goodsArray);
+  let sortedArray = searchFruitByItem(data);
   // eslint-disable-next-line no-restricted-syntax
   for (const key of params.keys()) {
     sortedArray = searchFruitByItem(sortedArray, key, params.get(key));
   }
-   if (Object.keys(sortedArray).length === 0) {
+   if (sortedArray.length === 0) {
     return error();
    }
-  return {
-    message: sortedArray,
-    code: 200,
-  };
+  return successMessage(sortedArray);
 }
 
 function postFilter(params, serverGoodsArray) {
@@ -46,77 +47,53 @@ function postFilter(params, serverGoodsArray) {
   for (const key of params.keys()) {
     sortedArray = searchFruitByItem(sortedArray, key, params.get(key));
   }
-   if (Object.keys(sortedArray).length === 0) {
+   if (sortedArray.length === 0) {
     return error();
    }
-  return {
-    message: sortedArray,
-    code: 200,
-  };
+   return successMessage(sortedArray);
 }
 
 function getTopprice() {
-  const goodsArray = data;
-  return {
-    message: mostExpensiveFruit(goodsArray),
-    code: 200,
-  };
+  return successMessage(mostExpensiveFruit(data));
 }
 
 function postTopprice(serverGoodsArray) {
   if (!validator(serverGoodsArray)) {
     return error();
   }
-  return {
-    message: mostExpensiveFruit(serverGoodsArray),
-    code: 200,
-  };
+  return successMessage(mostExpensiveFruit(serverGoodsArray));
 }
 
 function getCommonprice() {
-  const goodsArray = data;
-  return {
-    message: addKeyPrice(goodsArray),
-    code: 200,
-  };
+  return successMessage(addKeyPrice(data));
 }
 
 function postCommonprice(serverGoodsArray) {
   if (!validator(serverGoodsArray)) {
     return error();
   }
-  return {
-    message: addKeyPrice(serverGoodsArray),
-    code: 200,
-  };
+  return successMessage(addKeyPrice(serverGoodsArray));
 }
 
-function postData(serverGoodsArray) {
+async function postData(serverGoodsArray) {
   if (!validator(serverGoodsArray)) {
     return error();
   }
   console.log(serverGoodsArray);
-  fs.writeFile(`${__dirname}/data.json`, JSON.stringify(serverGoodsArray),
-    // eslint-disable-next-line consistent-return
-    (err) => {
-      if (err) return console.log(err);
-    });
-
-  return {
-    message: 'rewritten data.json',
-    code: 200,
-  };
+  const dataPath = path.join(__dirname, '../data.json');
+  const res = await fs.writeFile(dataPath, JSON.stringify(serverGoodsArray));
+  if(res){
+    return successMessage('rewritten data.json');
+  }
+  return error();
 }
 
 function notFound() {
-  return {
-    code: 404,
-    message: 'page not found',
-  };
+  return error();
 }
 
 module.exports = {
-  home,
+  getHomePage,
   notFound,
   getFilter,
   postFilter,

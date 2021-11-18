@@ -1,5 +1,5 @@
-const data = require('../data.json');
-const {formatPriceToNumber:formatter} = require('./helper3');
+const data = require('../../data.json');
+const {formatPriceToNumber:formatter} = require('./utils');
 
 const compare = (a, b) => {
   const pricePerQuantityA = a.pricePerKilo || a.pricePerItem;

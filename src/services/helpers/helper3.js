@@ -1,6 +1,4 @@
-function formatPriceToNumber(price) {
-  return price.replace('$', '').replace(',', '.');
-}
+const {formatPriceToNumber} = require('./utils');
 
 const addTotalPriceOfFruit = (obj) => {
   const pricePerQuantity = obj.pricePerKilo || obj.pricePerItem;
@@ -13,9 +11,5 @@ const addTotalPriceOfFruit = (obj) => {
 
 const addKeyPrice = (data) => data.map(addTotalPriceOfFruit);
 
-module.exports = {
-  addKeyPrice,
-  formatPriceToNumber,
-};
+module.exports = addKeyPrice;
 
-// module.exports = (products) => {};

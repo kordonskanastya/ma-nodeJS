@@ -9,20 +9,17 @@ const validator = (goodsArray) => {
       pricePerItem : price = pricePerKilo
     } = currentObj;
     const typeItem = (typeof item) === 'string';
-    const typeType = (typeof type) === 'string';
+    const typeOfItemType = (typeof type) === 'string';
     const typeWeight = (typeof weight) === 'number';
     const typePrice = ((typeof price) === 'string')
     &&
     (price.startsWith('$'))
     &&
     ((typeof parseFloat(price.slice(1))) === 'number');
-    return typeItem && typeType && typeWeight && typePrice;
+    return typeItem && typeOfItemType && typeWeight && typePrice;
   };
   const validateData = goodsArray.filter(check);
-  if (goodsArray.length !== validateData.length) {
-    return false;
-  }
-  return true;
+  return goodsArray.length === validateData.length;
 };
 
 module.exports = validator;
