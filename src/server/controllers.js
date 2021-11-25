@@ -55,6 +55,17 @@ function notFound(req, res) {
   sendResponse(message, code, res);
 }
 
+function getPromise(req, res) {
+  const {message, code} = services.getPromise();
+  sendResponse(message, code, res);
+}
+
+function postPromise(req, res) {
+  const {message, code} = services.postPromise(JSON.parse(req.body));
+  sendResponse(message, code, res);
+}
+
+
 
 module.exports = {
   getHomePage,
@@ -65,5 +76,7 @@ module.exports = {
   postTopprice,
   getCommonprice,
   postCommonprice,
-  postData
+  postData,
+  getPromise,
+  postPromise
 };

@@ -6,7 +6,8 @@ const {
   helper1:searchFruitByItem,
   helper2:mostExpensiveFruit,
   helper3:addKeyPrice,
-  validator
+  validator,
+  addKeyDiscountPromise
 } = require('./helpers/index');
 
 function successMessage(functionMessage) {
@@ -92,6 +93,17 @@ function postData(serverGoodsArray) {
   return successMessage({'result': 'rewritten data.json'});
 }
 
+function getPromise(){
+  return successMessage(addKeyDiscountPromise());
+}
+
+function postPromise(serverGoodsArray){
+  if (!validator(serverGoodsArray)) {
+    return error(statusCode.notAcceptable, {'error':'Not Acceptable'});
+  }
+  return successMessage(addKeyDiscountPromise(serverGoodsArray));
+}
+
 function notFound() {
   return error(statusCode.notFound, {'error':'Not found'});
 }
@@ -105,5 +117,7 @@ module.exports = {
   postTopprice,
   getCommonprice,
   postCommonprice,
-  postData
+  postData,
+  getPromise,
+  postPromise
 };

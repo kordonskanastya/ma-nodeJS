@@ -28,6 +28,13 @@ module.exports = (req, res) => {
     return controllers.postData(req, res);
   }
 
+  if (pathname === '/discount/promise' && method === 'GET') {
+    return controllers.getPromise(req, res);
+  }
+  if (pathname === '/discount/promise' && method === 'POST') {
+    return controllers.postPromise(req, res);
+  }
+
 
   return controllers.notFound(req, res);
 };
