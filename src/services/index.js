@@ -94,7 +94,7 @@ function postData(serverGoodsArray) {
 }
 
 function getPromise(){
-  return successMessage(addKeyDiscountPromise());
+  return successMessage(addKeyDiscountPromise(data));
 }
 
 function postPromise(serverGoodsArray){

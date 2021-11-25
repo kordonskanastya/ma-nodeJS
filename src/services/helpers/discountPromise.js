@@ -1,6 +1,5 @@
 const { formatPriceToNumber } = require('./utils');
 const discount = require('./discount');
-const data = require('../../data.json');
 
 function createDiscountPromise() {
   return new Promise((resolve, reject) => {
@@ -16,8 +15,10 @@ function createDiscountPromise() {
 
 }
 
-function randomDiscount() {
-  return Promise.all(createDiscountPromise())
+function addDiscountKey(obj) {
+  const pricePerQuantity = obj.pricePerKilo || obj.pricePerItem;
+  const weightOfFruit = obj.weight || obj.quantity;
+  const discont = Promise.all(createDiscountPromise())
   .then((disc) => {
     console.log(disc);
     return disc;
@@ -30,18 +31,12 @@ function randomDiscount() {
     })
     .catch((err) => err);
   });
-}
-
-
-function addDiscountKey(obj) {
-  const pricePerQuantity = obj.pricePerKilo || obj.pricePerItem;
-  const weightOfFruit = obj.weight || obj.quantity;
   const discountPrice = formatPriceToNumber(pricePerQuantity)
     *
     weightOfFruit
     *
-    (100 - randomDiscount()) / 100;
+    (100 - discont) / 100;
   return { ...obj, discountPrice};
 };
 
-module.exports = (goodsArray = data) => goodsArray.map(addDiscountKey);
+module.exports = (goodsArray) => goodsArray.map(addDiscountKey);
