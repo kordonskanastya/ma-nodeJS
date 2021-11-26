@@ -1,12 +1,12 @@
 const { formatPriceToNumber } = require('./utils');
 const discount = require('./discount');
 
+
 function createDiscountPromise() {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
       discount((err, disc) => {
       if(err) {
-        console.log(err);
-        return reject(err);
+        return resolve(createDiscountPromise());
       }
       return resolve(disc);
     });
@@ -14,34 +14,21 @@ function createDiscountPromise() {
 
 }
 
-function discont() {
-  createDiscountPromise()
-.then((disc) => {
-  console.log(disc, 'first try');
-  return disc;
-})
-.catch(() => {
+module.exports = (goodsArray) => goodsArray.map((obj) => {
+  let res = {};
   createDiscountPromise()
   .then((disc) => {
-    console.log(disc, 'second try');
-    return disc;
-  })
-  .catch((err) => err);
+    console.log(disc, 'then');
+    const pricePerQuantity = obj.pricePerKilo || obj.pricePerItem;
+    const weightOfFruit = obj.weight || obj.quantity;
+    const discountPrice = formatPriceToNumber(pricePerQuantity)
+      *
+      weightOfFruit
+      *
+      (100 - disc) / 100;
+    console.log('discont price', discountPrice);
+    res = { ...obj, discountPrice};
+    console.log('\n', res, '\n');
+  });
+  return res;
 });
-}
-
-function addDiscountKey(obj) {
-  const pricePerQuantity = obj.pricePerKilo || obj.pricePerItem;
-  const weightOfFruit = obj.weight || obj.quantity;
-  const discountPrice = formatPriceToNumber(pricePerQuantity)
-    *
-    weightOfFruit
-    *
-    (100 - discont()) / 100;
-  return { ...obj, discountPrice};
-  };
-
-
-
-
-module.exports = (goodsArray) => goodsArray.map(addDiscountKey);
