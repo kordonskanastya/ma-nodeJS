@@ -1,7 +1,6 @@
 const { formatPriceToNumber } = require('./utils');
 const discount = require('./discount');
 
-
 function createDiscountPromise() {
   return new Promise((resolve) => {
       discount((err, disc) => {
@@ -11,24 +10,20 @@ function createDiscountPromise() {
       return resolve(disc);
     });
   });
-
 }
 
-module.exports = (goodsArray) => goodsArray.map((obj) => {
-  let res = {};
-  createDiscountPromise()
-  .then((disc) => {
-    console.log(disc, 'then');
+function forMap(obj) {
     const pricePerQuantity = obj.pricePerKilo || obj.pricePerItem;
     const weightOfFruit = obj.weight || obj.quantity;
-    const discountPrice = formatPriceToNumber(pricePerQuantity)
-      *
-      weightOfFruit
-      *
-      (100 - disc) / 100;
-    console.log('discont price', discountPrice);
-    res = { ...obj, discountPrice};
-    console.log('\n', res, '\n');
-  });
-  return res;
-});
+    return createDiscountPromise().then((disc) => {
+      const discountPrice = (formatPriceToNumber(pricePerQuantity)
+        *
+        weightOfFruit
+        *
+        (100 - disc) / 100).toFixed(2);
+      console.log('\n', { ...obj, discountPrice}, '\n');
+      return { ...obj, discountPrice};
+    });
+  }
+
+module.exports = (goods) => (goods).map(forMap);
