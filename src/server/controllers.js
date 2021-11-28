@@ -62,12 +62,16 @@ function notFound(req, res) {
 
 
 function getPromise(req, res) {
-  const {message, code} = services.getPromise();
-  sendResponse(message, code, res);
+  services.getPromise().then(({message, code}) => {
+    sendResponse(message, code, res);
+  });
 }
 
 function postPromise(req, res) {
   services.postPromise(JSON.parse(req.body)).then(({message, code}) => {
+    sendResponse(message, code, res);
+  })
+  .catch(({message, code}) => {
     sendResponse(message, code, res);
   });
 }

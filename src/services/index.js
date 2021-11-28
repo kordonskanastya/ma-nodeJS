@@ -101,16 +101,22 @@ function postData(serverGoodsArray) {
 
 
 function getPromise(){
-  return successMessage(addKeyDiscountPromise(data));
+  return new Promise((resolve) => {
+    addKeyDiscountPromise(data).then((fruitWithDiscount) => {
+      resolve(successMessage(fruitWithDiscount));
+    });
+  });
 }
 
+// eslint-disable-next-line consistent-return
 function postPromise(serverGoodsArray){
-  if (!validator(serverGoodsArray)) {
-    return error(statusCode.notAcceptable, {'error':'Not Acceptable'});
-  }
-  addKeyDiscountPromise(serverGoodsArray).then((fruitWithDiscount) => {
-    console.log(fruitWithDiscount);
-    return successMessage(JSON.stringify(fruitWithDiscount));
+  return new Promise((resolve, reject) => {
+    if (!validator(serverGoodsArray)) {
+      reject(error(statusCode.notAcceptable, {'error':'Not Acceptable'}));
+    }
+    addKeyDiscountPromise(serverGoodsArray).then((fruitWithDiscount) => {
+      resolve(successMessage(fruitWithDiscount));
+    });
   });
 }
 
