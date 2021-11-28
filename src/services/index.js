@@ -7,7 +7,9 @@ const {
   helper2:mostExpensiveFruit,
   helper3:addKeyPrice,
   validator,
-  addKeyDiscountPromise
+  addKeyDiscountPromise,
+  addKeyDiscountPromisify,
+  addKeyDiscountAsync
 } = require('./helpers/index');
 
 function successMessage(functionMessage) {
@@ -104,6 +106,28 @@ function postPromise(serverGoodsArray){
   return successMessage(addKeyDiscountPromise(serverGoodsArray));
 }
 
+function getPromisify(){
+  return successMessage(addKeyDiscountPromisify(data));
+}
+
+function postPromisify(serverGoodsArray){
+  if (!validator(serverGoodsArray)) {
+    return error(statusCode.notAcceptable, {'error':'Not Acceptable'});
+  }
+  return successMessage(addKeyDiscountPromisify(serverGoodsArray));
+}
+
+function getAsync(){
+  addKeyDiscountAsync(data[0], successMessage);
+}
+
+function postAsync(serverGoodsArray){
+  if (!validator(serverGoodsArray)) {
+    return error(statusCode.notAcceptable, {'error':'Not Acceptable'});
+  }
+  return successMessage(addKeyDiscountAsync(serverGoodsArray));
+}
+
 function notFound() {
   return error(statusCode.notFound, {'error':'Not found'});
 }
@@ -119,5 +143,9 @@ module.exports = {
   postCommonprice,
   postData,
   getPromise,
-  postPromise
+  postPromise,
+  getPromisify,
+  postPromisify,
+  getAsync,
+  postAsync
 };

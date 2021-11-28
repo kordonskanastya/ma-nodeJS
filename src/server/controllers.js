@@ -65,7 +65,25 @@ function postPromise(req, res) {
   sendResponse(message, code, res);
 }
 
+function getPromisify(req, res) {
+  const {message, code} = services.getPromisify();
+  sendResponse(message, code, res);
+}
 
+function postPromisify(req, res) {
+  const {message, code} = services.postPromisify(JSON.parse(req.body));
+  sendResponse(message, code, res);
+}
+
+function getAsync(req, res) {
+  const {message, code} = services.getAsync();
+  sendResponse(message, code, res);
+}
+
+function postAsync(req, res) {
+  const {message, code} = services.postAsync(JSON.parse(req.body));
+  sendResponse(message, code, res);
+}
 
 module.exports = {
   getHomePage,
@@ -78,5 +96,9 @@ module.exports = {
   postCommonprice,
   postData,
   getPromise,
-  postPromise
+  postPromise,
+  getPromisify,
+  postPromisify,
+  getAsync,
+  postAsync
 };
