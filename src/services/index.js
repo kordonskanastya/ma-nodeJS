@@ -110,7 +110,7 @@ function postPromise(serverGoodsArray){
   }
   addKeyDiscountPromise(serverGoodsArray).then((fruitWithDiscount) => {
     console.log(fruitWithDiscount);
-    return successMessage(JSON.stringify('fruitWithDiscount'));
+    return successMessage(JSON.stringify(fruitWithDiscount));
   });
 }
 
