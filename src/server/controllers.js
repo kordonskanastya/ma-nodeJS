@@ -55,14 +55,21 @@ function notFound(req, res) {
   sendResponse(message, code, res);
 }
 
+
+
+
+
+
+
 function getPromise(req, res) {
   const {message, code} = services.getPromise();
   sendResponse(message, code, res);
 }
 
 function postPromise(req, res) {
-  const {message, code} = services.postPromise(JSON.parse(req.body));
-  sendResponse(message, code, res);
+  services.postPromise(JSON.parse(req.body)).then(({message, code}) => {
+    sendResponse(message, code, res);
+  });
 }
 
 function getPromisify(req, res) {

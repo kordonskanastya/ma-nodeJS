@@ -95,6 +95,11 @@ function postData(serverGoodsArray) {
   return successMessage({'result': 'rewritten data.json'});
 }
 
+
+
+
+
+
 function getPromise(){
   return successMessage(addKeyDiscountPromise(data));
 }
@@ -103,7 +108,9 @@ function postPromise(serverGoodsArray){
   if (!validator(serverGoodsArray)) {
     return error(statusCode.notAcceptable, {'error':'Not Acceptable'});
   }
-  return successMessage(addKeyDiscountPromise(serverGoodsArray));
+  return addKeyDiscountPromise(serverGoodsArray).then((fruitWithDiscount) => {
+    successMessage(JSON.stringify(fruitWithDiscount));
+  });
 }
 
 function getPromisify(){
