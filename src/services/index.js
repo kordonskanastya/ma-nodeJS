@@ -108,8 +108,9 @@ function postPromise(serverGoodsArray){
   if (!validator(serverGoodsArray)) {
     return error(statusCode.notAcceptable, {'error':'Not Acceptable'});
   }
-  return addKeyDiscountPromise(serverGoodsArray).then((fruitWithDiscount) => {
-    successMessage(JSON.stringify(fruitWithDiscount));
+  addKeyDiscountPromise(serverGoodsArray).then((fruitWithDiscount) => {
+    console.log(fruitWithDiscount);
+    return successMessage(JSON.stringify('fruitWithDiscount'));
   });
 }
 

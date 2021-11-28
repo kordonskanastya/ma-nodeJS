@@ -26,6 +26,12 @@ function addKeyDiscountPromise(obj) {
     });
   }
 
-// module.exports = (goods) => (goods).map(forMap);
+// const go = [
+//   { "item": "apple", "type": "Fuji", "weight": 10, "pricePerKilo": "$3" },
+//   { "item": "apple", "type": "Fuji", "weight": 10, "pricePerKilo": "$4" },
+//   { "item": "apple", "type": "Fuji", "weight": 10, "pricePerKilo": "$5" }
+// ];
 
-module.exports = (goods) => Promise.resolve((goods).map(addKeyDiscountPromise));
+// Promise.all((go).map(addKeyDiscountPromise)).then((res => console.log(res)));
+
+module.exports = (goods) => Promise.all((goods).map(addKeyDiscountPromise));
