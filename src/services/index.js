@@ -118,7 +118,7 @@ function postPromisify(serverGoodsArray){
 }
 
 function getAsync(){
-  addKeyDiscountAsync(data[0], successMessage);
+  return successMessage(addKeyDiscountAsync(data));
 }
 
 function postAsync(serverGoodsArray){
