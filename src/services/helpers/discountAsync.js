@@ -2,13 +2,14 @@ const { formatPriceToNumber } = require('./utils');
 const discount = require('./discount');
 
 async function createDiscountPromise() {
-  const discont = await discount((err, disc) => {
-    if(err) {
-      return createDiscountPromise();
-    }
-    return disc;
+  return new Promise((resolve) => {
+      discount((err, disc) => {
+      if(err) {
+        return resolve(createDiscountPromise());
+      }
+      return resolve(disc);
+    });
   });
-  return discont;
 }
 
 async function forMap(obj) {
