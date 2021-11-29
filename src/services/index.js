@@ -95,11 +95,6 @@ function postData(serverGoodsArray) {
   return successMessage({'result': 'rewritten data.json'});
 }
 
-
-
-
-
-
 function getPromise(){
   return new Promise((resolve) => {
     addKeyDiscountPromise(data).then((fruitWithDiscount) => {
@@ -120,26 +115,51 @@ function postPromise(serverGoodsArray){
   });
 }
 
+
+
+
+
+
+
+
 function getPromisify(){
-  return successMessage(addKeyDiscountPromisify(data));
+  return new Promise((resolve) => {
+    addKeyDiscountPromisify(data).then((fruitWithDiscount) => {
+      resolve(successMessage(fruitWithDiscount));
+    });
+  });
 }
 
+// eslint-disable-next-line consistent-return
 function postPromisify(serverGoodsArray){
-  if (!validator(serverGoodsArray)) {
-    return error(statusCode.notAcceptable, {'error':'Not Acceptable'});
-  }
-  return successMessage(addKeyDiscountPromisify(serverGoodsArray));
+  return new Promise((resolve, reject) => {
+    if (!validator(serverGoodsArray)) {
+      reject(error(statusCode.notAcceptable, {'error':'Not Acceptable'}));
+    }
+    addKeyDiscountPromisify(serverGoodsArray).then((fruitWithDiscount) => {
+      resolve(successMessage(fruitWithDiscount));
+    });
+  });
 }
 
 function getAsync(){
-  return successMessage(addKeyDiscountAsync(data));
+  return new Promise((resolve) => {
+    addKeyDiscountAsync(data).then((fruitWithDiscount) => {
+      resolve(successMessage(fruitWithDiscount));
+    });
+  });
 }
 
+// eslint-disable-next-line consistent-return
 function postAsync(serverGoodsArray){
-  if (!validator(serverGoodsArray)) {
-    return error(statusCode.notAcceptable, {'error':'Not Acceptable'});
-  }
-  return successMessage(addKeyDiscountAsync(serverGoodsArray));
+  return new Promise((resolve, reject) => {
+    if (!validator(serverGoodsArray)) {
+      reject(error(statusCode.notAcceptable, {'error':'Not Acceptable'}));
+    }
+    addKeyDiscountAsync(serverGoodsArray).then((fruitWithDiscount) => {
+      resolve(successMessage(fruitWithDiscount));
+    });
+  });
 }
 
 function notFound() {

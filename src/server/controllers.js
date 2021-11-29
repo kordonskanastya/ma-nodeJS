@@ -55,12 +55,6 @@ function notFound(req, res) {
   sendResponse(message, code, res);
 }
 
-
-
-
-
-
-
 function getPromise(req, res) {
   services.getPromise().then(({message, code}) => {
     sendResponse(message, code, res);
@@ -76,14 +70,25 @@ function postPromise(req, res) {
   });
 }
 
+
+
+
+
+
+
 function getPromisify(req, res) {
-  const {message, code} = services.getPromisify();
-  sendResponse(message, code, res);
+  services.getPromise().then(({message, code}) => {
+    sendResponse(message, code, res);
+  });
 }
 
 function postPromisify(req, res) {
-  const {message, code} = services.postPromisify(JSON.parse(req.body));
-  sendResponse(message, code, res);
+  services.postPromise(JSON.parse(req.body)).then(({message, code}) => {
+    sendResponse(message, code, res);
+  })
+  .catch(({message, code}) => {
+    sendResponse(message, code, res);
+  });
 }
 
 function getAsync(req, res) {

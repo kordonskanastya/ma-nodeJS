@@ -1,34 +1,37 @@
 const { formatPriceToNumber } = require('./utils');
-const discount = require('./discount');
+const randomDiscount = require('./discount');
 
-async function createDiscountPromise() {
-  return new Promise((resolve) => {
-      discount((err, disc) => {
-      if(err) {
-        return resolve(createDiscountPromise());
-      }
-      return resolve(disc);
+
+function createDiscountPromise(goodsArray) {
+
+  // eslint-disable-next-line arrow-body-style
+  const addDiscountPrice = (discount, fruitsArray) => {
+    return fruitsArray.map(fruit => {
+      const pricePerQuantity = fruit.pricePerKilo || fruit.pricePerItem;
+      const weightOfFruit = fruit.weight || fruit.quantity;
+      const discountPrice = (formatPriceToNumber(pricePerQuantity)
+        *
+        weightOfFruit
+        *
+        (100 - discount) / 100).toFixed(2);
+      return { ...fruit, discountPrice };
     });
+    // return fruitsArray;
+  };
+
+  return new Promise((resolve) => {
+    function discountCallback(err, disc) {
+      if (err) {
+        randomDiscount(discountCallback);
+      }
+      const fruitsWithDiscount = addDiscountPrice(disc, goodsArray);
+      console.log(fruitsWithDiscount);
+      resolve(fruitsWithDiscount);
+    }
+
+    randomDiscount(discountCallback);
   });
 }
 
-async function forMap(obj) {
-  const discont = await createDiscountPromise();
-  const pricePerQuantity = obj.pricePerKilo || obj.pricePerItem;
-  const weightOfFruit = obj.weight || obj.quantity;
-  const discountPrice = (formatPriceToNumber(pricePerQuantity)
-    *
-    weightOfFruit
-    *
-    (100 - discont) / 100).toFixed(2);
-  console.log('\n', 'in forMap:', { ...obj, discountPrice}, '\n');
-  return { ...obj, discountPrice};
-};
 
-// const o = {pricePerKilo:'$4', weight: 10};
-
-// console.log(forMap(o));
-
-module.exports = (goods) => {
-  (goods).map(forMap);
-};
+module.exports = createDiscountPromise;
