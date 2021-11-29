@@ -70,12 +70,6 @@ function postPromise(req, res) {
   });
 }
 
-
-
-
-
-
-
 function getPromisify(req, res) {
   services.getPromise().then(({message, code}) => {
     sendResponse(message, code, res);
@@ -90,6 +84,10 @@ function postPromisify(req, res) {
     sendResponse(message, code, res);
   });
 }
+
+
+
+
 
 function getAsync(req, res) {
   const {message, code} = services.getAsync();

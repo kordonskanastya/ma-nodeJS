@@ -103,7 +103,6 @@ function getPromise(){
   });
 }
 
-// eslint-disable-next-line consistent-return
 function postPromise(serverGoodsArray){
   return new Promise((resolve, reject) => {
     if (!validator(serverGoodsArray)) {
@@ -115,13 +114,6 @@ function postPromise(serverGoodsArray){
   });
 }
 
-
-
-
-
-
-
-
 function getPromisify(){
   return new Promise((resolve) => {
     addKeyDiscountPromisify(data).then((fruitWithDiscount) => {
@@ -130,7 +122,6 @@ function getPromisify(){
   });
 }
 
-// eslint-disable-next-line consistent-return
 function postPromisify(serverGoodsArray){
   return new Promise((resolve, reject) => {
     if (!validator(serverGoodsArray)) {
@@ -142,6 +133,10 @@ function postPromisify(serverGoodsArray){
   });
 }
 
+
+
+
+
 function getAsync(){
   return new Promise((resolve) => {
     addKeyDiscountAsync(data).then((fruitWithDiscount) => {
@@ -150,7 +145,6 @@ function getAsync(){
   });
 }
 
-// eslint-disable-next-line consistent-return
 function postAsync(serverGoodsArray){
   return new Promise((resolve, reject) => {
     if (!validator(serverGoodsArray)) {

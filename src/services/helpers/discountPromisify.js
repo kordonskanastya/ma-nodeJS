@@ -2,19 +2,21 @@ const util = require('util');
 const addDiscountPrice = require('./addDiscountPrice');
 const randomDiscount = require('./discount');
 
-function createDiscountPromise(goodsArray) {
+function createDiscountPromisify(goodsArray) {
+
+  const discount = util.promisify(randomDiscount);
+
   return new Promise((resolve) => {
-    // eslint-disable-next-line consistent-return
-    function discountCallback(err, disc) {
-      if (err) {
-        return randomDiscount(discountCallback);
-      }
-      const fruitsWithDiscount = addDiscountPrice(disc, goodsArray);
-      resolve(fruitsWithDiscount);
-    }
-    randomDiscount(discountCallback);
+
+    discount().then((disc) => {
+    const fruitsWithDiscount = addDiscountPrice(disc, goodsArray);
+    resolve(fruitsWithDiscount);
+    })
+    .catch(createDiscountPromisify(goodsArray));
+
   });
+
 }
 
 
-module.exports = createDiscountPromise;
+module.exports = createDiscountPromisify;
