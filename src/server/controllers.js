@@ -61,8 +61,8 @@ function notFound(req, res) {
   sendResponse(message, code, res);
 }
 
-function getPromise(req, res) {
-  services.getPromise().then(({message, code}) => {
+function getArrayWithDiscountPromise(req, res) {
+  services.getArrayWithDiscountPromise().then(({message, code}) => {
     sendResponse(message, code, res);
   })
   .catch(error => {
@@ -70,9 +70,9 @@ function getPromise(req, res) {
   });
 }
 
-function postPromise(req, res) {
+function postArrayWithDiscountPromise(req, res) {
   const parsedBody = JSON.parse(req.body);
-  services.postPromise(parsedBody).then(({message, code}) => {
+  services.postArrayWithDiscountPromise(parsedBody).then(({message, code}) => {
     sendResponse(message, code, res);
   })
   .catch(error => {
@@ -80,8 +80,8 @@ function postPromise(req, res) {
   });
 }
 
-function getPromisify(req, res) {
-  services.getPromisify().then(({message, code}) => {
+function getArrayWithDiscountPromisify(req, res) {
+  services.getArrayWithDiscountPromisify().then(({message, code}) => {
     sendResponse(message, code, res);
   })
   .catch(error => {
@@ -89,9 +89,10 @@ function getPromisify(req, res) {
   });
 }
 
-function postPromisify(req, res) {
+function postArrayWithDiscountPromisify(req, res) {
   const parsedBody = JSON.parse(req.body);
-  services.postPromisify(parsedBody).then(({message, code}) => {
+  services.postArrayWithDiscountPromisify(parsedBody)
+  .then(({message, code}) => {
     sendResponse(message, code, res);
   })
   .catch(error => {
@@ -99,8 +100,8 @@ function postPromisify(req, res) {
   });
 }
 
-function getAsync(req, res) {
-  services.getAsync().then(({message, code}) => {
+function getArrayWithDiscountAsync(req, res) {
+  services.getArrayWithDiscountAsync().then(({message, code}) => {
     sendResponse(message, code, res);
   })
   .catch(error => {
@@ -108,9 +109,9 @@ function getAsync(req, res) {
   });
 }
 
-function postAsync(req, res) {
+function postArrayWithDiscountAsync(req, res) {
   const parsedBody = JSON.parse(req.body);
-  services.postAsync(parsedBody).then(({message, code}) => {
+  services.postArrayWithDiscountAsync(parsedBody).then(({message, code}) => {
     sendResponse(message, code, res);
   })
   .catch(error => {
@@ -128,10 +129,10 @@ module.exports = {
   getCommonprice,
   postCommonprice,
   postData,
-  getPromise,
-  postPromise,
-  getPromisify,
-  postPromisify,
-  getAsync,
-  postAsync
+  getArrayWithDiscountPromise,
+  postArrayWithDiscountPromise,
+  getArrayWithDiscountPromisify,
+  postArrayWithDiscountPromisify,
+  getArrayWithDiscountAsync,
+  postArrayWithDiscountAsync
 };

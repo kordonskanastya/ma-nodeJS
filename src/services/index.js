@@ -94,7 +94,7 @@ function postData(serverGoodsArray) {
   return successMessage({'result': 'rewritten data.json'});
 }
 
-function getPromise(){
+function getArrayWithDiscountPromise(){
   return new Promise((resolve) => {
     addKeyDiscountPromise(data).then((fruitWithDiscount) => {
       resolve(successMessage(fruitWithDiscount));
@@ -102,7 +102,7 @@ function getPromise(){
   });
 }
 
-function postPromise(serverGoodsArray){
+function postArrayWithDiscountPromise(serverGoodsArray){
   return new Promise((resolve, reject) => {
     if (!validator(serverGoodsArray)) {
       reject(error(statusCode.notAcceptable, {'error':'Not Acceptable'}));
@@ -113,7 +113,7 @@ function postPromise(serverGoodsArray){
   });
 }
 
-function getPromisify(){
+function getArrayWithDiscountPromisify(){
   return new Promise((resolve) => {
     addKeyDiscountPromisify(data).then((fruitWithDiscount) => {
       resolve(successMessage(fruitWithDiscount));
@@ -121,7 +121,7 @@ function getPromisify(){
   });
 }
 
-function postPromisify(serverGoodsArray){
+function postArrayWithDiscountPromisify(serverGoodsArray){
   return new Promise((resolve, reject) => {
     if (!validator(serverGoodsArray)) {
       reject(error(statusCode.notAcceptable, {'error':'Not Acceptable'}));
@@ -132,12 +132,12 @@ function postPromisify(serverGoodsArray){
   });
 }
 
-async function getAsync(){
+async function getArrayWithDiscountAsync(){
   const arrayWithDiscount = await addKeyDiscountAsync(data);
   return successMessage(arrayWithDiscount);
 }
 
-async function postAsync(serverGoodsArray){
+async function postArrayWithDiscountAsync(serverGoodsArray){
   if (!validator(serverGoodsArray)) {
     return error(statusCode.notAcceptable, {'error':'Not Acceptable'});
   }
@@ -159,10 +159,10 @@ module.exports = {
   getCommonprice,
   postCommonprice,
   postData,
-  getPromise,
-  postPromise,
-  getPromisify,
-  postPromisify,
-  getAsync,
-  postAsync
+  getArrayWithDiscountPromise,
+  postArrayWithDiscountPromise,
+  getArrayWithDiscountPromisify,
+  postArrayWithDiscountPromisify,
+  getArrayWithDiscountAsync,
+  postArrayWithDiscountAsync
 };

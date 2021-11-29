@@ -29,22 +29,22 @@ module.exports = (req, res) => {
   }
 
   if (pathname === '/discount/promise' && method === 'GET') {
-    return controllers.getPromise(req, res);
+    return controllers.getArrayWithDiscountPromise(req, res);
   }
   if (pathname === '/discount/promise' && method === 'POST') {
-    return controllers.postPromise(req, res);
+    return controllers.postArrayWithDiscountPromise(req, res);
   }
   if (pathname === '/discount/promisify' && method === 'GET') {
-    return controllers.getPromisify(req, res);
+    return controllers.getArrayWithDiscountPromisify(req, res);
   }
   if (pathname === '/discount/promisify' && method === 'POST') {
-    return controllers.postPromisify(req, res);
+    return controllers.postArrayWithDiscountPromisify(req, res);
   }
   if (pathname === '/discount/async' && method === 'GET') {
-    return controllers.getAsync(req, res);
+    return controllers.getArrayWithDiscountAsync(req, res);
   }
   if (pathname === '/discount/async' && method === 'POST') {
-    return controllers.postAsync(req, res);
+    return controllers.postArrayWithDiscountAsync(req, res);
   }
 
 
