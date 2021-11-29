@@ -133,10 +133,6 @@ function postPromisify(serverGoodsArray){
   });
 }
 
-
-
-
-
 function getAsync(){
   return new Promise((resolve) => {
     addKeyDiscountAsync(data).then((fruitWithDiscount) => {

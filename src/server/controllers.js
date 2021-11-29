@@ -90,13 +90,18 @@ function postPromisify(req, res) {
 
 
 function getAsync(req, res) {
-  const {message, code} = services.getAsync();
-  sendResponse(message, code, res);
+  services.getPromise().then(({message, code}) => {
+    sendResponse(message, code, res);
+  });
 }
 
 function postAsync(req, res) {
-  const {message, code} = services.postAsync(JSON.parse(req.body));
-  sendResponse(message, code, res);
+  services.postPromise(JSON.parse(req.body)).then(({message, code}) => {
+    sendResponse(message, code, res);
+  })
+  .catch(({message, code}) => {
+    sendResponse(message, code, res);
+  });
 }
 
 module.exports = {
