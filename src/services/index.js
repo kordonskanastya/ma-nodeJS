@@ -83,7 +83,6 @@ function postData(serverGoodsArray) {
   if (!validator(serverGoodsArray)) {
     return error(statusCode.notAcceptable, {'error':'Not Acceptable'});
   }
-  console.log(serverGoodsArray);
   const dataPath = path.join(__dirname, '../data.json');
   try{
     fs.writeFileSync(dataPath, JSON.stringify(serverGoodsArray));
@@ -133,23 +132,17 @@ function postPromisify(serverGoodsArray){
   });
 }
 
-function getAsync(){
-  return new Promise((resolve) => {
-    addKeyDiscountAsync(data).then((fruitWithDiscount) => {
-      resolve(successMessage(fruitWithDiscount));
-    });
-  });
+async function getAsync(){
+  const arrayWithDiscount = await addKeyDiscountAsync(data);
+  return successMessage(arrayWithDiscount);
 }
 
-function postAsync(serverGoodsArray){
-  return new Promise((resolve, reject) => {
-    if (!validator(serverGoodsArray)) {
-      reject(error(statusCode.notAcceptable, {'error':'Not Acceptable'}));
-    }
-    addKeyDiscountAsync(serverGoodsArray).then((fruitWithDiscount) => {
-      resolve(successMessage(fruitWithDiscount));
-    });
-  });
+async function postAsync(serverGoodsArray){
+  if (!validator(serverGoodsArray)) {
+    return error(statusCode.notAcceptable, {'error':'Not Acceptable'});
+  }
+  const arrayWithDiscount = await addKeyDiscountAsync(data);
+  return successMessage(arrayWithDiscount);
 }
 
 function notFound() {

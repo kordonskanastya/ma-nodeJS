@@ -2,20 +2,17 @@ const addDiscountPrice = require('./addDiscountPrice');
 const randomDiscount = require('./discount');
 
 async function createDiscountPromise(goodsArray) {
-
-  const discount = await new Promise((resolve) => {
+  return new Promise((resolve) => {
     // eslint-disable-next-line consistent-return
     function discountCallback(err, disc) {
       if (err) {
         return randomDiscount(discountCallback);
       }
-      resolve(disc);
+      const fruitsWithDiscount = addDiscountPrice(disc, goodsArray);
+      resolve(fruitsWithDiscount);
     }
     randomDiscount(discountCallback);
   });
-
-  const fruitsWithDiscount = addDiscountPrice(discount, goodsArray);
-  return fruitsWithDiscount;
 }
 
 module.exports = createDiscountPromise;

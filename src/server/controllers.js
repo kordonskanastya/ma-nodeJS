@@ -1,5 +1,7 @@
 const services = require('../services');
 
+const badRequest = 400;
+
 function sendResponse(message, code, res) {
   res.setHeader('Content-Type', 'application/json');
   res.write(JSON.stringify(message));
@@ -18,9 +20,10 @@ function getFilter(req, res) {
 }
 
 function postFilter(req, res) {
+  const parsedBody = JSON.parse(req.body);
   const {message, code} = services.postFilter(
     req.params,
-    JSON.parse(req.body)
+    parsedBody
     );
   sendResponse(message, code, res);
 }
@@ -31,7 +34,8 @@ function getTopprice(req, res) {
 }
 
 function postTopprice(req, res) {
-  const {message, code} = services.postTopprice(JSON.parse(req.body));
+  const parsedBody = JSON.parse(req.body);
+  const {message, code} = services.postTopprice(parsedBody);
     sendResponse(message, code, res);
 }
 
@@ -41,12 +45,14 @@ function getCommonprice(req, res) {
 }
 
 function postCommonprice(req, res) {
-  const {message, code} = services.postCommonprice(JSON.parse(req.body));
+  const parsedBody = JSON.parse(req.body);
+  const {message, code} = services.postCommonprice(parsedBody);
   sendResponse(message, code, res);
 }
 
 function postData(req, res) {
-  const {message, code} = services.postData(JSON.parse(req.body));
+  const parsedBody = JSON.parse(req.body);
+  const {message, code} = services.postData(parsedBody);
   sendResponse(message, code, res);
 }
 
@@ -58,49 +64,57 @@ function notFound(req, res) {
 function getPromise(req, res) {
   services.getPromise().then(({message, code}) => {
     sendResponse(message, code, res);
+  })
+  .catch(error => {
+    sendResponse(error, badRequest, res);
   });
 }
 
 function postPromise(req, res) {
-  services.postPromise(JSON.parse(req.body)).then(({message, code}) => {
+  const parsedBody = JSON.parse(req.body);
+  services.postPromise(parsedBody).then(({message, code}) => {
     sendResponse(message, code, res);
   })
-  .catch(({message, code}) => {
-    sendResponse(message, code, res);
+  .catch(error => {
+    sendResponse(error, badRequest, res);
   });
 }
 
 function getPromisify(req, res) {
-  services.getPromise().then(({message, code}) => {
+  services.getPromisify().then(({message, code}) => {
     sendResponse(message, code, res);
+  })
+  .catch(error => {
+    sendResponse(error, badRequest, res);
   });
 }
 
 function postPromisify(req, res) {
-  services.postPromise(JSON.parse(req.body)).then(({message, code}) => {
+  const parsedBody = JSON.parse(req.body);
+  services.postPromisify(parsedBody).then(({message, code}) => {
     sendResponse(message, code, res);
   })
-  .catch(({message, code}) => {
-    sendResponse(message, code, res);
+  .catch(error => {
+    sendResponse(error, badRequest, res);
   });
 }
 
-
-
-
-
 function getAsync(req, res) {
-  services.getPromise().then(({message, code}) => {
+  services.getAsync().then(({message, code}) => {
     sendResponse(message, code, res);
+  })
+  .catch(error => {
+    sendResponse(error, badRequest, res);
   });
 }
 
 function postAsync(req, res) {
-  services.postPromise(JSON.parse(req.body)).then(({message, code}) => {
+  const parsedBody = JSON.parse(req.body);
+  services.postAsync(parsedBody).then(({message, code}) => {
     sendResponse(message, code, res);
   })
-  .catch(({message, code}) => {
-    sendResponse(message, code, res);
+  .catch(error => {
+    sendResponse(error, badRequest, res);
   });
 }
 

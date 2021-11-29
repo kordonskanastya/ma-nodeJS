@@ -3,20 +3,12 @@ const addDiscountPrice = require('./addDiscountPrice');
 const randomDiscount = require('./discount');
 
 function createDiscountPromisify(goodsArray) {
-
-  const discount = util.promisify(randomDiscount);
-
   return new Promise((resolve) => {
-
-    discount().then((disc) => {
-    const fruitsWithDiscount = addDiscountPrice(disc, goodsArray);
-    resolve(fruitsWithDiscount);
-    })
-    .catch(createDiscountPromisify(goodsArray));
-
+    const discount = util.promisify(randomDiscount);
+    discount()
+      .then((disc) => resolve(addDiscountPrice(disc, goodsArray)))
+      .catch(() => createDiscountPromisify());
   });
-
 }
-
 
 module.exports = createDiscountPromisify;
