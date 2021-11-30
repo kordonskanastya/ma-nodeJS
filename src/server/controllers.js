@@ -1,5 +1,5 @@
 const services = require('../services');
-const statusCode = require('../statusCode');
+const { badRequest } = require('../statusCode');
 
 function sendResponse(message, code, res) {
   res.setHeader('Content-Type', 'application/json');
@@ -65,7 +65,7 @@ function getArrayWithDiscountPromise(req, res) {
     sendResponse(message, code, res);
   })
   .catch(error => {
-    sendResponse({error: error.message}, statusCode.badRequest, res);
+    sendResponse({error: error.message}, badRequest, res);
   });
 }
 
@@ -75,7 +75,7 @@ function postArrayWithDiscountPromise(req, res) {
     sendResponse(message, code, res);
   })
   .catch(error => {
-    sendResponse({error: error.message}, statusCode.badRequest, res);
+    sendResponse({error: error.message}, badRequest, res);
   });
 }
 
@@ -84,7 +84,7 @@ function getArrayWithDiscountPromisify(req, res) {
     sendResponse(message, code, res);
   })
   .catch(error => {
-    sendResponse({error: error.message}, statusCode.badRequest, res);
+    sendResponse({error: error.message}, badRequest, res);
   });
 }
 
@@ -95,7 +95,7 @@ function postArrayWithDiscountPromisify(req, res) {
     sendResponse(message, code, res);
   })
   .catch(error => {
-    sendResponse({error: error.message}, statusCode.badRequest, res);
+    sendResponse({error: error.message}, badRequest, res);
   });
 }
 
@@ -104,7 +104,7 @@ function getArrayWithDiscountAsync(req, res) {
     sendResponse(message, code, res);
   })
   .catch(error => {
-    sendResponse({error: error.message}, statusCode.badRequest, res);
+    sendResponse({error: error.message}, badRequest, res);
   });
 }
 
@@ -114,7 +114,7 @@ function postArrayWithDiscountAsync(req, res) {
     sendResponse(message, code, res);
   })
   .catch(error => {
-    sendResponse({error: error.message}, statusCode.badRequest, res);
+    sendResponse({error: error.message}, badRequest, res);
   });
 }
 

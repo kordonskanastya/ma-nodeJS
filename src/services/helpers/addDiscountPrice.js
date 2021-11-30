@@ -15,5 +15,5 @@ module.exports = (discount, fruitsArray) => addKeyPrice(fruitsArray)
     } else {
       discountPrice = (fruit.price * (100 - discount) / 100);
     }
-    return { ...fruit, priceWithDiscount: parseInt(discountPrice, 10) };
+    return { ...fruit, priceWithDiscount: +discountPrice.toFixed(2)};
   });
