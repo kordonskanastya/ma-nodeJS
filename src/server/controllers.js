@@ -61,7 +61,8 @@ function notFound(req, res) {
 }
 
 function getArrayWithDiscountPromise(req, res) {
-  services.getArrayWithDiscountPromise().then(({message, code}) => {
+  services.getArrayWithDiscountPromise()
+  .then(({message, code}) => {
     sendResponse(message, code, res);
   })
   .catch(error => {
@@ -71,7 +72,8 @@ function getArrayWithDiscountPromise(req, res) {
 
 function postArrayWithDiscountPromise(req, res) {
   const parsedBody = JSON.parse(req.body);
-  services.postArrayWithDiscountPromise(parsedBody).then(({message, code}) => {
+  services.postArrayWithDiscountPromise(parsedBody)
+  .then(({message, code}) => {
     sendResponse(message, code, res);
   })
   .catch(error => {
@@ -80,7 +82,8 @@ function postArrayWithDiscountPromise(req, res) {
 }
 
 function getArrayWithDiscountPromisify(req, res) {
-  services.getArrayWithDiscountPromisify().then(({message, code}) => {
+  services.getArrayWithDiscountPromisify()
+  .then(({message, code}) => {
     sendResponse(message, code, res);
   })
   .catch(error => {
@@ -100,7 +103,8 @@ function postArrayWithDiscountPromisify(req, res) {
 }
 
 function getArrayWithDiscountAsync(req, res) {
-  services.getArrayWithDiscountAsync().then(({message, code}) => {
+  services.getArrayWithDiscountAsync()
+  .then(({message, code}) => {
     sendResponse(message, code, res);
   })
   .catch(error => {
@@ -110,7 +114,8 @@ function getArrayWithDiscountAsync(req, res) {
 
 function postArrayWithDiscountAsync(req, res) {
   const parsedBody = JSON.parse(req.body);
-  services.postArrayWithDiscountAsync(parsedBody).then(({message, code}) => {
+  services.postArrayWithDiscountAsync(parsedBody)
+  .then(({message, code}) => {
     sendResponse(message, code, res);
   })
   .catch(error => {
