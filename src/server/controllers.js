@@ -1,4 +1,5 @@
 const services = require('../services');
+const { badRequest } = require('../statusCode');
 
 function sendResponse(message, code, res) {
   res.setHeader('Content-Type', 'application/json');
@@ -18,9 +19,10 @@ function getFilter(req, res) {
 }
 
 function postFilter(req, res) {
+  const parsedBody = JSON.parse(req.body);
   const {message, code} = services.postFilter(
     req.params,
-    JSON.parse(req.body)
+    parsedBody
     );
   sendResponse(message, code, res);
 }
@@ -31,7 +33,8 @@ function getTopprice(req, res) {
 }
 
 function postTopprice(req, res) {
-  const {message, code} = services.postTopprice(JSON.parse(req.body));
+  const parsedBody = JSON.parse(req.body);
+  const {message, code} = services.postTopprice(parsedBody);
     sendResponse(message, code, res);
 }
 
@@ -41,12 +44,14 @@ function getCommonprice(req, res) {
 }
 
 function postCommonprice(req, res) {
-  const {message, code} = services.postCommonprice(JSON.parse(req.body));
+  const parsedBody = JSON.parse(req.body);
+  const {message, code} = services.postCommonprice(parsedBody);
   sendResponse(message, code, res);
 }
 
 function postData(req, res) {
-  const {message, code} = services.postData(JSON.parse(req.body));
+  const parsedBody = JSON.parse(req.body);
+  const {message, code} = services.postData(parsedBody);
   sendResponse(message, code, res);
 }
 
@@ -55,6 +60,68 @@ function notFound(req, res) {
   sendResponse(message, code, res);
 }
 
+function getArrayWithDiscountPromise(req, res) {
+  services.getArrayWithDiscountPromise()
+  .then(({message, code}) => {
+    sendResponse(message, code, res);
+  })
+  .catch(error => {
+    sendResponse({error: error.message}, badRequest, res);
+  });
+}
+
+function postArrayWithDiscountPromise(req, res) {
+  const parsedBody = JSON.parse(req.body);
+  services.postArrayWithDiscountPromise(parsedBody)
+  .then(({message, code}) => {
+    sendResponse(message, code, res);
+  })
+  .catch(error => {
+    sendResponse({error: error.message}, badRequest, res);
+  });
+}
+
+function getArrayWithDiscountPromisify(req, res) {
+  services.getArrayWithDiscountPromisify()
+  .then(({message, code}) => {
+    sendResponse(message, code, res);
+  })
+  .catch(error => {
+    sendResponse({error: error.message}, badRequest, res);
+  });
+}
+
+function postArrayWithDiscountPromisify(req, res) {
+  const parsedBody = JSON.parse(req.body);
+  services.postArrayWithDiscountPromisify(parsedBody)
+  .then(({message, code}) => {
+    sendResponse(message, code, res);
+  })
+  .catch(error => {
+    sendResponse({error: error.message}, badRequest, res);
+  });
+}
+
+function getArrayWithDiscountAsync(req, res) {
+  services.getArrayWithDiscountAsync()
+  .then(({message, code}) => {
+    sendResponse(message, code, res);
+  })
+  .catch(error => {
+    sendResponse({error: error.message}, badRequest, res);
+  });
+}
+
+function postArrayWithDiscountAsync(req, res) {
+  const parsedBody = JSON.parse(req.body);
+  services.postArrayWithDiscountAsync(parsedBody)
+  .then(({message, code}) => {
+    sendResponse(message, code, res);
+  })
+  .catch(error => {
+    sendResponse({error: error.message}, badRequest, res);
+  });
+}
 
 module.exports = {
   getHomePage,
@@ -65,5 +132,11 @@ module.exports = {
   postTopprice,
   getCommonprice,
   postCommonprice,
-  postData
+  postData,
+  getArrayWithDiscountPromise,
+  postArrayWithDiscountPromise,
+  getArrayWithDiscountPromisify,
+  postArrayWithDiscountPromisify,
+  getArrayWithDiscountAsync,
+  postArrayWithDiscountAsync
 };

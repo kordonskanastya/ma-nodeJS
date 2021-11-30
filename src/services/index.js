@@ -6,7 +6,9 @@ const {
   helper1:searchFruitByItem,
   helper2:mostExpensiveFruit,
   helper3:addKeyPrice,
-  validator
+  validator,
+  addKeyDiscountPromise,
+  addKeyDiscountPromisify,
 } = require('./helpers/index');
 
 function successMessage(functionMessage) {
@@ -80,7 +82,6 @@ function postData(serverGoodsArray) {
   if (!validator(serverGoodsArray)) {
     return error(statusCode.notAcceptable, {'error':'Not Acceptable'});
   }
-  console.log(serverGoodsArray);
   const dataPath = path.join(__dirname, '../data.json');
   try{
     fs.writeFileSync(dataPath, JSON.stringify(serverGoodsArray));
@@ -90,6 +91,57 @@ function postData(serverGoodsArray) {
   }
 
   return successMessage({'result': 'rewritten data.json'});
+}
+
+function getArrayWithDiscountPromise(){
+  return new Promise((resolve) => {
+    addKeyDiscountPromise(data).then((fruitWithDiscount) => {
+      resolve(successMessage(fruitWithDiscount));
+    });
+  });
+}
+
+function postArrayWithDiscountPromise(serverGoodsArray){
+  return new Promise((resolve, reject) => {
+    if (!validator(serverGoodsArray)) {
+      reject(error(statusCode.notAcceptable, {'error':'Not Acceptable'}));
+    }
+    addKeyDiscountPromise(serverGoodsArray).then((fruitWithDiscount) => {
+      resolve(successMessage(fruitWithDiscount));
+    });
+  });
+}
+
+function getArrayWithDiscountPromisify(){
+  return new Promise((resolve) => {
+    addKeyDiscountPromisify(data).then((fruitWithDiscount) => {
+      resolve(successMessage(fruitWithDiscount));
+    });
+  });
+}
+
+function postArrayWithDiscountPromisify(serverGoodsArray){
+  return new Promise((resolve, reject) => {
+    if (!validator(serverGoodsArray)) {
+      reject(error(statusCode.notAcceptable, {'error':'Not Acceptable'}));
+    }
+    addKeyDiscountPromisify(serverGoodsArray).then((fruitWithDiscount) => {
+      resolve(successMessage(fruitWithDiscount));
+    });
+  });
+}
+
+async function getArrayWithDiscountAsync(){
+  const arrayWithDiscount = await addKeyDiscountPromise(data);
+  return successMessage(arrayWithDiscount);
+}
+
+async function postArrayWithDiscountAsync(serverGoodsArray){
+  if (!validator(serverGoodsArray)) {
+    return error(statusCode.notAcceptable, {'error':'Not Acceptable'});
+  }
+  const arrayWithDiscount = await addKeyDiscountPromise(serverGoodsArray);
+  return successMessage(arrayWithDiscount);
 }
 
 function notFound() {
@@ -105,5 +157,11 @@ module.exports = {
   postTopprice,
   getCommonprice,
   postCommonprice,
-  postData
+  postData,
+  getArrayWithDiscountPromise,
+  postArrayWithDiscountPromise,
+  getArrayWithDiscountPromisify,
+  postArrayWithDiscountPromisify,
+  getArrayWithDiscountAsync,
+  postArrayWithDiscountAsync
 };
