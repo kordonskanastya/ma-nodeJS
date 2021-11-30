@@ -9,7 +9,6 @@ const {
   validator,
   addKeyDiscountPromise,
   addKeyDiscountPromisify,
-  addKeyDiscountAsync
 } = require('./helpers/index');
 
 function successMessage(functionMessage) {
@@ -133,7 +132,7 @@ function postArrayWithDiscountPromisify(serverGoodsArray){
 }
 
 async function getArrayWithDiscountAsync(){
-  const arrayWithDiscount = await addKeyDiscountAsync(data);
+  const arrayWithDiscount = await addKeyDiscountPromise(data);
   return successMessage(arrayWithDiscount);
 }
 
@@ -141,7 +140,7 @@ async function postArrayWithDiscountAsync(serverGoodsArray){
   if (!validator(serverGoodsArray)) {
     return error(statusCode.notAcceptable, {'error':'Not Acceptable'});
   }
-  const arrayWithDiscount = await addKeyDiscountAsync(data);
+  const arrayWithDiscount = await addKeyDiscountPromise(serverGoodsArray);
   return successMessage(arrayWithDiscount);
 }
 
