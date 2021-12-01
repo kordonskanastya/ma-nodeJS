@@ -102,25 +102,26 @@ function postArrayWithDiscountPromisify(req, res) {
   });
 }
 
-function getArrayWithDiscountAsync(req, res) {
-  services.getArrayWithDiscountAsync()
-  .then(({message, code}) => {
+async function getArrayWithDiscountAsync(req, res) {
+  try {
+    const {message, code} = await services.getArrayWithDiscountAsync();
     sendResponse(message, code, res);
-  })
-  .catch(error => {
+  }
+  catch(error) {
     sendResponse({error: error.message}, badRequest, res);
-  });
+  };
 }
 
-function postArrayWithDiscountAsync(req, res) {
+async function postArrayWithDiscountAsync(req, res) {
   const parsedBody = JSON.parse(req.body);
-  services.postArrayWithDiscountAsync(parsedBody)
-  .then(({message, code}) => {
+  try {
+    const {message, code} = await services
+      .postArrayWithDiscountAsync(parsedBody);
     sendResponse(message, code, res);
-  })
-  .catch(error => {
+  }
+  catch(error) {
     sendResponse({error: error.message}, badRequest, res);
-  });
+  };
 }
 
 module.exports = {
