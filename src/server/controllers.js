@@ -124,6 +124,17 @@ async function postArrayWithDiscountAsync(req, res) {
   };
 }
 
+async function uploadCsv(req, res) {
+  try {
+    const {message, code} = await services.uploadDataCsv();
+    sendResponse(message, code, res);
+  }
+  catch(error) {
+    sendResponse({error: error.message}, badRequest, res);
+  };
+
+};
+
 module.exports = {
   getHomePage,
   notFound,
@@ -139,5 +150,6 @@ module.exports = {
   getArrayWithDiscountPromisify,
   postArrayWithDiscountPromisify,
   getArrayWithDiscountAsync,
-  postArrayWithDiscountAsync
+  postArrayWithDiscountAsync,
+  uploadCsv
 };

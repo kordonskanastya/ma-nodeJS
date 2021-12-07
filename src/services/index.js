@@ -9,6 +9,7 @@ const {
   validator,
   addKeyDiscountPromise,
   addKeyDiscountPromisify,
+  uploadCsv
 } = require('./helpers/index');
 
 function successMessage(functionMessage) {
@@ -148,6 +149,18 @@ function notFound() {
   return error(statusCode.notFound, {'error':'Not found'});
 }
 
+async function uploadDataCsv(req) {
+  try{
+    const changedBody = await uploadCsv(req);
+    return successMessage(changedBody);
+  } catch (err) {
+    console.log('Can not convert csv to JSON in helpers', err);
+    return error(statusCode.badRequest,
+      {'error':'Can not convert csv to JSON'});
+  }
+
+}
+
 module.exports = {
   getHomePage,
   notFound,
@@ -163,5 +176,6 @@ module.exports = {
   getArrayWithDiscountPromisify,
   postArrayWithDiscountPromisify,
   getArrayWithDiscountAsync,
-  postArrayWithDiscountAsync
+  postArrayWithDiscountAsync,
+  uploadDataCsv
 };

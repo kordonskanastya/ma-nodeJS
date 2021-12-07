@@ -1,6 +1,6 @@
 const controllers = require('./controllers');
 
-module.exports = (req, res) => {
+ const routes = (req, res) => {
   const { pathname, method } = req;
 
   if (pathname === '/' && method === 'GET') {
@@ -47,6 +47,18 @@ module.exports = (req, res) => {
     return controllers.postArrayWithDiscountAsync(req, res);
   }
 
-
   return controllers.notFound(req, res);
 };
+
+
+function handleStreamRoutes(request, response) {
+  const { pathname, method } = request;
+
+  if (pathname === '/data' && method === 'PUT') {
+    controllers.uploadCsv(request);
+  }
+  controllers.notFound(request, response);
+}
+
+
+module.exports = {routes, handleStreamRoutes};
