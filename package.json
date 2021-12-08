@@ -10,7 +10,6 @@
   "author": "Kordonska Anastasiia <kordonskanastya@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "csv": "^6.0.4",
     "express": "^4.17.1"
   },
   "devDependencies": {

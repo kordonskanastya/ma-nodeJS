@@ -52,12 +52,12 @@ const controllers = require('./controllers');
 
 
 function handleStreamRoutes(request, response) {
-  const { pathname, method } = request;
+  const { url, method } = request;
 
-  if (pathname === '/data' && method === 'PUT') {
-    controllers.uploadCsv(request);
+  if (url === '/data' && method === 'PUT') {
+    return controllers.uploadCsv(request, response);
   }
-  controllers.notFound(request, response);
+  return controllers.notFound(request, response);
 }
 
 

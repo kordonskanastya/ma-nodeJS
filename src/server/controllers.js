@@ -126,7 +126,7 @@ async function postArrayWithDiscountAsync(req, res) {
 
 async function uploadCsv(req, res) {
   try {
-    const {message, code} = await services.uploadDataCsv();
+    const {message, code} = await services.uploadDataCsv(req);
     sendResponse(message, code, res);
   }
   catch(error) {
