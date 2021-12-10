@@ -8,7 +8,7 @@ module.exports = (req, res) => {
 
   const { pathname, searchParams } = new URL(url, `https://${host}`);
 
-   if (req.headers['content-type'] === 'application/json') {
+   if (req.headers['content-type'] === 'text/csv') {
     handleStreamRoutes(req, res);
     // .catch(err => console.log('CSV handler failed', err));
     return;

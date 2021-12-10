@@ -4,7 +4,7 @@ const { promisify } = require('util');
 
 const promisifiedPipeline = promisify(pipeline);
 
-const createCsvToJson = require('./csvToJson');
+const createCsvToJson = require('./csvToJsonUtils/csvToJson');
 
 async function uploadCsv(inputStream) {
   const filepath = 'src/data.json';

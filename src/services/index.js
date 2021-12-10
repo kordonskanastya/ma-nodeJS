@@ -151,8 +151,8 @@ function notFound() {
 
 async function uploadDataCsv(req) {
   try{
-    const changedBody = await uploadCsv(req);
-    return successMessage(changedBody);
+    await uploadCsv(req);
+    return successMessage('CSV file convert to JSON');
   } catch (err) {
     console.log('Can not convert csv to JSON in helpers', err);
     return error(statusCode.badRequest,
