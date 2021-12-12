@@ -38,8 +38,7 @@ function createCsvToJson() {
     console.log('No more data to read!');
     const allDataArray = res.flat();
     const optimizedJsonChunk = jsonOptimizer(allDataArray);
-    const newObjFormat = formatterObj(optimizedJsonChunk);
-    callback(null, JSON.stringify(newObjFormat));
+    callback(null, JSON.stringify(optimizedJsonChunk));
   };
 
 

@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const data = require('../data.json');
 const statusCode = require('../statusCode');
 const {
   helper1:searchFruitByItem,
@@ -11,6 +10,14 @@ const {
   addKeyDiscountPromisify,
   uploadCsv
 } = require('./helpers/index');
+
+const dirName = '../data';
+const dataPath = path.join(__dirname, dirName);
+const arrayJson = fs.readdirSync(dataPath);
+const lastJson = arrayJson[arrayJson.length - 1];
+const rightPath = path.join(dataPath, lastJson);
+// eslint-disable-next-line import/no-dynamic-require
+const data = require(rightPath);
 
 function successMessage(functionMessage) {
   return {
@@ -83,9 +90,9 @@ function postData(serverGoodsArray) {
   if (!validator(serverGoodsArray)) {
     return error(statusCode.notAcceptable, {'error':'Not Acceptable'});
   }
-  const dataPath = path.join(__dirname, '../data.json');
+  const pathData = path.join(__dirname, '../data.json');
   try{
-    fs.writeFileSync(dataPath, JSON.stringify(serverGoodsArray));
+    fs.writeFileSync(pathData, JSON.stringify(serverGoodsArray));
   } catch (err) {
     console.log(err);
     return error(statusCode.badRequest, {'error':'Unable to write file'});

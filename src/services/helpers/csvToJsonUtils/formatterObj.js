@@ -1,26 +1,29 @@
+const {formatPriceToNumber} = require('../utils');
+
 function formatterObj(jsonObjects) {
-  const correctJsonObjects = [];
+  const formattedArr = [];
 
-  jsonObjects.forEach((object) => {
-    const correctObject = {};
-    correctObject.item = object.item;
-    correctObject.type = object.type;
-    if (object.measure === 'quantity') {
-      correctObject.quantity = object.measureValue;
-    } else if (object.measure === 'weight') {
-      correctObject.weight = object.measureValue;
+  jsonObjects.forEach((obj) => {
+    const formattedObj = {};
+    formattedObj.item = obj.item;
+    formattedObj.type = obj.type;
+
+    if (obj.measure === 'quantity') {
+      formattedObj.quantity = obj.measureValue;
+    } else if (obj.measure === 'weight') {
+      formattedObj.weight = obj.measureValue;
     }
 
-    if (object.priceType === 'pricePerItem') {
-      correctObject.pricePerItem = object.priceValue.replace(',', '.');
-    } else if (object.priceType === 'pricePerKilo') {
-      correctObject.pricePerKilo = object.priceValue.replace(',', '.');
+    if (obj.priceType === 'pricePerItem') {
+      formattedObj.pricePerItem = formatPriceToNumber(obj.priceValue);
+    } else if (obj.priceType === 'pricePerKilo') {
+      formattedObj.pricePerKilo = formatPriceToNumber(obj.priceValue);
     }
-    
-    correctJsonObjects.push(correctObject);
+
+    formattedArr.push(formattedObj);
   });
 
-  return correctJsonObjects;
+  return formattedArr;
 }
 
 module.exports = formatterObj;

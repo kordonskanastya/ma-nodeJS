@@ -8,11 +8,21 @@ function jsonOptimizer(array) {
     if(!typeArray.includes(type)) {
       typeArray.push(type);
       optimizedArr.push(obj);
-    } else {
+      return;
+    }
       const index = typeArray.indexOf(type);
       const repitableObj = optimizedArr[index];
-      repitableObj.measureValue += obj.measureValue;
-    }
+
+      if (Object.hasOwn(repitableObj, 'measureValue')) {
+        repitableObj.measureValue += obj.measureValue;
+      } else {
+        if (Object.hasOwn(repitableObj, 'weight')) {
+          repitableObj.weight += obj.weight;
+        }
+        if (Object.hasOwn(repitableObj, 'quantity')) {
+          repitableObj.quantity += obj.quantity;
+        }
+      }
   });
 
   return optimizedArr;
