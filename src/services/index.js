@@ -11,21 +11,20 @@ const {
   uploadCsv
 } = require('./helpers/index');
 
+let data;
 
-
-function lastDataFile() {
+try {
   const dirName = '../data';
   const dataPath = path.join(__dirname, dirName);
-  if (!fs.existsSync(dataPath) || fs.readdirSync(dataPath).length === 0) {
-    return '../data.json';
-  }
   const arrayJson = fs.readdirSync(dataPath);
   const lastJson = arrayJson[arrayJson.length - 1];
-  return path.join(dataPath, lastJson);
+  const jsonPath = path.join(dataPath, lastJson);
+  // eslint-disable-next-line import/no-dynamic-require, global-require
+  data = require(jsonPath);
+} catch (err) {
+  // eslint-disable-next-line import/no-dynamic-require, global-require
+  data = require('../data.json');
 }
-
-// eslint-disable-next-line import/no-dynamic-require
-const data = require(lastDataFile());
 
 function successMessage(functionMessage) {
   return {
