@@ -11,13 +11,21 @@ const {
   uploadCsv
 } = require('./helpers/index');
 
-const dirName = '../data';
-const dataPath = path.join(__dirname, dirName);
-const arrayJson = fs.readdirSync(dataPath);
-const lastJson = arrayJson[arrayJson.length - 1];
-const rightPath = path.join(dataPath, lastJson);
+
+
+function lastDataFile() {
+  const dirName = '../data';
+  const dataPath = path.join(__dirname, dirName);
+  if (!fs.existsSync(dataPath) || fs.readdirSync(dataPath).length === 0) {
+    return '../data.json';
+  }
+  const arrayJson = fs.readdirSync(dataPath);
+  const lastJson = arrayJson[arrayJson.length - 1];
+  return path.join(dataPath, lastJson);
+}
+
 // eslint-disable-next-line import/no-dynamic-require
-const data = require(rightPath);
+const data = require(lastDataFile());
 
 function successMessage(functionMessage) {
   return {
