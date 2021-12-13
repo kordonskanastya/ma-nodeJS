@@ -5,6 +5,15 @@ const formatterObj = require('./formatterObj');
 
 const res = [];
 
+function pushOptimizedFormattedJson(headersArray, array){
+  const lastLine = array[array.length - 1];
+  const chunkJson = chunkToJson(headersArray, array);
+  const optimizedJsonChunk = jsonOptimizer(chunkJson);
+  const newObjFormat = formatterObj(optimizedJsonChunk);
+  res.push(newObjFormat);
+  return lastLine;
+}
+
 function createCsvToJson() {
   let isFirstChunk = true;
   let headers = [];
@@ -15,20 +24,12 @@ function createCsvToJson() {
       isFirstChunk = false;
       const dataArray = chunk.toString().split('\n');
       headers = dataArray[0].split(',');
-      chunkLastLine = dataArray[dataArray.length - 1];
       dataArray.shift();
-      const chunkJson = chunkToJson(headers, dataArray);
-      const optimizedJsonChunk = jsonOptimizer(chunkJson);
-      const newObjFormat = formatterObj(optimizedJsonChunk);
-      res.push(newObjFormat);
+      chunkLastLine = pushOptimizedFormattedJson(headers, dataArray);
       callback(null, '');
     } else {
-      const dataArray = chunk.toString().concat(chunkLastLine).split('\n');
-      chunkLastLine = dataArray[dataArray.length - 1];
-      const chunkJson = chunkToJson(headers, dataArray);
-      const optimizedJsonChunk = jsonOptimizer(chunkJson);
-      const newObjFormat = formatterObj(optimizedJsonChunk);
-      res.push(newObjFormat);
+      const dataArray = chunkLastLine.concat(chunk.toString()).split('\n');
+      chunkLastLine = pushOptimizedFormattedJson(headers, dataArray);
       callback(null, '');
     }
   };
