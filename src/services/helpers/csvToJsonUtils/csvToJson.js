@@ -22,16 +22,15 @@ function createCsvToJson() {
       const newObjFormat = formatterObj(optimizedJsonChunk);
       res.push(newObjFormat);
       callback(null, '');
-      return;
+    } else {
+      const dataArray = chunk.toString().concat(chunkLastLine).split('\n');
+      chunkLastLine = dataArray[dataArray.length - 1];
+      const chunkJson = chunkToJson(headers, dataArray);
+      const optimizedJsonChunk = jsonOptimizer(chunkJson);
+      const newObjFormat = formatterObj(optimizedJsonChunk);
+      res.push(newObjFormat);
+      callback(null, '');
     }
-
-    const dataArray = chunk.toString().concat(chunkLastLine).split('\n');
-    chunkLastLine = dataArray[dataArray.length - 1];
-    const chunkJson = chunkToJson(headers, dataArray);
-    const optimizedJsonChunk = jsonOptimizer(chunkJson);
-    const newObjFormat = formatterObj(optimizedJsonChunk);
-    res.push(newObjFormat);
-    callback(null, '');
   };
 
   const flush = callback => {

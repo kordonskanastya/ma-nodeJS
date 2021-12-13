@@ -1,5 +1,6 @@
 const { pipeline } = require('stream');
 const fs = require('fs');
+const path = require('path');
 const { promisify } = require('util');
 
 const promisifiedPipeline = promisify(pipeline);
@@ -7,8 +8,13 @@ const promisifiedPipeline = promisify(pipeline);
 const createCsvToJson = require('./csvToJsonUtils/csvToJson');
 
 async function uploadCsv(inputStream) {
+  const dirName = '../data';
+  const dataPath = path.join(__dirname, dirName);
   const timestamp = Date.now();
-  const filepath = `src/data/${timestamp}.json`;
+  if (!fs.existsSync(dataPath)) {
+    fs.mkdirSync(dataPath);
+  }
+  const filepath = `${dataPath}/${timestamp}.json`;
   const outputStream = fs.createWriteStream(filepath);
   const csvToJson = createCsvToJson(filepath);
 
