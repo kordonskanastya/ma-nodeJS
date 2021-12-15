@@ -5,7 +5,8 @@ function enableGracefulShutdown() {
     if (error) console.log(error);
     console.log('Gracefully shutting shown');
 
-    server.stop(() => process.exit());
+    // process.exit();
+    server.stop((server.start, () => process.exit()));
   };
 
   process.on('SIGINT', exitHandler);
