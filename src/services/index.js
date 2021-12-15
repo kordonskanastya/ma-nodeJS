@@ -15,7 +15,7 @@ let data;
 
 (() => {
     try {
-    const dirName = '../data';
+    const dirName = '../../data';
     const dataPath = path.join(__dirname, dirName);
     const arrayJson = fs.readdirSync(dataPath);
     const lastJson = arrayJson[arrayJson.length - 1];
