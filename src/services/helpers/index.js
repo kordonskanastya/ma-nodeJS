@@ -4,6 +4,7 @@ const helper3 = require('./helper3');
 const validator = require('./validator');
 const addKeyDiscountPromise = require('./discountPromise');
 const addKeyDiscountPromisify = require('./discountPromisify');
+const uploadCsv = require('./uploadCsv');
 
 module.exports = {
   helper1,
@@ -12,4 +13,5 @@ module.exports = {
   validator,
   addKeyDiscountPromise,
   addKeyDiscountPromisify,
+  uploadCsv
 };

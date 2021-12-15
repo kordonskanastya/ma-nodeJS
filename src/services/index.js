@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const data = require('../data.json');
 const statusCode = require('../statusCode');
 const {
   helper1:searchFruitByItem,
@@ -9,7 +8,25 @@ const {
   validator,
   addKeyDiscountPromise,
   addKeyDiscountPromisify,
+  uploadCsv
 } = require('./helpers/index');
+
+let data;
+
+(() => {
+    try {
+    const dirName = '../../data';
+    const dataPath = path.join(__dirname, dirName);
+    const arrayJson = fs.readdirSync(dataPath);
+    const lastJson = arrayJson[arrayJson.length - 1];
+    const jsonPath = path.join(dataPath, lastJson);
+    // eslint-disable-next-line import/no-dynamic-require, global-require
+    data = require(jsonPath);
+  } catch (err) {
+    // eslint-disable-next-line import/no-dynamic-require, global-require
+    data = require('../data.json');
+  }
+})();
 
 function successMessage(functionMessage) {
   return {
@@ -82,9 +99,9 @@ function postData(serverGoodsArray) {
   if (!validator(serverGoodsArray)) {
     return error(statusCode.notAcceptable, {'error':'Not Acceptable'});
   }
-  const dataPath = path.join(__dirname, '../data.json');
+  const pathData = path.join(__dirname, '../data.json');
   try{
-    fs.writeFileSync(dataPath, JSON.stringify(serverGoodsArray));
+    fs.writeFileSync(pathData, JSON.stringify(serverGoodsArray));
   } catch (err) {
     console.log(err);
     return error(statusCode.badRequest, {'error':'Unable to write file'});
@@ -148,6 +165,18 @@ function notFound() {
   return error(statusCode.notFound, {'error':'Not found'});
 }
 
+async function uploadDataCsv(req) {
+  try{
+    await uploadCsv(req);
+    return successMessage({result: 'CSV file convert to JSON'});
+  } catch (err) {
+    console.log('Can not convert csv to JSON in helpers', err);
+    return error(statusCode.badRequest,
+      {'error':'Can not convert csv to JSON'});
+  }
+
+}
+
 module.exports = {
   getHomePage,
   notFound,
@@ -163,5 +192,6 @@ module.exports = {
   getArrayWithDiscountPromisify,
   postArrayWithDiscountPromisify,
   getArrayWithDiscountAsync,
-  postArrayWithDiscountAsync
+  postArrayWithDiscountAsync,
+  uploadDataCsv
 };

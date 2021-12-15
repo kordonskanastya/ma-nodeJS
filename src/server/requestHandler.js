@@ -1,4 +1,4 @@
-const routes = require('./routes');
+const { routes, handleStreamRoutes} = require('./routes');
 
 module.exports = (req, res) => {
   const {
@@ -7,6 +7,12 @@ module.exports = (req, res) => {
   } = req;
 
   const { pathname, searchParams } = new URL(url, `https://${host}`);
+
+   if (req.headers['content-type'] === 'text/csv') {
+    handleStreamRoutes(req, res);
+    // .catch(err => console.log('CSV handler failed', err));
+    return;
+  }
 
   let body = [];
 
