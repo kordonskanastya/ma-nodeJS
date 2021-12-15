@@ -8,9 +8,9 @@ const res = [];
 function pushOptimizedFormattedJson(headersArray, array){
   const lastLine = array[array.length - 1];
   const chunkJson = chunkToJson(headersArray, array);
-  const optimizedJsonChunk = jsonOptimizer(chunkJson);
-  const newObjFormat = formatterObj(optimizedJsonChunk);
-  res.push(newObjFormat);
+  const newObjFormat = formatterObj(chunkJson);
+  const optimizedJsonChunk = jsonOptimizer(newObjFormat);
+  res.push(optimizedJsonChunk);
   return lastLine;
 }
 

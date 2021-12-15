@@ -1,7 +1,6 @@
 function strSplit(str) {
   const contentAndPrice = str
-  .replace('"', '')
-  .replace('"', '')
+  .replace(/"/g, '')
   .split('$');
   const content = contentAndPrice[0].split(',');
   content.pop();

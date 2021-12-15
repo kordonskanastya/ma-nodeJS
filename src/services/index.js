@@ -13,18 +13,20 @@ const {
 
 let data;
 
-try {
-  const dirName = './data';
-  const dataPath = path.join(__dirname, dirName);
-  const arrayJson = fs.readdirSync(dataPath);
-  const lastJson = arrayJson[arrayJson.length - 1];
-  const jsonPath = path.join(dataPath, lastJson);
-  // eslint-disable-next-line import/no-dynamic-require, global-require
-  data = require(jsonPath);
-} catch (err) {
-  // eslint-disable-next-line import/no-dynamic-require, global-require
-  data = require('../data.json');
-}
+(() => {
+    try {
+    const dirName = '../data';
+    const dataPath = path.join(__dirname, dirName);
+    const arrayJson = fs.readdirSync(dataPath);
+    const lastJson = arrayJson[arrayJson.length - 1];
+    const jsonPath = path.join(dataPath, lastJson);
+    // eslint-disable-next-line import/no-dynamic-require, global-require
+    data = require(jsonPath);
+  } catch (err) {
+    // eslint-disable-next-line import/no-dynamic-require, global-require
+    data = require('../data.json');
+  }
+})();
 
 function successMessage(functionMessage) {
   return {
@@ -166,7 +168,7 @@ function notFound() {
 async function uploadDataCsv(req) {
   try{
     await uploadCsv(req);
-    return successMessage('CSV file convert to JSON');
+    return successMessage({result: 'CSV file convert to JSON'});
   } catch (err) {
     console.log('Can not convert csv to JSON in helpers', err);
     return error(statusCode.badRequest,

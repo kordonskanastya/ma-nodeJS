@@ -8,7 +8,7 @@ const promisifiedPipeline = promisify(pipeline);
 const createCsvToJson = require('./csvToJsonUtils/csvToJson');
 
 async function uploadCsv(inputStream) {
-  const dirName = '../data';
+  const dirName = '../../data';
   const dataPath = path.join(__dirname, dirName);
   const timestamp = Date.now();
   if (!fs.existsSync(dataPath)) {

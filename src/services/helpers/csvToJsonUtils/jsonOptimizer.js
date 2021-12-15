@@ -1,28 +1,33 @@
 function jsonOptimizer(array) {
-  const typeArray = [];
   const optimizedArr = [];
 
-  // eslint-disable-next-line array-callback-return
-  array.map(obj => {
-    const { type } = obj;
-    if(!typeArray.includes(type)) {
-      typeArray.push(type);
+  array.forEach(obj => {
+    let flag = true;
+    if (optimizedArr.length === 0) {
       optimizedArr.push(obj);
       return;
     }
-      const index = typeArray.indexOf(type);
-      const repitableObj = optimizedArr[index];
-
-      if (Object.hasOwn(repitableObj, 'measureValue')) {
-        repitableObj.measureValue += obj.measureValue;
-      } else {
-        if (Object.hasOwn(repitableObj, 'weight')) {
-          repitableObj.weight += obj.weight;
+    const priceObj = obj.pricePerKilo || obj.pricePerItem;
+    optimizedArr.forEach((optimizedElem) => {
+      const priceOptimizedElem = optimizedElem.pricePerKilo
+        ||
+        optimizedElem.pricePerItem;
+      if (optimizedElem.type === obj.type && priceObj === priceOptimizedElem) {
+        if (optimizedElem.weight !== undefined) {
+          // eslint-disable-next-line no-param-reassign
+          optimizedElem.weight += (obj.weight);
+          flag = false;
         }
-        if (Object.hasOwn(repitableObj, 'quantity')) {
-          repitableObj.quantity += obj.quantity;
+        if (optimizedElem.quantity !== undefined) {
+          // eslint-disable-next-line no-param-reassign
+          optimizedElem.quantity += obj.quantity;
+          flag = false;
         }
       }
+    });
+    if (flag) {
+      optimizedArr.push(obj);
+    }
   });
 
   return optimizedArr;
