@@ -4,8 +4,8 @@ require('dotenv').config();
 
 const config = {
   port: process.env.PORT || 3000,
-  loginEnv: process.env.LOGIN || new Error('Login is absent'),
-  passwordEnv: process.env.PASSWORD || new Error('Password is absent')
+  loginEnv: process.env.LOGIN || process.exit(1),
+  passwordEnv: process.env.PASSWORD || process.exit(1)
 };
 
 
