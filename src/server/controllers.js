@@ -14,15 +14,14 @@ function getHomePage(req, res) {
 }
 
 function getFilter(req, res) {
-  const {message, code} = services.getFilter(req.params);
+  const {message, code} = services.getFilter(req.query);
   sendResponse(message, code, res);
 }
 
 function postFilter(req, res) {
-  const parsedBody = JSON.parse(req.body);
   const {message, code} = services.postFilter(
-    req.params,
-    parsedBody
+    req.query,
+    req.body
     );
   sendResponse(message, code, res);
 }
@@ -33,8 +32,7 @@ function getTopprice(req, res) {
 }
 
 function postTopprice(req, res) {
-  const parsedBody = JSON.parse(req.body);
-  const {message, code} = services.postTopprice(parsedBody);
+  const {message, code} = services.postTopprice(req.body);
     sendResponse(message, code, res);
 }
 
@@ -44,14 +42,12 @@ function getCommonprice(req, res) {
 }
 
 function postCommonprice(req, res) {
-  const parsedBody = JSON.parse(req.body);
-  const {message, code} = services.postCommonprice(parsedBody);
+  const {message, code} = services.postCommonprice(req.body);
   sendResponse(message, code, res);
 }
 
 function postData(req, res) {
-  const parsedBody = JSON.parse(req.body);
-  const {message, code} = services.postData(parsedBody);
+  const {message, code} = services.postData(req.body);
   sendResponse(message, code, res);
 }
 
@@ -71,8 +67,7 @@ function getArrayWithDiscountPromise(req, res) {
 }
 
 function postArrayWithDiscountPromise(req, res) {
-  const parsedBody = JSON.parse(req.body);
-  services.postArrayWithDiscountPromise(parsedBody)
+  services.postArrayWithDiscountPromise(req.body)
   .then(({message, code}) => {
     sendResponse(message, code, res);
   })
@@ -92,8 +87,7 @@ function getArrayWithDiscountPromisify(req, res) {
 }
 
 function postArrayWithDiscountPromisify(req, res) {
-  const parsedBody = JSON.parse(req.body);
-  services.postArrayWithDiscountPromisify(parsedBody)
+  services.postArrayWithDiscountPromisify(req.body)
   .then(({message, code}) => {
     sendResponse(message, code, res);
   })
@@ -113,10 +107,9 @@ async function getArrayWithDiscountAsync(req, res) {
 }
 
 async function postArrayWithDiscountAsync(req, res) {
-  const parsedBody = JSON.parse(req.body);
   try {
     const {message, code} = await services
-      .postArrayWithDiscountAsync(parsedBody);
+      .postArrayWithDiscountAsync(req.body);
     sendResponse(message, code, res);
   }
   catch(error) {

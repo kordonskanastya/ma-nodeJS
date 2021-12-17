@@ -35,40 +35,33 @@ function successMessage(functionMessage) {
   };
 }
 
-function error(errorCode, errorMessage) {
-  return {
-    message: errorMessage,
-    code: errorCode
-  };
-}
-
 function getHomePage() {
   return successMessage({'result': 'hello world!'});
 }
 
 function getFilter(params) {
-  let sortedArray = searchFruitByItem(data);
+  let sortedArray = data;
   // eslint-disable-next-line no-restricted-syntax
-  for (const key of params.keys()) {
-    sortedArray = searchFruitByItem(sortedArray, key, params.get(key));
+  for (const key of Object.keys(params)) {
+    sortedArray = searchFruitByItem(sortedArray, key, params[key]);
   }
    if (sortedArray.length === 0) {
-    return error(statusCode.notFound, {'error': 'Not found'});
+    return new Error('Not found items');
    }
   return successMessage(sortedArray);
 }
 
 function postFilter(params, serverGoodsArray) {
   if (!validator(serverGoodsArray)) {
-    return error(statusCode.notAcceptable, {'error':'Not Acceptable'});
+    return new Error('Not Acceptable');
   }
-  let sortedArray = searchFruitByItem(serverGoodsArray);
+  let sortedArray = serverGoodsArray;
   // eslint-disable-next-line no-restricted-syntax
-  for (const key of params.keys()) {
-    sortedArray = searchFruitByItem(sortedArray, key, params.get(key));
+  for (const key of Object.keys(params)) {
+    sortedArray = searchFruitByItem(sortedArray, key, params[key]);
   }
    if (sortedArray.length === 0) {
-    return error(statusCode.notFound, {'error': 'Not found'});
+    return new Error('Not found items');
    }
    return successMessage(sortedArray);
 }
@@ -79,7 +72,7 @@ function getTopprice() {
 
 function postTopprice(serverGoodsArray) {
   if (!validator(serverGoodsArray)) {
-    return error(statusCode.notAcceptable, {'error':'Not Acceptable'});
+    return new Error('Not Acceptable');
   }
   return successMessage(mostExpensiveFruit(serverGoodsArray));
 }
@@ -90,21 +83,21 @@ function getCommonprice() {
 
 function postCommonprice(serverGoodsArray) {
   if (!validator(serverGoodsArray)) {
-    return error(statusCode.notAcceptable, {'error':'Not Acceptable'});
+    return new Error('Not Acceptable');
   }
   return successMessage(addKeyPrice(serverGoodsArray));
 }
 
 function postData(serverGoodsArray) {
   if (!validator(serverGoodsArray)) {
-    return error(statusCode.notAcceptable, {'error':'Not Acceptable'});
+    return new Error('Not Acceptable');
   }
   const pathData = path.join(__dirname, '../data.json');
   try{
     fs.writeFileSync(pathData, JSON.stringify(serverGoodsArray));
   } catch (err) {
     console.log(err);
-    return error(statusCode.badRequest, {'error':'Unable to write file'});
+    return new Error('Unable to write file');
   }
 
   return successMessage({'result': 'rewritten data.json'});
@@ -121,7 +114,7 @@ function getArrayWithDiscountPromise(){
 function postArrayWithDiscountPromise(serverGoodsArray){
   return new Promise((resolve, reject) => {
     if (!validator(serverGoodsArray)) {
-      reject(error(statusCode.notAcceptable, {'error':'Not Acceptable'}));
+      reject(new Error('Not Acceptable'));
     }
     addKeyDiscountPromise(serverGoodsArray).then((fruitWithDiscount) => {
       resolve(successMessage(fruitWithDiscount));
@@ -140,7 +133,7 @@ function getArrayWithDiscountPromisify(){
 function postArrayWithDiscountPromisify(serverGoodsArray){
   return new Promise((resolve, reject) => {
     if (!validator(serverGoodsArray)) {
-      reject(error(statusCode.notAcceptable, {'error':'Not Acceptable'}));
+      reject(new Error('Not Acceptable'));
     }
     addKeyDiscountPromisify(serverGoodsArray).then((fruitWithDiscount) => {
       resolve(successMessage(fruitWithDiscount));
@@ -155,14 +148,14 @@ async function getArrayWithDiscountAsync(){
 
 async function postArrayWithDiscountAsync(serverGoodsArray){
   if (!validator(serverGoodsArray)) {
-    return error(statusCode.notAcceptable, {'error':'Not Acceptable'});
+    return new Error('Not Acceptable');
   }
   const arrayWithDiscount = await addKeyDiscountPromise(serverGoodsArray);
   return successMessage(arrayWithDiscount);
 }
 
 function notFound() {
-  return error(statusCode.notFound, {'error':'Not found'});
+  return new Error('Not Found route');
 }
 
 async function uploadDataCsv(req) {
@@ -171,8 +164,7 @@ async function uploadDataCsv(req) {
     return successMessage({result: 'CSV file convert to JSON'});
   } catch (err) {
     console.log('Can not convert csv to JSON in helpers', err);
-    return error(statusCode.badRequest,
-      {'error':'Can not convert csv to JSON'});
+    return new Error('Can not convert csv to JSON');
   }
 
 }
