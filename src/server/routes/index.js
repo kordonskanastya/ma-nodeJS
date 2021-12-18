@@ -35,7 +35,7 @@ app.post('/data', (req, res) => controllers.postData(req, res));
 
 app.use('/discount', discount);
 
-app.use((req, res) => controllers.notFound(req, res));
+app.use((req, res, next) => next(new Error(`Page not found ${req.path}`)));
 
 app.use(errorHandler);
 

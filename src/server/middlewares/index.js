@@ -17,24 +17,16 @@ const authorization = (req, res, next) => {
   }
 };
 
-const writeRes = (res, strErr, code) => {
-  res.setHeader('Content-Type', 'application/json');
-  res.write(JSON.stringify({ error: strErr }));
-  res.status(code);
-  res.end();
-};
-
 // eslint-disable-next-line no-unused-vars
 const errorHandler = (err, req, res, next) => {
   if (!err) {
-    res.json({ error: false });
-    res.status(200);
-    res.end();
+    res.status(200).send({ error: false });
   }
-  if (err.toString() === 'Error: Not Authorized') {
-    writeRes(res, err.toString(), 403);
+  const errorStr = err.toString();
+  if (errorStr === 'Error: Not Authorized') {
+    res.status(403).send({ error: errorStr });
   } else {
-    writeRes(res, err.toString(), 500);
+    res.status(500).send({ error: errorStr });
   }
 };
 

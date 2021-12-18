@@ -154,10 +154,6 @@ async function postArrayWithDiscountAsync(serverGoodsArray){
   return successMessage(arrayWithDiscount);
 }
 
-function notFound() {
-  return new Error('Not Found route');
-}
-
 async function uploadDataCsv(req) {
   try{
     await uploadCsv(req);
@@ -171,7 +167,6 @@ async function uploadDataCsv(req) {
 
 module.exports = {
   getHomePage,
-  notFound,
   getFilter,
   postFilter,
   getTopprice,

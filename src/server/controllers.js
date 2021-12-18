@@ -1,21 +1,14 @@
 const services = require('../services');
 const { badRequest } = require('../statusCode');
 
-function sendResponse(message, code, res) {
-  res.setHeader('Content-Type', 'application/json');
-  res.write(JSON.stringify(message));
-  res.statusCode = code;
-  res.end();
-}
-
 function getHomePage(req, res) {
   const { message, code } = services.getHomePage();
-  sendResponse(message, code, res);
+  res.status(code).send(message);
 }
 
 function getFilter(req, res) {
   const {message, code} = services.getFilter(req.query);
-  sendResponse(message, code, res);
+  res.status(code).send(message);
 }
 
 function postFilter(req, res) {
@@ -23,86 +16,78 @@ function postFilter(req, res) {
     req.query,
     req.body
     );
-  sendResponse(message, code, res);
+  res.status(code).send(message);
 }
 
 function getTopprice(req, res) {
   const {message, code} = services.getTopprice();
-  sendResponse(message, code, res);
-}
+  res.status(code).send(message);}
 
 function postTopprice(req, res) {
   const {message, code} = services.postTopprice(req.body);
-    sendResponse(message, code, res);
-}
+  res.status(code).send(message);}
 
 function getCommonprice(req, res) {
   const {message, code} = services.getCommonprice();
-  sendResponse(message, code, res);
-}
+  res.status(code).send(message);}
 
 function postCommonprice(req, res) {
   const {message, code} = services.postCommonprice(req.body);
-  sendResponse(message, code, res);
+  res.status(code).send(message);
 }
 
 function postData(req, res) {
   const {message, code} = services.postData(req.body);
-  sendResponse(message, code, res);
-}
-
-function notFound(req, res) {
-  const { message, code } = services.notFound();
-  sendResponse(message, code, res);
+  res.status(code).send(message);
 }
 
 function getArrayWithDiscountPromise(req, res) {
   services.getArrayWithDiscountPromise()
   .then(({message, code}) => {
-    sendResponse(message, code, res);
+    res.status(code).send(message);
   })
   .catch(error => {
-    sendResponse({error: error.message}, badRequest, res);
+    res.status(badRequest).send({error: error.message});
   });
 }
 
 function postArrayWithDiscountPromise(req, res) {
   services.postArrayWithDiscountPromise(req.body)
   .then(({message, code}) => {
-    sendResponse(message, code, res);
+    res.status(code).send(message);
   })
   .catch(error => {
-    sendResponse({error: error.message}, badRequest, res);
+    res.status(badRequest).send({error: error.message});
   });
 }
 
 function getArrayWithDiscountPromisify(req, res) {
   services.getArrayWithDiscountPromisify()
   .then(({message, code}) => {
-    sendResponse(message, code, res);
+    res.status(code).send(message);
   })
   .catch(error => {
-    sendResponse({error: error.message}, badRequest, res);
+    res.status(badRequest).send({error: error.message});
   });
 }
 
 function postArrayWithDiscountPromisify(req, res) {
   services.postArrayWithDiscountPromisify(req.body)
   .then(({message, code}) => {
-    sendResponse(message, code, res);
+    res.status(code).send(message);
   })
   .catch(error => {
-    sendResponse({error: error.message}, badRequest, res);
+    res.status(badRequest).send({error: error.message});
   });
 }
 
 async function getArrayWithDiscountAsync(req, res) {
   try {
     const {message, code} = await services.getArrayWithDiscountAsync();
-    sendResponse(message, code, res);
+    res.status(code).send(message);
   }
   catch(error) {
-    sendResponse({error: error.message}, badRequest, res);
+    res.status(badRequest).send({error: error.message});
   };
 }
 
@@ -110,27 +95,26 @@ async function postArrayWithDiscountAsync(req, res) {
   try {
     const {message, code} = await services
       .postArrayWithDiscountAsync(req.body);
-    sendResponse(message, code, res);
+    res.status(code).send(message);
   }
   catch(error) {
-    sendResponse({error: error.message}, badRequest, res);
+    res.status(badRequest).send({error: error.message});
   };
 }
 
 async function uploadCsv(req, res) {
   try {
     const {message, code} = await services.uploadDataCsv(req);
-    sendResponse(message, code, res);
+    res.status(code).send(message);
   }
   catch(error) {
-    sendResponse({error: error.message}, badRequest, res);
+    res.status(badRequest).send({error: error.message});
   };
 
 };
 
 module.exports = {
   getHomePage,
-  notFound,
   getFilter,
   postFilter,
   getTopprice,
