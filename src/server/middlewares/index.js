@@ -10,19 +10,18 @@ const authorization = (req, res, next) => {
     return res.status(statusCode.unauthorized)
       .send({ error: 'Authorization header is absent' });
   }
-  
-  const authHeaders = (req.headers.authorization || '').split(' ');
+
+  const [type, token] = req.headers.authorization.split(' ');
   const [login, password] = Buffer
-    .from(authHeaders[1], 'base64')
+    .from(token, 'base64')
     .toString().split(':');
 
-  if (login && password && authHeaders[0] === typeAuth
-    && login === loginEnv && password === passwordEnv) {
-    next();
-  } else {
+    // !login && !password &&
+  if (type !== typeAuth || login !== loginEnv || password !== passwordEnv) {
     return res.status(statusCode.unauthorized)
       .send({ error: 'Not Authorized' });
   }
+  next();
 };
 
 // eslint-disable-next-line no-unused-vars
