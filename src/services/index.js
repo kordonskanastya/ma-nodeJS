@@ -46,14 +46,14 @@ function getFilter(params) {
     sortedArray = searchFruitByItem(sortedArray, key, params[key]);
   }
    if (sortedArray.length === 0) {
-    return new Error('Not found items');
+    throw new Error('Not found items');
    }
   return successMessage(sortedArray);
 }
 
 function postFilter(params, serverGoodsArray) {
   if (!validator(serverGoodsArray)) {
-    return new Error('Not Acceptable');
+    throw new Error('Not Acceptable');
   }
   let sortedArray = serverGoodsArray;
   // eslint-disable-next-line no-restricted-syntax
@@ -61,7 +61,7 @@ function postFilter(params, serverGoodsArray) {
     sortedArray = searchFruitByItem(sortedArray, key, params[key]);
   }
    if (sortedArray.length === 0) {
-    return new Error('Not found items');
+    throw new Error('Not found items');
    }
    return successMessage(sortedArray);
 }
@@ -72,7 +72,7 @@ function getTopprice() {
 
 function postTopprice(serverGoodsArray) {
   if (!validator(serverGoodsArray)) {
-    return new Error('Not Acceptable');
+    throw new Error('Not Acceptable');
   }
   return successMessage(mostExpensiveFruit(serverGoodsArray));
 }
@@ -83,21 +83,21 @@ function getCommonprice() {
 
 function postCommonprice(serverGoodsArray) {
   if (!validator(serverGoodsArray)) {
-    return new Error('Not Acceptable');
+    throw new Error('Not Acceptable');
   }
   return successMessage(addKeyPrice(serverGoodsArray));
 }
 
 function postData(serverGoodsArray) {
   if (!validator(serverGoodsArray)) {
-    return new Error('Not Acceptable');
+    throw new Error('Not Acceptable');
   }
   const pathData = path.join(__dirname, '../data.json');
   try{
     fs.writeFileSync(pathData, JSON.stringify(serverGoodsArray));
   } catch (err) {
     console.log(err);
-    return new Error('Unable to write file');
+    throw new Error('Unable to write file');
   }
 
   return successMessage({'result': 'rewritten data.json'});
@@ -148,7 +148,7 @@ async function getArrayWithDiscountAsync(){
 
 async function postArrayWithDiscountAsync(serverGoodsArray){
   if (!validator(serverGoodsArray)) {
-    return new Error('Not Acceptable');
+    throw new Error('Not Acceptable');
   }
   const arrayWithDiscount = await addKeyDiscountPromise(serverGoodsArray);
   return successMessage(arrayWithDiscount);
@@ -160,7 +160,7 @@ async function uploadDataCsv(req) {
     return successMessage({result: 'CSV file convert to JSON'});
   } catch (err) {
     console.log('Can not convert csv to JSON in helpers', err);
-    return new Error('Can not convert csv to JSON');
+    throw new Error('Can not convert csv to JSON');
   }
 
 }
