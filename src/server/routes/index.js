@@ -9,34 +9,26 @@ const app = express();
 
 app.use(authorization);
 
-app.put('/data', (req, res, next) => {
-  if (req.headers['content-type'] === 'text/csv') {
-   controllers.uploadCsv(req, res);
- } else {
-   next(new Error('wrong header'));
- }
-});
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get('/', (req, res) => controllers.getHomePage(req, res));
-
-app.get('/filter', (req, res) => controllers.getFilter(req, res));
-app.post('/filter', (req, res) => controllers.postFilter(req, res));
-
-app.get('/topprice', (req, res) => controllers.getTopprice(req, res));
-app.post('/topprice', (req, res) => controllers.postTopprice(req, res));
-
-app.get('/commonprice', (req, res) => controllers.getCommonprice(req, res));
-app.post('/commonprice', (req, res) => controllers.postCommonprice(req, res));
-
-app.post('/data', (req, res) => controllers.postData(req, res));
-
 app.use('/discount', discount);
 
-app.use((req, res, next) => next(new Error(`Page not found ${req.path}`)));
+app.get('/', controllers.getHomePage);
 
+app.get('/filter', controllers.getFilter);
+app.post('/filter', controllers.postFilter);
+
+app.get('/topprice', controllers.getTopprice);
+app.post('/topprice', controllers.postTopprice);
+
+app.get('/commonprice', controllers.getCommonprice);
+app.post('/commonprice', controllers.postCommonprice);
+
+app.post('/data', controllers.postData);
+app.put('/data', controllers.uploadCsv);
+
+app.use((req, res, next) => next(new Error(`Page not found ${req.path}`)));
 app.use(errorHandler);
 
 module.exports = app;

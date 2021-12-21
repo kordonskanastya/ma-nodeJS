@@ -3,11 +3,13 @@ const app = require('./routes');
 
 const { port } = config;
 
-const listener = app.listen(port, () => {
-  console.log(`Server successfully started on port ${port}`);
-});
+let listener;
 
-const start = () => listener;
+const start = () => {
+  listener = app.listen(port, () => {
+    console.log(`Server successfully started on port ${port}`);
+  });
+};
 
 function stop(callback) {
   if (!listener) {

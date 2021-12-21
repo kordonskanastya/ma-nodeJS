@@ -3,28 +3,16 @@ const controllers = require('../controllers');
 
 const discount = express.Router();
 
-discount.get('/promise', (req, res) => {
-  controllers.getArrayWithDiscountPromise(req, res);
-  });
+discount.get('/promise', controllers.getArrayWithDiscountPromise);
 
-discount.post('/promise', (req, res) => {
-  controllers.postArrayWithDiscountPromise(req, res);
-  });
+discount.post('/promise', controllers.postArrayWithDiscountPromise);
 
-discount.get('/promisify', (req, res) => {
-  controllers.getArrayWithDiscountPromisify(req, res);
-  });
+discount.get('/promisify', controllers.getArrayWithDiscountPromisify);
 
-discount.post('/promisify', (req, res) => {
-  controllers.postArrayWithDiscountPromisify(req, res);
-  });
+discount.post('/promisify', controllers.postArrayWithDiscountPromisify);
 
-discount.get('/async', (req, res) => {
-  controllers.getArrayWithDiscountAsync(req, res);
-  });
+discount.get('/async', controllers.getArrayWithDiscountAsync);
 
-discount.post('/async', (req, res) => {
-  controllers.postArrayWithDiscountAsync(req, res);
-  });
+discount.post('/async', controllers.postArrayWithDiscountAsync);
 
 module.exports = discount;
