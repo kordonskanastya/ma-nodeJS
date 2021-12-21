@@ -28,7 +28,8 @@ app.post('/commonprice', controllers.postCommonprice);
 app.post('/data', controllers.postData);
 app.put('/data', controllers.uploadCsv);
 
-app.use((req, res, next) => next(new Error(`Page not found ${req.path}`)));
+app.use((req, res) => res.status(404)
+  .send({ error: `Page not found ${req.path}` }));
 app.use(errorHandler);
 
 module.exports = app;
