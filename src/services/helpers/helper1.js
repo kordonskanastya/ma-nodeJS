@@ -5,4 +5,3 @@ const searchFruitByItem = (goodsArray, item, value) => {
 
 module.exports = searchFruitByItem;
 
-// module.exports = (products, sortKey, sortValue) => {};

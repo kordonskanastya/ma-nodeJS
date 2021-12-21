@@ -1,18 +1,22 @@
-const http = require('http');
-const requestHandler = require('./requestHandler');
+const config = require('../config');
+const app = require('./routes');
 
-const PORT = 3000;
+const { port } = config;
 
-const server = http.createServer(requestHandler);
+let listener;
 
-function start() {
-  server.listen(PORT, () => {
-    console.log(`Server successfully started on port ${PORT}`);
+const start = () => {
+  listener = app.listen(port, () => {
+    console.log(`Server successfully started on port ${port}`);
   });
-}
+};
 
 function stop(callback) {
-  server.close((err) => {
+  if (!listener) {
+    callback();
+    return;
+  }
+  listener.close((err) => {
     if (err) {
       console.log(err, 'Failed to close the server');
       callback();
