@@ -5,14 +5,16 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint --ignore-path .gitignore . --fix",
-    "start": "node ./src/index.js"
+    "start": "node ./src/index.js",
+    "dev": "nodemon ./src/index.js"
   },
   "author": "Kordonska Anastasiia <kordonskanastya@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.1",
     "dotenv": "^10.0.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "pg": "^8.7.1"
   },
   "devDependencies": {
     "eslint": "^7.32.0",
@@ -21,6 +23,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.25.2",
     "eslint-plugin-prettier": "^4.0.0",
+    "nodemon": "^2.0.15",
     "prettier": "^2.4.1"
   }
 }
