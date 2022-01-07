@@ -4,10 +4,20 @@ module.exports = (config) => {
   const client = new Pool(config);
 
   return {
+    getAllData: async () => {
+      try {
+        const data = await(client.query('SELECT * FROM products'));
+        return data.rows;
+      } catch(err) {
+        console.error(err.message || err);
+        throw err;
+      }
+    },
+
     testConnection: async () => {
       try {
         console.log('hello from pg test connection');
-        await(client.query('SELECT NOW()'));
+        return await(client.query('SELECT NOW()'));
       } catch(err) {
         console.error(err.message || err);
         throw err;
@@ -110,6 +120,16 @@ module.exports = (config) => {
           'UPDATE products SET deleted_at = $1 WHERE id = $2',
           [new Date(), id]
         );
+        return true;
+      } catch (err) {
+        console.error(err.message || err);
+        throw err;
+      }
+    },
+
+    cleanTable: async () => {
+      try {
+        await client.query('DELETE FROM products');
         return true;
       } catch (err) {
         console.error(err.message || err);

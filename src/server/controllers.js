@@ -37,8 +37,10 @@ function postCommonprice(req, res) {
 }
 
 function postData(req, res) {
-  const {message, code} = services.postData(req.body);
-  res.status(code).send(message);
+  services.postData(req.body).then((result) => {
+    const {message, code} = result;
+    res.status(code).send(message);
+  });
 }
 
 function getArrayWithDiscountPromise(req, res) {
@@ -117,6 +119,51 @@ async function uploadCsv(req, res) {
 
 };
 
+async function allProducts(req, res) {
+  try {
+    const { message, code } = await services.allProducts();
+    res.status(code).send(message);
+  } catch (err) {
+    res.status(badRequest).send({error: err.message});
+  }
+};
+
+async function productGet(req, res) {
+  try {
+    const { message, code } = await services.productGet(req);
+    res.status(code).send(message);
+  } catch (err) {
+    res.status(badRequest).send({error: err.message});
+  }
+};
+
+async function productCreate(req, res) {
+  try {
+    const { message, code } = await services.productCreate(req);
+    res.status(code).send(message);
+  } catch (err) {
+    res.status(badRequest).send({error: err.message});
+  }
+}
+
+async function productUpdate(req, res) {
+  try {
+    const { message, code } = await services.productUpdate(req);
+    res.status(code).send(message);
+  } catch (err) {
+    res.status(badRequest).send({error: err.message});
+  }
+}
+
+async function productDelete(req, res) {
+  try {
+    const { message, code } = await services.productDelete(req);
+    res.status(code).send(message);
+  } catch (err) {
+    res.status(badRequest).send({error: err.message});
+  }
+}
+
 module.exports = {
   getHomePage,
   getFilter,
@@ -132,5 +179,10 @@ module.exports = {
   postArrayWithDiscountPromisify,
   getArrayWithDiscountAsync,
   postArrayWithDiscountAsync,
-  uploadCsv
+  uploadCsv,
+  allProducts,
+  productGet,
+  productCreate,
+  productUpdate,
+  productDelete
 };

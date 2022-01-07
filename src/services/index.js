@@ -1,5 +1,7 @@
-const fs = require('fs');
-const path = require('path');
+const config = require('../config');
+
+const { db: dbConfig } = config;
+const db = require('../db')(dbConfig);
 const statusCode = require('../statusCode');
 const {
   helper1:searchFruitByItem,
@@ -13,18 +15,12 @@ const {
 
 let data;
 
-(() => {
+(async () => {
     try {
-    const dirName = '../../data';
-    const dataPath = path.join(__dirname, dirName);
-    const arrayJson = fs.readdirSync(dataPath);
-    const lastJson = arrayJson[arrayJson.length - 1];
-    const jsonPath = path.join(dataPath, lastJson);
-    // eslint-disable-next-line import/no-dynamic-require, global-require
-    data = require(jsonPath);
-  } catch (err) {
-    // eslint-disable-next-line import/no-dynamic-require, global-require
-    data = require('../data.json');
+    data = await db.getAllData();
+  } catch(err) {
+    console.error(err.message || err);
+    throw err;
   }
 })();
 
@@ -88,13 +84,17 @@ function postCommonprice(serverGoodsArray) {
   return successMessage(addKeyPrice(serverGoodsArray));
 }
 
-function postData(serverGoodsArray) {
+async function postData(serverGoodsArray) {
   if (!validator(serverGoodsArray)) {
     throw new Error('Not Acceptable');
   }
-  const pathData = path.join(__dirname, '../data.json');
   try{
-    fs.writeFileSync(pathData, JSON.stringify(serverGoodsArray));
+    await db.cleanTable();
+    // eslint-disable-next-line no-restricted-syntax
+    for (const obj of serverGoodsArray) {
+      // eslint-disable-next-line no-await-in-loop
+      await db.createProduct(obj);
+    }
   } catch (err) {
     console.log(err);
     throw new Error('Unable to write file');
@@ -162,7 +162,39 @@ async function uploadDataCsv(req) {
     console.log('Can not convert csv to JSON in helpers', err);
     throw new Error('Can not convert csv to JSON');
   }
+}
 
+async function allProducts(){
+  const dbData = await db.getAllData();
+  return successMessage(dbData);
+}
+
+async function productGet(req){
+  const productById = await db.getProduct(Number(req.params.id));
+  return successMessage(productById);
+}
+
+async function productCreate(req){
+  if (!validator([req.body])) {
+    throw new Error('Not Acceptable');
+  }
+  const newProduct = await db.createProduct(req.body);
+  return successMessage(newProduct);
+}
+
+async function productUpdate(req){
+  if (!validator([req.body])) {
+    throw new Error('Not Acceptable');
+  }
+  const updatedProduct = await db.updateProduct(
+    {id: Number(req.params.id), ...req.body}
+  );
+  return successMessage(updatedProduct);
+}
+
+async function productDelete(req){
+  const deletedProduct = await db.deleteProduct(Number(req.params.id));
+  return successMessage(deletedProduct);
 }
 
 module.exports = {
@@ -180,5 +212,10 @@ module.exports = {
   postArrayWithDiscountPromisify,
   getArrayWithDiscountAsync,
   postArrayWithDiscountAsync,
-  uploadDataCsv
+  uploadDataCsv,
+  allProducts,
+  productGet,
+  productCreate,
+  productUpdate,
+  productDelete
 };

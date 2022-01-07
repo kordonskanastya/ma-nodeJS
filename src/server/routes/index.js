@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 
 const discount = require('./discount');
 const commonRoutes = require('./common');
+const products = require('./products');
 const { authorization, errorHandler } = require('../middlewares');
 
 const app = express();
@@ -15,6 +16,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(commonRoutes);
 
 app.use('/discount', discount);
+
+app.use('/products', products);
 
 app.use((req, res) => res.status(404)
   .send({ error: `Page not found ${req.path}` }));

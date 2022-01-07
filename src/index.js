@@ -5,9 +5,10 @@ const db = require('./db')(dbConfig);
 const server = require('./server');
 
 function enableGracefulShutdown() {
-  const exitHandler = (error) => {
+  const exitHandler = async (error) => {
     if (error) console.log(error);
     console.log('Gracefully shutting shown');
+    await db.close();
     server.stop(() => process.exit());
   };
 
@@ -22,18 +23,11 @@ function enableGracefulShutdown() {
 async function boot () {
   enableGracefulShutdown();
   try {
-    // await db.createProduct(
-    //   {'item':'apple','type':'Fuji','measure':'weight',
-    //   'measureValue': 5, 'priceType':'pricePerKilo', 'priceValue':'$3'});
-
-    await db.updateProduct({id: 1, 'item':'apple',
-    'type':'Fuji', 'measure':'weight','measureValue': 100,
-    'priceType':'pricePerKilo', 'priceValue':'$5'});
-
-    // await db.deleteProduct(5);
-
+    if (!await db.testConnection()) {
+      server.stop(() => process.exit());
+    }
+    // await db.cleanTable();
     server.start();
-
   } catch(err) {
     console.error(err.message || err);
   }
