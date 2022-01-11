@@ -119,25 +119,25 @@ async function uploadCsv(req, res) {
 
 };
 
-async function allProducts(req, res) {
+async function getAllProducts(req, res) {
   try {
-    const { message, code } = await services.allProducts();
+    const { message, code } = await services.getAllProducts();
     res.status(code).send(message);
   } catch (err) {
     res.status(badRequest).send({error: err.message});
   }
 };
 
-async function productGet(req, res) {
+async function getProductById(req, res) {
   try {
-    const { message, code } = await services.productGet(req);
+    const { message, code } = await services.getProductById(req);
     res.status(code).send(message);
   } catch (err) {
     res.status(badRequest).send({error: err.message});
   }
 };
 
-async function productCreate(req, res) {
+async function createProduct(req, res) {
   try {
     const { message, code } = await services.productCreate(req);
     res.status(code).send(message);
@@ -146,18 +146,18 @@ async function productCreate(req, res) {
   }
 }
 
-async function productUpdate(req, res) {
+async function updateProduct(req, res) {
   try {
-    const { message, code } = await services.productUpdate(req);
+    const { message, code } = await services.updateProduct(req);
     res.status(code).send(message);
   } catch (err) {
     res.status(badRequest).send({error: err.message});
   }
 }
 
-async function productDelete(req, res) {
+async function deleteProductIfExists(req, res) {
   try {
-    const { message, code } = await services.productDelete(req);
+    const { message, code } = await services.deleteProductIfExists(req);
     res.status(code).send(message);
   } catch (err) {
     res.status(badRequest).send({error: err.message});
@@ -180,9 +180,9 @@ module.exports = {
   getArrayWithDiscountAsync,
   postArrayWithDiscountAsync,
   uploadCsv,
-  allProducts,
-  productGet,
-  productCreate,
-  productUpdate,
-  productDelete
+  getAllProducts,
+  getProductById,
+  createProduct,
+  updateProduct,
+  deleteProductIfExists
 };

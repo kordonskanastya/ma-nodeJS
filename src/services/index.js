@@ -1,7 +1,6 @@
 const config = require('../config');
 
-const { db: dbConfig } = config;
-const db = require('../db')(dbConfig);
+const db = require('../db')(config.db);
 const statusCode = require('../statusCode');
 const {
   helper1:searchFruitByItem,
@@ -164,17 +163,17 @@ async function uploadDataCsv(req) {
   }
 }
 
-async function allProducts(){
+async function getAllProducts(){
   const dbData = await db.getAllData();
   return successMessage(dbData);
 }
 
-async function productGet(req){
-  const productById = await db.getProduct(Number(req.params.id));
+async function getProductById(req){
+  const productById = await db.getProduct(parseInt(req.params.id, 10));
   return successMessage(productById);
 }
 
-async function productCreate(req){
+async function createProduct(req){
   if (!validator([req.body])) {
     throw new Error('Not Acceptable');
   }
@@ -182,18 +181,18 @@ async function productCreate(req){
   return successMessage(newProduct);
 }
 
-async function productUpdate(req){
+async function updateProduct(req){
   if (!validator([req.body])) {
     throw new Error('Not Acceptable');
   }
   const updatedProduct = await db.updateProduct(
-    {id: Number(req.params.id), ...req.body}
+    {id: parseInt(req.params.id, 10), ...req.body}
   );
   return successMessage(updatedProduct);
 }
 
-async function productDelete(req){
-  const deletedProduct = await db.deleteProduct(Number(req.params.id));
+async function deleteProductIfExists(req){
+  const deletedProduct = await db.deleteProduct(parseInt(req.params.id, 10));
   return successMessage(deletedProduct);
 }
 
@@ -213,9 +212,9 @@ module.exports = {
   getArrayWithDiscountAsync,
   postArrayWithDiscountAsync,
   uploadDataCsv,
-  allProducts,
-  productGet,
-  productCreate,
-  productUpdate,
-  productDelete
+  getAllProducts,
+  getProductById,
+  createProduct,
+  updateProduct,
+  deleteProductIfExists
 };

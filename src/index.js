@@ -24,6 +24,7 @@ async function boot () {
   enableGracefulShutdown();
   try {
     if (!await db.testConnection()) {
+      console.log('DB connection failed. Stop server');
       server.stop(() => process.exit());
     }
     // await db.cleanTable();

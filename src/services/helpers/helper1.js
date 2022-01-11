@@ -1,7 +1,7 @@
 const searchFruitByItem = (goodsArray, item, value) => {
   const filteredArray = goodsArray.filter(obj => {
-    if (Number(value)) {
-      return obj[item] === Number(value);
+    if (parseInt(value, 10)) {
+      return obj[item] === parseInt(value, 10);
     }
     return obj[item] === value;
   });

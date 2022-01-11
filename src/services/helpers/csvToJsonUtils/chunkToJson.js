@@ -17,7 +17,7 @@ function chunkToJson(headers, array) {
     // eslint-disable-next-line no-plusplus
     for (let i = 0; i < lenHeaders; i++) {
       if (headers[i] === 'measureValue') {
-        resObj[headers[i]] = Number(contentArray[i]);
+        resObj[headers[i]] = parseInt(contentArray[i], 10);
       } else {
         resObj[headers[i]] = contentArray[i];
       }
