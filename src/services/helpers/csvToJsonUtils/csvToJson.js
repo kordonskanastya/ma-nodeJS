@@ -1,8 +1,7 @@
 const { Transform } = require('stream');
 const config = require('../../../config');
 
-const { db: dbConfig } = config;
-const db = require('../../../db')(dbConfig);
+const db = require('../../../db')(config.db);
 const chunkToJson = require('./chunkToJson');
 const jsonOptimizer = require('./jsonOptimizer');
 // const formatterObj = require('./formatterObj');
@@ -42,7 +41,6 @@ function createCsvToJson() {
     console.log('No more data to read!');
     const allDataArray = res.flat();
     const optimizedJsonChunk = jsonOptimizer(allDataArray);
-    await db.cleanTable();
     // eslint-disable-next-line no-restricted-syntax
     for (const obj of optimizedJsonChunk) {
       // eslint-disable-next-line no-await-in-loop

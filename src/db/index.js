@@ -126,16 +126,5 @@ module.exports = (config) => {
         throw err;
       }
     },
-
-    cleanTable: async () => {
-      try {
-        await client.query('DELETE FROM products');
-        return true;
-      } catch (err) {
-        console.error(err.message || err);
-        throw err;
-      }
-    }
-
   };
 };

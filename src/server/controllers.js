@@ -6,8 +6,8 @@ function getHomePage(req, res) {
   res.status(code).send(message);
 }
 
-function getFilter(req, res) {
-  const {message, code} = services.getFilter(req.query);
+async function getFilter(req, res) {
+  const {message, code} = await services.getFilter(req.query);
   res.status(code).send(message);
 }
 
@@ -139,7 +139,7 @@ async function getProductById(req, res) {
 
 async function createProduct(req, res) {
   try {
-    const { message, code } = await services.productCreate(req);
+    const { message, code } = await services.createProduct(req);
     res.status(code).send(message);
   } catch (err) {
     res.status(badRequest).send({error: err.message});

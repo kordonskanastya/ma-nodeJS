@@ -34,7 +34,10 @@ function getHomePage() {
   return successMessage({'result': 'hello world!'});
 }
 
-function getFilter(params) {
+async function getFilter(params) {
+  if (params.length === 0) {
+    return successMessage(await db.getAllData());
+  }
   let sortedArray = data;
   // eslint-disable-next-line no-restricted-syntax
   for (const key of Object.keys(params)) {
@@ -88,7 +91,6 @@ async function postData(serverGoodsArray) {
     throw new Error('Not Acceptable');
   }
   try{
-    await db.cleanTable();
     // eslint-disable-next-line no-restricted-syntax
     for (const obj of serverGoodsArray) {
       // eslint-disable-next-line no-await-in-loop
@@ -169,7 +171,7 @@ async function getAllProducts(){
 }
 
 async function getProductById(req){
-  const productById = await db.getProduct(parseInt(req.params.id, 10));
+  const productById = await db.getProduct(req.params.id);
   return successMessage(productById);
 }
 
@@ -186,13 +188,13 @@ async function updateProduct(req){
     throw new Error('Not Acceptable');
   }
   const updatedProduct = await db.updateProduct(
-    {id: parseInt(req.params.id, 10), ...req.body}
+    {id: req.params.id, ...req.body}
   );
   return successMessage(updatedProduct);
 }
 
 async function deleteProductIfExists(req){
-  const deletedProduct = await db.deleteProduct(parseInt(req.params.id, 10));
+  const deletedProduct = await db.deleteProduct(req.params.id);
   return successMessage(deletedProduct);
 }
 
