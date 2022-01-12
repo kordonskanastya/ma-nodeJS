@@ -6,8 +6,8 @@ function getHomePage(req, res) {
   res.status(code).send(message);
 }
 
-function getFilter(req, res) {
-  const {message, code} = services.getFilter(req.query);
+async function getFilter(req, res) {
+  const {message, code} = await services.getFilter(req.query);
   res.status(code).send(message);
 }
 
@@ -37,8 +37,10 @@ function postCommonprice(req, res) {
 }
 
 function postData(req, res) {
-  const {message, code} = services.postData(req.body);
-  res.status(code).send(message);
+  services.postData(req.body).then((result) => {
+    const {message, code} = result;
+    res.status(code).send(message);
+  });
 }
 
 function getArrayWithDiscountPromise(req, res) {
@@ -117,6 +119,51 @@ async function uploadCsv(req, res) {
 
 };
 
+async function getAllProducts(req, res) {
+  try {
+    const { message, code } = await services.getAllProducts();
+    res.status(code).send(message);
+  } catch (err) {
+    res.status(badRequest).send({error: err.message});
+  }
+};
+
+async function getProductById(req, res) {
+  try {
+    const { message, code } = await services.getProductById(req);
+    res.status(code).send(message);
+  } catch (err) {
+    res.status(badRequest).send({error: err.message});
+  }
+};
+
+async function createProduct(req, res) {
+  try {
+    const { message, code } = await services.createProduct(req);
+    res.status(code).send(message);
+  } catch (err) {
+    res.status(badRequest).send({error: err.message});
+  }
+}
+
+async function updateProduct(req, res) {
+  try {
+    const { message, code } = await services.updateProduct(req);
+    res.status(code).send(message);
+  } catch (err) {
+    res.status(badRequest).send({error: err.message});
+  }
+}
+
+async function deleteProductIfExists(req, res) {
+  try {
+    const { message, code } = await services.deleteProductIfExists(req);
+    res.status(code).send(message);
+  } catch (err) {
+    res.status(badRequest).send({error: err.message});
+  }
+}
+
 module.exports = {
   getHomePage,
   getFilter,
@@ -132,5 +179,10 @@ module.exports = {
   postArrayWithDiscountPromisify,
   getArrayWithDiscountAsync,
   postArrayWithDiscountAsync,
-  uploadCsv
+  uploadCsv,
+  getAllProducts,
+  getProductById,
+  createProduct,
+  updateProduct,
+  deleteProductIfExists
 };

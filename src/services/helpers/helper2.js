@@ -1,21 +1,16 @@
-const data = require('../../data.json');
 const {formatPriceToNumber:formatter} = require('./utils');
 
 const compare = (a, b) => {
-  const pricePerQuantityA = a.pricePerKilo || a.pricePerItem;
-  const weightOfFruitA = a.weight || a.quantity;
-  const priceA = formatter(pricePerQuantityA)
-    * weightOfFruitA;
+  const priceA = formatter(a.pricevalue)
+    * a.measurevalue;
 
-  const pricePerQuantityB = b.pricePerKilo || b.pricePerItem;
-  const weightOfFruitB = b.weight || b.quantity;
-  const priceB = formatter(pricePerQuantityB)
-    * weightOfFruitB;
+  const priceB = formatter(b.pricevalue)
+    * b.measurevalue;
 
   return priceA - priceB;
 };
 
-const mostExpensiveFruit = (goodsArray = data) => {
+const mostExpensiveFruit = (goodsArray) => {
   const filteredArray = goodsArray.sort(compare);
   return filteredArray[filteredArray.length - 1];
 };

@@ -3,20 +3,23 @@ const validator = (goodsArray) => {
     const {
       item,
       type,
-      quantity,
-      weight = quantity,
-      pricePerKilo,
-      pricePerItem : price = pricePerKilo
+      measure,
+      measurevalue,
+      pricetype,
+      pricevalue
     } = currentObj;
     const typeItem = (typeof item) === 'string';
     const typeOfItemType = (typeof type) === 'string';
-    const typeWeight = (typeof weight) === 'number';
-    const typePrice = ((typeof price) === 'string')
+    const typeMeasure = (typeof measure) === 'string';
+    const typeMeasureValue = (typeof measurevalue) === 'number';
+    const typePriceType = (typeof pricetype) === 'string';
+    const typePriceValue = ((typeof pricevalue) === 'string')
     &&
-    (price.startsWith('$'))
+    (pricevalue.startsWith('$'))
     &&
-    ((typeof parseFloat(price.slice(1))) === 'number');
-    return typeItem && typeOfItemType && typeWeight && typePrice;
+    ((typeof parseFloat(pricevalue.slice(1))) === 'number');
+    return typeItem && typeOfItemType && typeMeasure && typeMeasureValue &&
+    typePriceType && typePriceValue;
   };
   const validateData = goodsArray.filter(check);
   return goodsArray.length === validateData.length;

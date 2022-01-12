@@ -1,9 +1,14 @@
+const config = require('./config');
+
+const { db: dbConfig } = config;
+const db = require('./db')(dbConfig);
 const server = require('./server');
 
 function enableGracefulShutdown() {
-  const exitHandler = (error) => {
+  const exitHandler = async (error) => {
     if (error) console.log(error);
     console.log('Gracefully shutting shown');
+    await db.close();
     server.stop(() => process.exit());
   };
 
@@ -15,9 +20,18 @@ function enableGracefulShutdown() {
   process.on('unhandledRejection', exitHandler);
 }
 
-function boot () {
+async function boot () {
   enableGracefulShutdown();
-  server.start();
+  try {
+    if (!await db.testConnection()) {
+      console.log('DB connection failed. Stop server');
+      server.stop(() => process.exit());
+    }
+    // await db.cleanTable();
+    server.start();
+  } catch(err) {
+    console.error(err.message || err);
+  }
 };
 
 boot();

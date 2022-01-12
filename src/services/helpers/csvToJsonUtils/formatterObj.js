@@ -9,9 +9,9 @@ function formatterObj(jsonObjects) {
     formattedObj.type = obj.type;
 
     if (obj.measure === 'quantity') {
-      formattedObj.quantity = Number(obj.measureValue);
+      formattedObj.quantity = parseInt(obj.measureValue, 10);
     } else if (obj.measure === 'weight') {
-      formattedObj.weight = Number(obj.measureValue);
+      formattedObj.weight = parseInt(obj.measureValue, 10);
     }
 
     if (obj.priceType === 'pricePerItem') {
