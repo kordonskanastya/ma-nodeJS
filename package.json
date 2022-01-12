@@ -6,7 +6,14 @@
   "scripts": {
     "lint": "eslint --ignore-path .gitignore . --fix",
     "start": "node ./src/index.js",
-    "dev": "nodemon ./src/index.js"
+    "dev": "nodemon ./src/index.js",
+    "sequelize:migrate:make": "./node_modules/.bin/sequelize --migrations-path=./src/db/sequelize/migrations migration:generate --name",
+    "sequelize:migrate:latest": "./node_modules/.bin/sequelize --migrations-path=./src/db/sequelize/migrations --config=./src/db/sequelize/config/config.js db:migrate",
+    "sequelize:migrate:undo": "./node_modules/.bin/sequelize --migrations-path=./src/db/sequelize/migrations --config=./src/db/sequelize/config/config.js db:migrate:undo",
+    "knex:migrate:make": "./node_modules/.bin/knex --knexfile=./src/db/knex/knexfile.js migrate:make",
+    "knex:migrate:latest": "./node_modules/.bin/knex --knexfile=./src/db/knex/knexfile.js migrate:latest",
+    "knex:migrate:up": "./node_modules/.bin/knex --knexfile=./src/db/knex/knexfile.js migrate:up",
+    "knex:migrate:down": "./node_modules/.bin/knex --knexfile=./src/db/knex/knexfile.js migrate:down"
   },
   "author": "Kordonska Anastasiia <kordonskanastya@gmail.com>",
   "license": "ISC",
@@ -14,7 +21,10 @@
     "body-parser": "^1.19.1",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
-    "pg": "^8.7.1"
+    "knex": "^0.95.15",
+    "pg": "^8.7.1",
+    "sequelize": "^6.13.0",
+    "sequelize-cli": "^6.3.0"
   },
   "devDependencies": {
     "eslint": "^7.32.0",
