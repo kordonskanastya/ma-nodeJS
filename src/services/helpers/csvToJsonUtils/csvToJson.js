@@ -1,20 +1,27 @@
+/* eslint-disable no-param-reassign */
 const { Transform } = require('stream');
-const config = require('../../../config');
-
-const db = require('../../../db')(config.db);
 const chunkToJson = require('./chunkToJson');
 const jsonOptimizer = require('./jsonOptimizer');
-// const formatterObj = require('./formatterObj');
 
-const res = [];
-
-function pushOptimizedFormattedJson(headersArray, array){
+async function pushOptimizedFormattedJson(headersArray, array){
   const lastLine = array[array.length - 1];
   const chunkJson = chunkToJson(headersArray, array);
-  // const newObjFormat = formatterObj(chunkJson);
-  const optimizedJsonChunk = jsonOptimizer(chunkJson);
-  res.push(optimizedJsonChunk);
+  await jsonOptimizer(chunkJson);
   return lastLine;
+}
+
+function validationHeaders (headers) {
+  // eslint-disable-next-line no-restricted-syntax
+  for(let i = 0; i < headers.length; i += 1) {
+    if (headers[i] === 'measureValue') {
+      headers[i] = 'measurevalue';
+    } else if (headers[i] === 'priceType') {
+      headers[i] = 'pricetype';
+    } else if (headers[i] === 'priceValue') {
+      headers[i] = 'pricevalue';
+    }
+  }
+  return headers;
 }
 
 function createCsvToJson() {
@@ -22,33 +29,25 @@ function createCsvToJson() {
   let headers = [];
   let chunkLastLine = '';
 
-  const transform = (chunk, encoding, callback) => {
+  const transform = async (chunk, encoding, callback) => {
     if (isFirstChunk) {
       isFirstChunk = false;
       const dataArray = chunk.toString().split('\n');
-      headers = dataArray[0].split(',');
+      headers = validationHeaders(dataArray[0].split(','));
       dataArray.shift();
-      chunkLastLine = pushOptimizedFormattedJson(headers, dataArray);
+      chunkLastLine = await pushOptimizedFormattedJson(headers, dataArray);
       callback(null);
     } else {
       const dataArray = chunkLastLine.concat(chunk.toString()).split('\n');
-      chunkLastLine = pushOptimizedFormattedJson(headers, dataArray);
+      chunkLastLine = await pushOptimizedFormattedJson(headers, dataArray);
       callback(null);
     }
   };
 
   const flush = async (callback) => {
     console.log('No more data to read!');
-    const allDataArray = res.flat();
-    const optimizedJsonChunk = jsonOptimizer(allDataArray);
-    // eslint-disable-next-line no-restricted-syntax
-    for (const obj of optimizedJsonChunk) {
-      // eslint-disable-next-line no-await-in-loop
-      await db.createProduct(obj);
-    }
     callback(null);
   };
-
 
   return new Transform({ transform, flush });
 }

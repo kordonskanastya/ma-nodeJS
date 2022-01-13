@@ -1,27 +1,11 @@
-function jsonOptimizer(array) {
-  const optimizedArr = [];
+const dataOptimizerDB = require('../addedDataOptimizerDB');
 
-  array.forEach(obj => {
-    let flag = true;
-    if (optimizedArr.length === 0) {
-      optimizedArr.push(obj);
-      return;
-    }
-    const priceObj = obj.priceValue;
-    optimizedArr.forEach((optimizedElem) => {
-      const priceOptimizedElem = optimizedElem.priceValue;
-      if (optimizedElem.type === obj.type && priceObj === priceOptimizedElem) {
-          // eslint-disable-next-line no-param-reassign
-          optimizedElem.measureValue += parseInt(obj.measureValue, 10);
-          flag = false;
-      }
-    });
-    if (flag) {
-      optimizedArr.push(obj);
-    }
-  });
-
-  return optimizedArr;
+async function jsonOptimizer(array) {
+  // eslint-disable-next-line no-restricted-syntax
+  for (const obj of array) {
+    // eslint-disable-next-line no-await-in-loop
+    await dataOptimizerDB(obj);
+  }
 };
 
 module.exports = jsonOptimizer;

@@ -21,7 +21,7 @@ const config = {
           min: 2,
           max: 10
         },
-        debug: true
+        debug: false
       },
       pg: {
         user: process.env.DB_USER || exit('db_user'),
@@ -32,14 +32,12 @@ const config = {
       },
       sequelize: {
         dialect: 'postgres',
-        connection: {
-          username: process.env.DB_USER || exit('db_user'),
-          host: process.env.DB_HOST || exit('db_host'),
-          port: process.env.DB_PORT || exit('db_port'),
-          database: process.env.DB_NAME || exit('db_name'),
-          password: process.env.DB_PASS || exit('db_pass'),
-          logging: false
-        },
+        username: process.env.DB_USER || exit('db_user'),
+        host: process.env.DB_HOST || exit('db_host'),
+        port: process.env.DB_PORT || exit('db_port'),
+        database: process.env.DB_NAME || exit('db_name'),
+        password: process.env.DB_PASS || exit('db_pass'),
+        logging: false,
         pool: {
           min: 0,
           max: 10,

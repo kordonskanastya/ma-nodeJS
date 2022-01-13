@@ -19,16 +19,16 @@ function postFilter(req, res) {
   res.status(code).send(message);
 }
 
-function getTopprice(req, res) {
-  const {message, code} = services.getTopprice();
+async function getTopprice(req, res) {
+  const {message, code} = await services.getTopprice();
   res.status(code).send(message);}
 
 function postTopprice(req, res) {
   const {message, code} = services.postTopprice(req.body);
   res.status(code).send(message);}
 
-function getCommonprice(req, res) {
-  const {message, code} = services.getCommonprice();
+async function getCommonprice(req, res) {
+  const {message, code} = await services.getCommonprice();
   res.status(code).send(message);}
 
 function postCommonprice(req, res) {

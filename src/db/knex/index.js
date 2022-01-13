@@ -5,10 +5,10 @@ module.exports = (config) => {
   const knex = new Knex(config);
 
   return {
-    getAllData: async () => {
+    getAllProducts: async () => {
       try {
         const data = await knex.from('products').select();
-        return data[0];
+        return data;
       } catch(err) {
         console.error(err.message || err);
         throw err;
@@ -84,7 +84,7 @@ module.exports = (config) => {
         }
 
         const res = await knex('products')
-          .update(product).where('id', id).returning('*');
+          .where('id', id).update(product).returning('*');
 
         console.log(`DEBUG:  Product updated: ${JSON.stringify(res[0])}`);
         return res[0];
@@ -110,15 +110,20 @@ module.exports = (config) => {
       }
     },
 
-    cleanTable: async () => {
+    getProductByTypeAndPrice: async (type, price) => {
       try {
-        await knex('products').del();
-        return true;
+        if (!type) {
+          throw new Error('ERROR: No product type defined');
+        }
+        const res = await knex('products')
+          .where('type', type)
+          .where('pricevalue', price)
+          .whereNull('deleted_at');
+        return res[0];
       } catch (err) {
         console.error(err.message || err);
         throw err;
       }
-    }
-
+    },
   };
 };

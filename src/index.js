@@ -1,14 +1,10 @@
-const config = require('./config');
-
-const { db: dbConfig } = config;
-const db = require('./db')(dbConfig);
 const server = require('./server');
+const db = require('./db');
 
 function enableGracefulShutdown() {
   const exitHandler = async (error) => {
     if (error) console.log(error);
     console.log('Gracefully shutting shown');
-    await db.close();
     server.stop(() => process.exit());
   };
 
@@ -23,11 +19,9 @@ function enableGracefulShutdown() {
 async function boot () {
   enableGracefulShutdown();
   try {
-    if (!await db.testConnection()) {
-      console.log('DB connection failed. Stop server');
-      server.stop(() => process.exit());
-    }
-    // await db.cleanTable();
+    await db.init();
+    db.setType('sequelize');
+
     server.start();
   } catch(err) {
     console.error(err.message || err);

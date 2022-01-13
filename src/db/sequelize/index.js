@@ -25,9 +25,13 @@ module.exports = (config) => {
   });
 
   return {
-    getAllData: async () => {
+    getAllProducts: async () => {
       try {
-        const data = await db.Product.findAll();
+        const data = await db.Product.findAll({
+          where: {
+            deletedAt: { [Sequelize.Op.is]: null }
+          }
+        });
         return data;
       } catch(err) {
         console.error(err.message || err);
@@ -133,15 +137,23 @@ module.exports = (config) => {
       }
     },
 
-    cleanTable: async () => {
+    getProductByTypeAndPrice: async (type, pricevalue) => {
       try {
-        await db.Product.destroy();
-        return true;
+        if (!type) {
+          throw new Error('ERROR: No product type defined');
+        }
+        const res = await db.Product.findOne({
+          where: {
+            type,
+            pricevalue,
+            deletedAt: { [Sequelize.Op.is]: null },
+          }
+      });
+        return res;
       } catch (err) {
         console.error(err.message || err);
         throw err;
       }
-    }
-
+    },
   };
 };

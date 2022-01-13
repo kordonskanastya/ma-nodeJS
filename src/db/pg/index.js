@@ -4,7 +4,7 @@ module.exports = (config) => {
   const client = new Pool(config);
 
   return {
-    getAllData: async () => {
+    getAllProducts: async () => {
       try {
         const data = await(client.query('SELECT * FROM products'));
         return data.rows;
@@ -121,6 +121,23 @@ module.exports = (config) => {
           [new Date(), id]
         );
         return true;
+      } catch (err) {
+        console.error(err.message || err);
+        throw err;
+      }
+    },
+
+    getProductByTypeAndPrice: async (type, price) => {
+      try {
+        if (!type) {
+          throw new Error('ERROR: No product type defined');
+        }
+        const res = await client.query(
+          `SELECT * FROM products WHERE type = $1
+            and pricevalue = $2 and deleted_at IS NULL`,
+          [type, price]
+        );
+        return res.rows[0];
       } catch (err) {
         console.error(err.message || err);
         throw err;
