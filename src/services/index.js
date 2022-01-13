@@ -67,7 +67,6 @@ function postTopprice(serverGoodsArray) {
 
 async function getCommonprice() {
   const dbData = await db.getAllProducts();
-  console.log(dbData);
   return successMessage(addKeyPrice(dbData));
 }
 

@@ -4,7 +4,8 @@ const addTotalPriceOfFruit = (obj) => {
   const price = formatPriceToNumber(obj.pricevalue)
     *
     obj.measurevalue;
-  return { ...obj, price};
+  const returnedObj = obj.dataValues || obj;
+  return { ...returnedObj, price};
 };
 
 const addKeyPrice = (data) => data.map(addTotalPriceOfFruit);
