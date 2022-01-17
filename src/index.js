@@ -4,6 +4,7 @@ const db = require('./db');
 function enableGracefulShutdown() {
   const exitHandler = async (error) => {
     if (error) console.log(error);
+    await db.end();
     console.log('Gracefully shutting shown');
     server.stop(() => process.exit());
   };

@@ -1,12 +1,13 @@
-const db = require('../../db');
-
 async function dataOptimizerDB (obj) {
-  const similarProduct = await db.getProductByTypeAndPrice(
+  // eslint-disable-next-line global-require
+  const services = require('..');
+  console.log(services);
+  const similarProduct = await services.getProductByTypeAndPrice(
     obj.type, obj.pricevalue);
   if (similarProduct === undefined || similarProduct === null) {
-    await db.createProduct(obj);
+    await services.createProduct(obj);
   } else {
-    await db.updateProduct({
+    await services.updateProduct({
       id: similarProduct.id,
       ...{
         item: similarProduct.item,

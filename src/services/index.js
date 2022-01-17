@@ -1,7 +1,6 @@
 /* eslint-disable no-await-in-loop */
 const db = require('../db');
 const statusCode = require('../statusCode');
-const dataOptimizerDB = require('./helpers/addedDataOptimizerDB');
 const {
   helper1:searchFruitByItem,
   helper2:mostExpensiveFruit,
@@ -84,7 +83,23 @@ async function postData(serverGoodsArray) {
   try{
     // eslint-disable-next-line no-restricted-syntax
     for (const obj of serverGoodsArray) {
-      await dataOptimizerDB(obj);
+      const similarProduct = await db.getProductByTypeAndPrice(
+        obj.type, obj.pricevalue);
+      if (similarProduct === undefined || similarProduct === null) {
+        await db.createProduct(obj);
+      } else {
+        await db.updateProduct({
+          id: similarProduct.id,
+          ...{
+            item: similarProduct.item,
+            type: similarProduct.type,
+            measure: similarProduct.measure,
+            measurevalue: similarProduct.measurevalue + obj.measurevalue,
+            pricetype: similarProduct.pricetype,
+            pricevalue: similarProduct.pricevalue
+          }
+        });
+      }
     }
   } catch (err) {
     console.log(err);
@@ -169,6 +184,10 @@ async function getProductById(req){
 }
 
 async function createProduct(req){
+  if(!req.body) {
+    await db.createProduct(req);
+    return true;
+  }
   if (!validator([req.body])) {
     throw new Error('Not Acceptable');
   }
@@ -177,6 +196,10 @@ async function createProduct(req){
 }
 
 async function updateProduct(req){
+  if(!req.body) {
+    await db.updateProduct(req);
+    return true;
+  }
   if (!validator([req.body])) {
     throw new Error('Not Acceptable');
   }
@@ -189,6 +212,12 @@ async function updateProduct(req){
 async function deleteProductIfExists(req){
   const deletedProduct = await db.deleteProduct(req.params.id);
   return successMessage(deletedProduct);
+}
+
+async function getProductByTypeAndPrice(item, measurevalue){
+  const productByTypeAndPrice = await db
+    .getProductByTypeAndPrice(item, measurevalue);
+  return productByTypeAndPrice;
 }
 
 module.exports = {
@@ -211,5 +240,6 @@ module.exports = {
   getProductById,
   createProduct,
   updateProduct,
-  deleteProductIfExists
+  deleteProductIfExists,
+  getProductByTypeAndPrice
 };
