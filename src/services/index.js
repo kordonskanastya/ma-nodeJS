@@ -1,6 +1,7 @@
 /* eslint-disable no-await-in-loop */
-const db = require('../db');
+const db = require('./product');
 const statusCode = require('../statusCode');
+const dataOptimizerDB = require('./helpers/addedDataOptimizerDB');
 const {
   helper1:searchFruitByItem,
   helper2:mostExpensiveFruit,
@@ -83,23 +84,7 @@ async function postData(serverGoodsArray) {
   try{
     // eslint-disable-next-line no-restricted-syntax
     for (const obj of serverGoodsArray) {
-      const similarProduct = await db.getProductByTypeAndPrice(
-        obj.type, obj.pricevalue);
-      if (similarProduct === undefined || similarProduct === null) {
-        await db.createProduct(obj);
-      } else {
-        await db.updateProduct({
-          id: similarProduct.id,
-          ...{
-            item: similarProduct.item,
-            type: similarProduct.type,
-            measure: similarProduct.measure,
-            measurevalue: similarProduct.measurevalue + obj.measurevalue,
-            pricetype: similarProduct.pricetype,
-            pricevalue: similarProduct.pricevalue
-          }
-        });
-      }
+      await dataOptimizerDB(obj);
     }
   } catch (err) {
     console.log(err);

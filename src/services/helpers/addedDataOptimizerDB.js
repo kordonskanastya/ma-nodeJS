@@ -1,22 +1,19 @@
+const db = require('../product');
+
 async function dataOptimizerDB (obj) {
-  // eslint-disable-next-line global-require
-  const services = require('..');
-  console.log(services);
-  const similarProduct = await services.getProductByTypeAndPrice(
+  const similarProduct = await db.getProductByTypeAndPrice(
     obj.type, obj.pricevalue);
   if (similarProduct === undefined || similarProduct === null) {
-    await services.createProduct(obj);
+    await db.createProduct(obj);
   } else {
-    await services.updateProduct({
+    await db.updateProduct({
       id: similarProduct.id,
-      ...{
-        item: similarProduct.item,
-        type: similarProduct.type,
-        measure: similarProduct.measure,
-        measurevalue: similarProduct.measurevalue + obj.measurevalue,
-        pricetype: similarProduct.pricetype,
-        pricevalue: similarProduct.pricevalue
-      }
+      item: similarProduct.item,
+      type: similarProduct.type,
+      measure: similarProduct.measure,
+      measurevalue: similarProduct.measurevalue + obj.measurevalue,
+      pricetype: similarProduct.pricetype,
+      pricevalue: similarProduct.pricevalue
     });
   }
 }

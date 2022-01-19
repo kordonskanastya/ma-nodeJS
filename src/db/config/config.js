@@ -2,10 +2,10 @@ require('dotenv').config({ path: `${process.env.PWD}/.env` });
 
 const {
   db: {
-    config: { knex }
+    config: { sequelize }
   }
 } = require('../../config');
 
 module.exports = {
-    development: knex
+    development: sequelize
 };
