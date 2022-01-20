@@ -1,12 +1,12 @@
-const db = require('../product');
+const productService = require('../product');
 
 async function dataOptimizerDB (obj) {
-  const similarProduct = await db.getProductByTypeAndPrice(
+  const similarProduct = await productService.getProductByTypeAndPrice(
     obj.type, obj.pricevalue);
   if (similarProduct === undefined || similarProduct === null) {
-    await db.createProduct(obj);
+    await productService.createProduct(obj);
   } else {
-    await db.updateProduct({
+    await productService.updateProduct({
       id: similarProduct.id,
       item: similarProduct.item,
       type: similarProduct.type,

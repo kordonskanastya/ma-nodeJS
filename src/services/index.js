@@ -1,5 +1,5 @@
 /* eslint-disable no-await-in-loop */
-const db = require('./product');
+const productService = require('./product');
 const statusCode = require('../statusCode');
 const dataOptimizerDB = require('./helpers/addedDataOptimizerDB');
 const {
@@ -26,9 +26,9 @@ function getHomePage() {
 
 async function getFilter(params) {
   if (params.length === 0) {
-    return successMessage(await db.getAllProducts());
+    return successMessage(await productService.getAllProducts());
   }
-  let sortedArray = await db.getAllProducts();
+  let sortedArray = await productService.getAllProducts();
   // eslint-disable-next-line no-restricted-syntax
   for (const key of Object.keys(params)) {
     sortedArray = searchFruitByItem(sortedArray, key, params[key]);
@@ -55,7 +55,8 @@ function postFilter(params, serverGoodsArray) {
 }
 
 async function getTopprice() {
-  return successMessage(mostExpensiveFruit(await db.getAllProducts()));
+  return successMessage(mostExpensiveFruit(await productService
+    .getAllProducts()));
 }
 
 function postTopprice(serverGoodsArray) {
@@ -66,7 +67,7 @@ function postTopprice(serverGoodsArray) {
 }
 
 async function getCommonprice() {
-  const dbData = await db.getAllProducts();
+  const dbData = await productService.getAllProducts();
   return successMessage(addKeyPrice(dbData));
 }
 
@@ -95,7 +96,7 @@ async function postData(serverGoodsArray) {
 }
 
 async function getArrayWithDiscountPromise(){
-  const data = await db.getAllProducts();
+  const data = await productService.getAllProducts();
   return new Promise((resolve) => {
     addKeyDiscountPromise(data).then((fruitWithDiscount) => {
       resolve(successMessage(fruitWithDiscount));
@@ -115,7 +116,7 @@ function postArrayWithDiscountPromise(serverGoodsArray){
 }
 
 async function getArrayWithDiscountPromisify(){
-  const data = await db.getAllProducts();
+  const data = await productService.getAllProducts();
   return new Promise((resolve) => {
     addKeyDiscountPromisify(data).then((fruitWithDiscount) => {
       resolve(successMessage(fruitWithDiscount));
@@ -136,7 +137,7 @@ function postArrayWithDiscountPromisify(serverGoodsArray){
 
 async function getArrayWithDiscountAsync(){
   const arrayWithDiscount = await addKeyDiscountPromise(
-    await db.getAllProducts());
+    await productService.getAllProducts());
   return successMessage(arrayWithDiscount);
 }
 
@@ -159,48 +160,48 @@ async function uploadDataCsv(req) {
 }
 
 async function getAllProducts(){
-  const dbData = await db.getAllProducts();
+  const dbData = await productService.getAllProducts();
   return successMessage(dbData);
 }
 
 async function getProductById(req){
-  const productById = await db.getProduct(req.params.id);
+  const productById = await productService.getProduct(req.params.id);
   return successMessage(productById);
 }
 
 async function createProduct(req){
   if(!req.body) {
-    await db.createProduct(req);
+    await productService.createProduct(req);
     return true;
   }
   if (!validator([req.body])) {
     throw new Error('Not Acceptable');
   }
-  const newProduct = await db.createProduct(req.body);
+  const newProduct = await productService.createProduct(req.body);
   return successMessage(newProduct);
 }
 
 async function updateProduct(req){
   if(!req.body) {
-    await db.updateProduct(req);
+    await productService.updateProduct(req);
     return true;
   }
   if (!validator([req.body])) {
     throw new Error('Not Acceptable');
   }
-  const updatedProduct = await db.updateProduct(
+  const updatedProduct = await productService.updateProduct(
     {id: req.params.id, ...req.body}
   );
   return successMessage(updatedProduct);
 }
 
 async function deleteProductIfExists(req){
-  const deletedProduct = await db.deleteProduct(req.params.id);
+  const deletedProduct = await productService.deleteProduct(req.params.id);
   return successMessage(deletedProduct);
 }
 
 async function getProductByTypeAndPrice(item, measurevalue){
-  const productByTypeAndPrice = await db
+  const productByTypeAndPrice = await productService
     .getProductByTypeAndPrice(item, measurevalue);
   return productByTypeAndPrice;
 }
