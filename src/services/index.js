@@ -1,7 +1,7 @@
-const config = require('../config');
-
-const db = require('../db')(config.db);
+/* eslint-disable no-await-in-loop */
+const productService = require('./product');
 const statusCode = require('../statusCode');
+const dataOptimizerDB = require('./helpers/addedDataOptimizerDB');
 const {
   helper1:searchFruitByItem,
   helper2:mostExpensiveFruit,
@@ -12,16 +12,6 @@ const {
   uploadCsv
 } = require('./helpers/index');
 
-let data;
-
-(async () => {
-    try {
-    data = await db.getAllData();
-  } catch(err) {
-    console.error(err.message || err);
-    throw err;
-  }
-})();
 
 function successMessage(functionMessage) {
   return {
@@ -36,9 +26,9 @@ function getHomePage() {
 
 async function getFilter(params) {
   if (params.length === 0) {
-    return successMessage(await db.getAllData());
+    return successMessage(await productService.getAllProducts());
   }
-  let sortedArray = data;
+  let sortedArray = await productService.getAllProducts();
   // eslint-disable-next-line no-restricted-syntax
   for (const key of Object.keys(params)) {
     sortedArray = searchFruitByItem(sortedArray, key, params[key]);
@@ -64,8 +54,9 @@ function postFilter(params, serverGoodsArray) {
    return successMessage(sortedArray);
 }
 
-function getTopprice() {
-  return successMessage(mostExpensiveFruit(data));
+async function getTopprice() {
+  return successMessage(mostExpensiveFruit(await productService
+    .getAllProducts()));
 }
 
 function postTopprice(serverGoodsArray) {
@@ -75,8 +66,9 @@ function postTopprice(serverGoodsArray) {
   return successMessage(mostExpensiveFruit(serverGoodsArray));
 }
 
-function getCommonprice() {
-  return successMessage(addKeyPrice(data));
+async function getCommonprice() {
+  const dbData = await productService.getAllProducts();
+  return successMessage(addKeyPrice(dbData));
 }
 
 function postCommonprice(serverGoodsArray) {
@@ -93,8 +85,7 @@ async function postData(serverGoodsArray) {
   try{
     // eslint-disable-next-line no-restricted-syntax
     for (const obj of serverGoodsArray) {
-      // eslint-disable-next-line no-await-in-loop
-      await db.createProduct(obj);
+      await dataOptimizerDB(obj);
     }
   } catch (err) {
     console.log(err);
@@ -104,7 +95,8 @@ async function postData(serverGoodsArray) {
   return successMessage({'result': 'rewritten data.json'});
 }
 
-function getArrayWithDiscountPromise(){
+async function getArrayWithDiscountPromise(){
+  const data = await productService.getAllProducts();
   return new Promise((resolve) => {
     addKeyDiscountPromise(data).then((fruitWithDiscount) => {
       resolve(successMessage(fruitWithDiscount));
@@ -123,7 +115,8 @@ function postArrayWithDiscountPromise(serverGoodsArray){
   });
 }
 
-function getArrayWithDiscountPromisify(){
+async function getArrayWithDiscountPromisify(){
+  const data = await productService.getAllProducts();
   return new Promise((resolve) => {
     addKeyDiscountPromisify(data).then((fruitWithDiscount) => {
       resolve(successMessage(fruitWithDiscount));
@@ -143,7 +136,8 @@ function postArrayWithDiscountPromisify(serverGoodsArray){
 }
 
 async function getArrayWithDiscountAsync(){
-  const arrayWithDiscount = await addKeyDiscountPromise(data);
+  const arrayWithDiscount = await addKeyDiscountPromise(
+    await productService.getAllProducts());
   return successMessage(arrayWithDiscount);
 }
 
@@ -166,36 +160,50 @@ async function uploadDataCsv(req) {
 }
 
 async function getAllProducts(){
-  const dbData = await db.getAllData();
+  const dbData = await productService.getAllProducts();
   return successMessage(dbData);
 }
 
 async function getProductById(req){
-  const productById = await db.getProduct(req.params.id);
+  const productById = await productService.getProduct(req.params.id);
   return successMessage(productById);
 }
 
 async function createProduct(req){
+  if(!req.body) {
+    await productService.createProduct(req);
+    return true;
+  }
   if (!validator([req.body])) {
     throw new Error('Not Acceptable');
   }
-  const newProduct = await db.createProduct(req.body);
+  const newProduct = await productService.createProduct(req.body);
   return successMessage(newProduct);
 }
 
 async function updateProduct(req){
+  if(!req.body) {
+    await productService.updateProduct(req);
+    return true;
+  }
   if (!validator([req.body])) {
     throw new Error('Not Acceptable');
   }
-  const updatedProduct = await db.updateProduct(
+  const updatedProduct = await productService.updateProduct(
     {id: req.params.id, ...req.body}
   );
   return successMessage(updatedProduct);
 }
 
 async function deleteProductIfExists(req){
-  const deletedProduct = await db.deleteProduct(req.params.id);
+  const deletedProduct = await productService.deleteProduct(req.params.id);
   return successMessage(deletedProduct);
+}
+
+async function getProductByTypeAndPrice(item, measurevalue){
+  const productByTypeAndPrice = await productService
+    .getProductByTypeAndPrice(item, measurevalue);
+  return productByTypeAndPrice;
 }
 
 module.exports = {
@@ -218,5 +226,6 @@ module.exports = {
   getProductById,
   createProduct,
   updateProduct,
-  deleteProductIfExists
+  deleteProductIfExists,
+  getProductByTypeAndPrice
 };

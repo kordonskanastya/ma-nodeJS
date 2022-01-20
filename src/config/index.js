@@ -1,20 +1,25 @@
 require('dotenv').config();
-
-function exit (field) {
-  console.error(`Can't working without value for field: ${field}`);
-  process.exit(1);
-}
+const { exit } = require('../utils');
 
 const config = {
   port: process.env.PORT || 3000,
   loginEnv: process.env.LOGIN || exit('loginEnv'),
   passwordEnv: process.env.PASSWORD || exit('passwordEnv'),
-  db: {
-    user: process.env.DB_USER || exit('db_user'),
+  sequelize: {
+    dialect: 'postgres',
+    username: process.env.DB_USER || exit('db_user'),
     host: process.env.DB_HOST || exit('db_host'),
     port: process.env.DB_PORT || exit('db_port'),
     database: process.env.DB_NAME || exit('db_name'),
     password: process.env.DB_PASS || exit('db_pass'),
+    logging: false,
+    pool: {
+      min: 0,
+      max: 10,
+      idle: 5000,
+      aquire: 5000,
+      evict: 5000
+    }
   }
 };
 
