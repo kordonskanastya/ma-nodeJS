@@ -1,17 +1,17 @@
-module.exports = (sequelize, DataTypes) =>
-  sequelize.define('Product', {
+module.exports = (sequelize, DataTypes) =>{
+  const Product = sequelize.define('Product', {
     id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: DataTypes.INTEGER
     },
-    item: {
-      type: DataTypes.STRING,
+    itemId: {
+      type: DataTypes.INTEGER,
       allowNull: false
     },
-    type: {
-      type: DataTypes.STRING,
+    typeId: {
+      type: DataTypes.INTEGER,
       allowNull: false
     },
     measure: {
@@ -36,3 +36,15 @@ module.exports = (sequelize, DataTypes) =>
       defaultValue: null,
     },
   }, {});
+
+  Product.associate = (models) => {
+    Product.belongsTo(models.Item,
+      {foreignKey: 'itemId', foreignKeyConstraint: true}
+      );
+    Product.belongsTo(models.Type,
+      {foreignKey: 'typeId', foreignKeyConstraint: true}
+      );
+  };
+
+  return Product;
+};

@@ -1,36 +1,24 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable(
-      'Products', {
-        id: {
+      'Orders', {
+        orderId: {
           allowNull: false,
           autoIncrement: true,
           primaryKey: true,
           type: Sequelize.DataTypes.INTEGER
         },
-        item: {
-          type: Sequelize.DataTypes.STRING,
-          allowNull: false
-        },
-        type: {
-          type: Sequelize.DataTypes.STRING,
-          allowNull: false
-        },
-        measure: {
-          type: Sequelize.DataTypes.STRING,
-          allowNull: false
-        },
-        measurevalue: {
+        productId: {
           type: Sequelize.DataTypes.INTEGER,
-          allowNull: false
+          allowNull: false,
+          references: {
+            model: 'Products',
+            key: 'id'
+          },
         },
-        pricetype: {
-          type: Sequelize.DataTypes.STRING,
-          allowNull: false
-        },
-        pricevalue: {
-          type: Sequelize.DataTypes.STRING,
-          allowNull: false
+        quantity: {
+          allowNull: false,
+          type: Sequelize.DataTypes.INTEGER
         },
         createdAt: {
           type: Sequelize.DataTypes.DATE,
@@ -47,12 +35,12 @@ module.exports = {
           allowNull: true,
           defaultValue: null,
         },
-      }
+      },
     );
   },
 
   // eslint-disable-next-line no-unused-vars
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Products');
+    await queryInterface.dropTable('Orders');
   }
 };
