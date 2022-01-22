@@ -50,7 +50,7 @@ async function createProduct(obj) {
     }, {});
     return res.dataValues;
   } catch (err) {
-    console.error(err.sql || err.message || err);
+    console.error(err.message || err);
     throw err;
   }
 }
