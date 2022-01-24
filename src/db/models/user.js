@@ -4,8 +4,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.INTEGER
     },
-    orderId: {
-      type: DataTypes.INTEGER,
+    login: {
+      allowNull: false,
+      type: DataTypes.STRING
+    },
+    password: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
   }, {timestamps: false});

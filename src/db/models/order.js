@@ -14,10 +14,20 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.INTEGER
     },
-  }, {timestamps: false});
+    userId: {
+      allowNull: false,
+      type: DataTypes.INTEGER
+    },
+    deletedAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: null,
+    },
+  }, {});
 
   Order.associate = (models) => {
-    Order.hasOne(models.User);
+    Order.belongsTo(models.User,
+      {foreignKey: 'userId', foreignKeyConstraint: true});
   };
   return Order;
 };

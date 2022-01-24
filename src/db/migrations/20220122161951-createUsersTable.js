@@ -6,13 +6,13 @@ module.exports = {
           allowNull: false,
           type: Sequelize.DataTypes.INTEGER
         },
-        orderId: {
-          type: Sequelize.DataTypes.INTEGER,
+        login: {
           allowNull: false,
-          references: {
-            model: 'Orders',
-            key: 'orderId'
-          },
+          type: Sequelize.DataTypes.STRING
+        },
+        password: {
+          type: Sequelize.DataTypes.STRING,
+          allowNull: false,
         },
       },
     );
