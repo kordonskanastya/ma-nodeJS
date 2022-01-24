@@ -17,38 +17,41 @@ const getProduct = async (id) => {
   }
 };
 
-async function createProduct(obj) {
+async function updateProduct({id, ...obj}) {
   try {
-    if(!obj.item) {
-      throw new Error('ERROR: No product item defined');
+    if (!id) {
+      throw new Error('ERROR: No product id defined');
     }
-    if(!obj.type) {
-      throw new Error('ERROR: No product type defined');
-    }
-    const timestamp = Date.now();
-    const [{ itemId }, isCreatedItem] = await db.Item
-      .findOrCreate({
-        attributes: ['itemId'],
-        where: { item: obj.item }
-      });
-      const [{ typeId }, isCreatedType] = await db.Type
-      .findOrCreate({
-        attributes: ['typeId'],
-        where: { type: obj.type }
-      });
+    const res = await db.Product.update(obj,
+      { where: { id }, returning: true }
+      );
 
+    return {
+      ...res[1][0].dataValues,
+      itemId: obj.item,
+      typeId: obj.type
+    };
+  } catch (err) {
+    console.error(err.message || err);
+    throw err;
+  }
+}
+
+async function createProduct(obj, {item, type}) {
+  try {
+    const timestamp = Date.now();
     const res = await db.Product.create({
-      itemId,
-      typeId,
-      measure: obj.measure,
-      measurevalue: obj.measurevalue,
-      pricetype: obj.pricetype,
-      pricevalue: obj.pricevalue,
-      deletedAt: null,
+      ...obj,
       createdAt: timestamp,
-      updatedAt: timestamp
-    }, {});
-    return res.dataValues;
+      updateAt: timestamp,
+      deletedAt: null
+    });
+
+    return {
+      ...res.dataValues,
+      itemId: item,
+      typeId: type
+    };
   } catch (err) {
     console.error(err.message || err);
     throw err;
@@ -62,27 +65,6 @@ async function getAllProducts() {
         deletedAt: null,
       }
     });
-  } catch (err) {
-    console.error(err.message || err);
-    throw err;
-  }
-}
-
-async function updateProduct({id, ...obj}) {
-  try {
-    if (!id) {
-      throw new Error('ERROR: No product id defined');
-    }
-
-    if(!Object.keys(obj).length) {
-      throw new Error('ERROR: Nothing to update');
-    }
-
-    const res = await db.Product.update(obj,
-      { where: { id }, returning: true }
-      );
-
-    return res[1][0];
   } catch (err) {
     console.error(err.message || err);
     throw err;
@@ -103,14 +85,14 @@ async function deleteProduct(id) {
   }
 }
 
- async function getProductByTypeAndPrice (type, pricevalue) {
+ async function getProductByTypeAndPrice (typeId, pricevalue) {
   try {
-    if (!type) {
+    if (!typeId) {
       throw new Error('ERROR: No product type defined');
     }
     const res = await db.Product.findOne({
       where: {
-        type,
+        typeId,
         pricevalue,
         deletedAt: null,
       }

@@ -1,10 +1,10 @@
-const dataOptimizerDB = require('../addedDataOptimizerDB');
+const createUniqueProduct = require('../createUniqueProduct');
 
 async function jsonOptimizer(array) {
   // eslint-disable-next-line no-restricted-syntax
   for (const obj of array) {
     // eslint-disable-next-line no-await-in-loop
-    await dataOptimizerDB(obj);
+    await createUniqueProduct(obj);
   }
 };
 

@@ -1,7 +1,8 @@
 /* eslint-disable no-await-in-loop */
 const productService = require('./product');
+const orderService = require('./order');
 const statusCode = require('../statusCode');
-const dataOptimizerDB = require('./helpers/addedDataOptimizerDB');
+const createUniqueProduct = require('./helpers/createUniqueProduct');
 const {
   helper1:searchFruitByItem,
   helper2:mostExpensiveFruit,
@@ -85,7 +86,7 @@ async function postData(serverGoodsArray) {
   try{
     // eslint-disable-next-line no-restricted-syntax
     for (const obj of serverGoodsArray) {
-      await dataOptimizerDB(obj);
+      await createUniqueProduct(obj);
     }
   } catch (err) {
     console.log(err);
@@ -170,25 +171,14 @@ async function getProductById(req){
 }
 
 async function createProduct(req){
-  if(!req.body) {
-    await productService.createProduct(req);
-    return true;
-  }
   if (!validator([req.body])) {
     throw new Error('Not Acceptable');
   }
-  const newProduct = await productService.createProduct(req.body);
+  const newProduct = await createUniqueProduct(req.body);
   return successMessage(newProduct);
 }
 
 async function updateProduct(req){
-  if(!req.body) {
-    await productService.updateProduct(req);
-    return true;
-  }
-  if (!validator([req.body])) {
-    throw new Error('Not Acceptable');
-  }
   const updatedProduct = await productService.updateProduct(
     {id: req.params.id, ...req.body}
   );
@@ -204,6 +194,37 @@ async function getProductByTypeAndPrice(item, measurevalue){
   const productByTypeAndPrice = await productService
     .getProductByTypeAndPrice(item, measurevalue);
   return productByTypeAndPrice;
+}
+
+async function getAllOrders(){
+  const dbData = await orderService.getAllOrders();
+  return successMessage(dbData);
+}
+
+async function getOrderById(req){
+  const productById = await orderService.getOrder(req.params.id);
+  return successMessage(productById);
+}
+
+async function createOrder(req){
+  const newProduct = await orderService.createOrder(req.body);
+  if (!newProduct) {
+    return successMessage(`Order quantity bigger than product measurevalue.
+      Order Did Not Created!`);
+  }
+  return successMessage(newProduct);
+}
+
+async function updateOrder(req){
+  const updatedProduct = await orderService.updateOrder(
+    {orderId: req.params.id, ...req.body}
+  );
+  return successMessage(updatedProduct);
+}
+
+async function deleteOrderIfExists(req){
+  const deletedProduct = await orderService.deleteOrder(req.params.id);
+  return successMessage(deletedProduct);
 }
 
 module.exports = {
@@ -227,5 +248,10 @@ module.exports = {
   createProduct,
   updateProduct,
   deleteProductIfExists,
-  getProductByTypeAndPrice
+  getProductByTypeAndPrice,
+  getOrderById,
+  createOrder,
+  getAllOrders,
+  updateOrder,
+  deleteOrderIfExists
 };

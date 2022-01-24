@@ -3,6 +3,7 @@ module.exports = (sequelize, DataTypes) => {
     userId: {
       allowNull: false,
       primaryKey: true,
+      autoIncrement: true,
       type: DataTypes.INTEGER
     },
     login: {
@@ -16,7 +17,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {timestamps: false});
 
   User.associate = (models) => {
-    User.hasMany(models.Order);
+    User.hasMany(models.Order,
+      {foreignKey: 'userId'});
   };
   return User;
 };

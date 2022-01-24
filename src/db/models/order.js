@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
 
   Order.associate = (models) => {
     Order.belongsTo(models.User,
-      {foreignKey: 'userId', foreignKeyConstraint: true});
+      {foreignKey: 'userId'});
   };
   return Order;
 };

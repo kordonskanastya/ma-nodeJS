@@ -5,6 +5,7 @@ module.exports = {
         userId: {
           allowNull: false,
           primaryKey: true,
+          autoIncrement: true,
           type: Sequelize.DataTypes.INTEGER
         },
         login: {
