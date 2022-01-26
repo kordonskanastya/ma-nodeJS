@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const Order = sequelize.define('Order', {
-    orderId: {
+    id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
@@ -28,6 +28,8 @@ module.exports = (sequelize, DataTypes) => {
   Order.associate = (models) => {
     Order.belongsTo(models.User,
       {foreignKey: 'userId'});
+    Order.belongsTo(models.Product,
+      {foreignKey: 'productId'});
   };
   return Order;
 };

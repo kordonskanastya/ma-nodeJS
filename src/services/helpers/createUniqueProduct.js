@@ -1,16 +1,20 @@
 /* eslint-disable no-return-await */
-const productService = require('../product');
+const productService = require('../CRUD/product');
 const db = require('../../db');
+const { validator } = require('./index');
 
 async function dataOptimizerDB (obj) {
-  const [{ itemId }] = await db.Item
+  if (!validator([obj])) {
+    throw new Error('Not Acceptable');
+  }
+  const [{ id: itemId }] = await db.Item
       .findOrCreate({
-        attributes: ['itemId'],
+        attributes: ['id'],
         where: { item: obj.item }
       });
-      const [{ typeId }] = await db.Type
+      const [{ id: typeId }] = await db.Type
       .findOrCreate({
-        attributes: ['typeId'],
+        attributes: ['id'],
         where: { type: obj.type }
       });
   const similarProduct = await productService.getProductByTypeAndPrice(
@@ -23,7 +27,7 @@ async function dataOptimizerDB (obj) {
       measurevalue: obj.measurevalue,
       pricetype: obj.pricetype,
       pricevalue: obj.pricevalue
-    }, {item: obj.item, type: obj.type});
+    });
   }
   return await productService.updateProduct({
     id: similarProduct.dataValues.id,

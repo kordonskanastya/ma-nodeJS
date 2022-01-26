@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
-    userId: {
+    id: {
       allowNull: false,
       primaryKey: true,
       autoIncrement: true,
@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
 
   User.associate = (models) => {
     User.hasMany(models.Order,
-      {foreignKey: 'userId'});
+      {foreignKey: 'id'});
   };
   return User;
 };

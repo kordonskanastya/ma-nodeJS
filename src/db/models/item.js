@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const Item = sequelize.define('Item', {
-    itemId: {
+    id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {timestamps: false});
 
   Item.associate = (models) => {
-    Item.hasMany(models.Product, { foreignKey: 'itemId'});
+    Item.hasMany(models.Product, { foreignKey: 'id'});
   };
   return Item;
 };

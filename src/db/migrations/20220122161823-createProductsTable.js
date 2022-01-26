@@ -13,7 +13,7 @@ module.exports = {
           allowNull: false,
           references: {
             model: 'Items',
-            key: 'itemId'
+            key: 'id'
           },
         },
         typeId: {
@@ -21,7 +21,7 @@ module.exports = {
           allowNull: false,
           references: {
             model: 'Types',
-            key: 'typeId'
+            key: 'id'
           },
         },
         measure: {

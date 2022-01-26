@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const Type = sequelize.define('Type', {
-    typeId: {
+    id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {timestamps: false});
 
   Type.associate = (models) => {
-    Type.hasMany(models.Product, { foreignKey: 'typeId'});
+    Type.hasMany(models.Product, { foreignKey: 'id'});
   };
 
   return Type;
