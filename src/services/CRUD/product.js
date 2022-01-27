@@ -12,7 +12,7 @@ async function getAllProducts() {
       ]
     });
     if (!res[0]) {
-      return {result: 'Products not found'};
+      throw new Error('Products not found');
     }
     delete res[0].dataValues.itemId;
     delete res[0].dataValues.typeId;
@@ -39,7 +39,7 @@ const getProduct = async (id) => {
       ]
     });
     if (!res[0]) {
-      return { result: `Product with id: ${id} not found` };
+      throw new Error(`Product with id: ${id} not found`);
     }
     delete res[0].dataValues.itemId;
     delete res[0].dataValues.typeId;
@@ -60,7 +60,7 @@ async function createProduct(obj) {
       deletedAt: null
     });
     if (!res) {
-      return { result: 'Can\'t create product' };
+      throw new Error('Can\'t create product');
     }
     return getProduct(res.dataValues.id);
   } catch (err) {
@@ -78,7 +78,7 @@ async function updateProduct({id, ...obj}) {
       { where: { id }, returning: true }
       );
     if (!res[1][0]) {
-      return { result: 'Can\'t update product' };
+      throw new Error('Can\'t update product');
     }
     return getProduct(res[1][0].dataValues.id);
   } catch (err) {
@@ -96,7 +96,7 @@ async function deleteProduct(id) {
     const res = await Product
       .update({ deletedAt: Date.now()}, { where: { id } });
     if (res[0] === 1) {
-      return { result: 'Product deleted' };
+      throw new Error('Product deleted');
     }
     return { result: 'Product is not deleted' };
   } catch (err) {

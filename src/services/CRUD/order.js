@@ -9,7 +9,7 @@ async function getAllOrders() {
       include: User
     });
     if (!res[0]) {
-      return {result: 'Orders not found'};
+      throw new Error('Orders not found');
     }
     delete res[0].dataValues.userId;
     return res[0].dataValues;
@@ -32,7 +32,7 @@ const getOrder = async (id) => {
       include: User
     });
     if (!res[0]) {
-      return {result: `Order with id: ${id} not found`};
+      throw new Error(`Order with id: ${id} not found`);
     }
     delete res[0].dataValues.userId;
     return res[0].dataValues;
@@ -52,10 +52,10 @@ async function createOrder(obj) {
       }
     });
     if (!product) {
-      return {result: 'Such product is absent'};
+      throw new Error('Such product is absent');
     }
     if (product.dataValues.measurevalue < obj.quantity) {
-      return {result: 'We have less than you want'};
+      throw new Error('We have less quantity than you want');
     }
     const res = await Order.create({
       ...obj,
@@ -64,7 +64,7 @@ async function createOrder(obj) {
       deletedAt: null
     });
     if (!res) {
-      return {result: 'Can\'t create order'};
+      throw new Error('Can\'t create order');
     }
     return getOrder(res.dataValues.id);
   } catch (err) {
@@ -85,16 +85,16 @@ async function updateOrder({orderId, ...obj}) {
       }
     });
     if (!product) {
-      return {result: 'Such product is absent'};
+      throw new Error('Such product is absent');
     }
     if (product.dataValues.measurevalue < obj.quantity) {
-      return {result: 'We have less than you want'};
+      throw new Error('We have less than you want');
     }
     const res = await Order.update(obj,
       { where: { id: orderId }, returning: true }
       );
       if (!res[1][0]) {
-        return {result: 'Can\'t update order'};
+        throw new Error('Can\'t update order');
       }
       return getOrder(res[1][0].dataValues.id);
   } catch (err) {
@@ -112,7 +112,7 @@ async function deleteOrder(orderId) {
     const res = await Order
       .update({ deletedAt: Date.now()}, { where: { id: orderId } });
     if (res[0] === 1) {
-      return { result: 'Order deleted' };
+      throw new Error('Order deleted');
     }
     return { result: 'Order is not deleted' };
   } catch (err) {
