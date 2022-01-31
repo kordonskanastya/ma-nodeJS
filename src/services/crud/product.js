@@ -1,21 +1,22 @@
 const { Product, Item, Type} = require('../../db');
 
+const emptyArray = [];
+
 async function getAllProducts() {
   try {
     const res = await Product.findAll({
       where: {
         deletedAt: null,
       },
+      attributes: {exclude: ['itemId', 'typeId']},
       include: [
-        { model: Item },
-        { model: Type }
+        { model: Item, as: 'item' },
+        { model: Type, as: 'type' }
       ]
     });
     if (!res[0]) {
-      throw new Error('Products not found');
+      return emptyArray;
     }
-    delete res[0].dataValues.itemId;
-    delete res[0].dataValues.typeId;
     return res[0].dataValues;
   } catch (err) {
     console.error(err.message || err);
@@ -23,7 +24,7 @@ async function getAllProducts() {
   }
 }
 
-const getProduct = async (id) => {
+const getProductById = async (id) => {
   try {
     if (!id) {
       throw new Error('ERROR: No product id defined');
@@ -33,16 +34,15 @@ const getProduct = async (id) => {
         id,
         deletedAt: null
       },
+      attributes: {exclude: ['itemId', 'typeId']},
       include: [
-        { model: Item },
-        { model: Type }
+        { model: Item, as: 'item' },
+        { model: Type, as: 'type' }
       ]
     });
     if (!res[0]) {
-      throw new Error(`Product with id: ${id} not found`);
+      return emptyArray;
     }
-    delete res[0].dataValues.itemId;
-    delete res[0].dataValues.typeId;
     return res[0].dataValues;
   } catch (err) {
     console.error(err.message || err);
@@ -62,7 +62,7 @@ async function createProduct(obj) {
     if (!res) {
       throw new Error('Can\'t create product');
     }
-    return getProduct(res.dataValues.id);
+    return res;
   } catch (err) {
     console.error(err.message || err);
     throw err;
@@ -75,12 +75,14 @@ async function updateProduct({id, ...obj}) {
       throw new Error('ERROR: No product id defined');
     }
     const res = await Product.update(obj,
-      { where: { id }, returning: true }
-      );
+      {
+        where: { id },
+        returning: true
+      });
     if (!res[1][0]) {
       throw new Error('Can\'t update product');
     }
-    return getProduct(res[1][0].dataValues.id);
+    return res[1][0];
   } catch (err) {
     console.error(err.message || err);
     throw err;
@@ -93,12 +95,18 @@ async function deleteProduct(id) {
       throw new Error('ERROR: No product id defined');
     }
     // await db.Product.destroy({ where: { id } });
-    const res = await Product
-      .update({ deletedAt: Date.now()}, { where: { id } });
-    if (res[0] === 1) {
-      throw new Error('Product deleted');
+    const res = await Product.update(
+      {
+        deletedAt: Date.now()
+      },
+      {
+        where: id
+      }
+    );
+    if (res[0] !== 1) {
+      throw new Error('Product is not deleted');
     }
-    return { result: 'Product is not deleted' };
+    return { result: 'Product deleted' };
   } catch (err) {
     console.error(err.message || err);
     throw err;
@@ -125,7 +133,7 @@ async function deleteProduct(id) {
 }
 
 module.exports = {
-  getProduct,
+  getProductById,
   createProduct,
   getAllProducts,
   updateProduct,

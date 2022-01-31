@@ -1,17 +1,22 @@
 const { User, Order, Product} = require('../../db');
 
+const emptyArray = [];
+
 async function getAllOrders() {
   try {
     const res = await Order.findAll({
       where: {
         deletedAt: null,
       },
-      include: User
+      attributes: {exclude: ['userId', 'productId']},
+      include: [
+        { model: User, as: 'user' },
+        { model: Product, as: 'product' }
+      ]
     });
     if (!res[0]) {
-      throw new Error('Orders not found');
+      return emptyArray;
     }
-    delete res[0].dataValues.userId;
     return res[0].dataValues;
   } catch (err) {
     console.error(err.message || err);
@@ -19,22 +24,25 @@ async function getAllOrders() {
   }
 }
 
-const getOrder = async (id) => {
+const getOrderById = async (id) => {
   try {
     if (!id) {
       throw new Error('ERROR: No order id defined');
     }
     const res = await Order.findAll({
       where: {
-        id,
-        deletedAt: null
+        deletedAt: null,
       },
-      include: User
+      attributes: {exclude: ['userId', 'productId']},
+      include: [
+        { model: User, as: 'user' },
+        { model: Product, as: 'product' }
+      ]
     });
+    // const res = await Order.findByPk(id);
     if (!res[0]) {
-      throw new Error(`Order with id: ${id} not found`);
+      return emptyArray;
     }
-    delete res[0].dataValues.userId;
     return res[0].dataValues;
   } catch (err) {
     console.error(err.message || err);
@@ -52,7 +60,7 @@ async function createOrder(obj) {
       }
     });
     if (!product) {
-      throw new Error('Such product is absent');
+      return emptyArray;
     }
     if (product.dataValues.measurevalue < obj.quantity) {
       throw new Error('We have less quantity than you want');
@@ -66,7 +74,7 @@ async function createOrder(obj) {
     if (!res) {
       throw new Error('Can\'t create order');
     }
-    return getOrder(res.dataValues.id);
+    return res;
   } catch (err) {
     console.error(err.message || err);
     throw err;
@@ -85,18 +93,20 @@ async function updateOrder({orderId, ...obj}) {
       }
     });
     if (!product) {
-      throw new Error('Such product is absent');
+      throw new Error('Can\'t update order. Such product is absent');
     }
     if (product.dataValues.measurevalue < obj.quantity) {
       throw new Error('We have less than you want');
     }
     const res = await Order.update(obj,
-      { where: { id: orderId }, returning: true }
-      );
+      {
+        where: { id: orderId },
+        returning: true
+      });
       if (!res[1][0]) {
         throw new Error('Can\'t update order');
       }
-      return getOrder(res[1][0].dataValues.id);
+      return res[1][0];
   } catch (err) {
     console.error(err.message || err);
     throw err;
@@ -109,12 +119,18 @@ async function deleteOrder(orderId) {
       throw new Error('ERROR: No product id defined');
     }
     // await db.Product.destroy({ where: { id } });
-    const res = await Order
-      .update({ deletedAt: Date.now()}, { where: { id: orderId } });
-    if (res[0] === 1) {
-      throw new Error('Order deleted');
+    const res = await Order.update(
+      {
+        deletedAt: Date.now()
+      },
+      {
+        where: { id: orderId}
+      }
+    );
+    if (res[0] !== 1) {
+      throw new Error('Order is not deleted');
     }
-    return { result: 'Order is not deleted' };
+    return { result: 'Order deleted' };
   } catch (err) {
     console.error(err.message || err);
     throw err;
@@ -122,7 +138,7 @@ async function deleteOrder(orderId) {
 }
 
 module.exports = {
-  getOrder,
+  getOrderById,
   createOrder,
   getAllOrders,
   updateOrder,

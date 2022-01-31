@@ -1,5 +1,5 @@
 const { successMessage } = require('../utils');
-const productService = require('./CRUD/product');
+const productService = require('./crud/product');
 const { helper1: searchFruitByItem, validator } = require('./helpers/index');
 
 async function getFilter(params) {

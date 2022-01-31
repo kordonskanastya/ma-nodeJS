@@ -1,5 +1,5 @@
 const { successMessage } = require('../utils');
-const productService = require('./CRUD/product');
+const productService = require('./crud/product');
 const { helper3: addKeyPrice, validator } = require('./helpers/index');
 
 async function getCommonprice() {

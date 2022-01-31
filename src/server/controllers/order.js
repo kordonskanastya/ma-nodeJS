@@ -1,10 +1,11 @@
 const { badRequest } = require('../../statusCode');
 const { successMessage } = require('../../utils');
-const orderService = require('../../services/CRUD/order');
+const orderService = require('../../services/crud/order');
 
 async function getAllOrders(req, res) {
   try {
-    const { message, code } = successMessage(await orderService.getAllOrders());
+    const allOrdersResult = await orderService.getAllOrders();
+    const { message, code } = successMessage(allOrdersResult);
     res.status(code).send(message);
   } catch (err) {
     res.status(badRequest).send({error: err.message});
@@ -13,8 +14,8 @@ async function getAllOrders(req, res) {
 
 async function getOrderById(req, res) {
   try {
-    const { message, code } = successMessage(await orderService
-      .getOrder(req.params.id));
+    const orderResult = await orderService.getOrderById(req.params.id);
+    const { message, code } = successMessage(orderResult);
     res.status(code).send(message);
   } catch (err) {
     res.status(badRequest).send({error: err.message});
@@ -23,8 +24,8 @@ async function getOrderById(req, res) {
 
 async function createOrder(req, res) {
   try {
-    const { message, code } = successMessage(await orderService
-      .createOrder(req.body));
+    const creatingResult = await orderService.createOrder(req.body);
+    const { message, code } = successMessage(creatingResult);
     res.status(code).send(message);
   } catch (err) {
     res.status(badRequest).send({error: err.message});
@@ -33,8 +34,11 @@ async function createOrder(req, res) {
 
 async function updateOrder(req, res) {
   try {
-    const { message, code } = successMessage(await orderService
-      .updateOrder({orderId: req.params.id, ...req.body}));
+    const updatingResult = await orderService.updateOrder({
+      id: req.params.id,
+       ...req.body
+    });
+    const { message, code } = successMessage(updatingResult);
     res.status(code).send(message);
   } catch (err) {
     res.status(badRequest).send({error: err.message});
@@ -43,8 +47,8 @@ async function updateOrder(req, res) {
 
 async function deleteOrderIfExists(req, res) {
   try {
-    const { message, code } = successMessage(await orderService
-      .deleteOrder(req.params.id));
+    const deletingResult = await orderService.deleteOrder(req.params.id);
+    const { message, code } = successMessage(deletingResult);
     res.status(code).send(message);
   } catch (err) {
     res.status(badRequest).send({error: err.message});

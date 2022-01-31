@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {timestamps: false});
 
   Item.associate = (models) => {
-    Item.hasMany(models.Product, { foreignKey: 'id'});
+    Item.hasMany(models.Product, { foreignKey: 'id' });
   };
   return Item;
 };

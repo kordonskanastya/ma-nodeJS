@@ -1,5 +1,5 @@
 /* eslint-disable no-return-await */
-const productService = require('../CRUD/product');
+const productService = require('../crud/product');
 const db = require('../../db');
 const { validator } = require('./index');
 

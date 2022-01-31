@@ -1,5 +1,5 @@
 const { successMessage } = require('../utils');
-const productService = require('./CRUD/product');
+const productService = require('./crud/product');
 const {
   addKeyDiscountPromise,
   addKeyDiscountPromisify,
