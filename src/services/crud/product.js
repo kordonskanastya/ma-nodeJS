@@ -29,9 +29,8 @@ const getProductById = async (id) => {
     if (!id) {
       throw new Error('ERROR: No product id defined');
     }
-    const res = await Product.findAll({
+    const res = await Product.findByPk(id, {
       where: {
-        id,
         deletedAt: null
       },
       attributes: {exclude: ['itemId', 'typeId']},
@@ -40,10 +39,10 @@ const getProductById = async (id) => {
         { model: Type, as: 'type' }
       ]
     });
-    if (!res[0]) {
+    if (!res || !res.dataValues) {
       return emptyArray;
     }
-    return res[0].dataValues;
+    return res.dataValues;
   } catch (err) {
     console.error(err.message || err);
     throw err;
