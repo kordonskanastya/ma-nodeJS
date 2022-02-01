@@ -8,13 +8,21 @@ module.exports = {
           primaryKey: true,
           type: Sequelize.DataTypes.INTEGER
         },
-        item: {
-          type: Sequelize.DataTypes.STRING,
-          allowNull: false
+        itemId: {
+          type: Sequelize.DataTypes.INTEGER,
+          allowNull: false,
+          references: {
+            model: 'Items',
+            key: 'id'
+          },
         },
-        type: {
-          type: Sequelize.DataTypes.STRING,
-          allowNull: false
+        typeId: {
+          type: Sequelize.DataTypes.INTEGER,
+          allowNull: false,
+          references: {
+            model: 'Types',
+            key: 'id'
+          },
         },
         measure: {
           type: Sequelize.DataTypes.STRING,

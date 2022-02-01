@@ -7,7 +7,8 @@ const { loginEnv, passwordEnv } = config;
 const authorization = (req, res, next) => {
   const typeAuth = 'Basic';
   if (!req.headers.authorization) {
-    return res.status(statusCode.unauthorized)
+    return res
+      .status(statusCode.unauthorized)
       .send({ error: 'Authorization header is absent' });
   }
 
@@ -27,10 +28,9 @@ const authorization = (req, res, next) => {
 // eslint-disable-next-line no-unused-vars
 const errorHandler = (err, req, res, next) => {
   if (!err) {
-    res.status(statusCode.ok).send({ error: false });
-  } else {
-    res.status(statusCode.serverError).send({ error: err.message });
+    return res.status(statusCode.ok).send({ error: false });
   }
+  return res.status(statusCode.serverError).send({ error: err.message });
 };
 
 module.exports = { authorization, errorHandler };
