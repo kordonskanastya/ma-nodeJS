@@ -36,7 +36,7 @@ const getProductById = async (id) => {
         { model: Type, as: 'type' }
       ]
     });
-    if (!res || !res.dataValues || res.dataValues.deletedAt) {
+    if (!res || !res.dataValues) {
       return emptyArray;
     }
     return res.dataValues;

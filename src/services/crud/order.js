@@ -36,7 +36,7 @@ const getOrderById = async (id) => {
         { model: Product, as: 'product' }
       ]
     });
-    if (!res || !res.dataValues || res.dataValues.deletedAt) {
+    if (!res || !res.dataValues) {
       return emptyArray;
     }
     return res.dataValues;
