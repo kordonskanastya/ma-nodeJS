@@ -30,16 +30,13 @@ const getProductById = async (id) => {
       throw new Error('ERROR: No product id defined');
     }
     const res = await Product.findByPk(id, {
-      where: {
-        deletedAt: null
-      },
       attributes: {exclude: ['itemId', 'typeId']},
       include: [
         { model: Item, as: 'item' },
         { model: Type, as: 'type' }
       ]
     });
-    if (!res || !res.dataValues) {
+    if (!res || !res.dataValues || res.dataValues.deletedAt) {
       return emptyArray;
     }
     return res.dataValues;

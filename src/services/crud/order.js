@@ -30,16 +30,13 @@ const getOrderById = async (id) => {
       throw new Error('ERROR: No order id defined');
     }
     const res = await Order.findByPk(id, {
-      where: {
-        deletedAt: null,
-      },
       attributes: {exclude: ['userId', 'productId']},
       include: [
         { model: User, as: 'user' },
         { model: Product, as: 'product' }
       ]
     });
-    if (!res || !res.dataValues) {
+    if (!res || !res.dataValues || res.dataValues.deletedAt) {
       return emptyArray;
     }
     return res.dataValues;
