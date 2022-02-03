@@ -14,10 +14,10 @@ async function getAllOrders() {
         { model: Product, as: 'product' }
       ]
     });
-    if (!res[0]) {
+    if (!res) {
       return emptyArray;
     }
-    return res[0].dataValues;
+    return res;
   } catch (err) {
     console.error(err.message || err);
     throw err;

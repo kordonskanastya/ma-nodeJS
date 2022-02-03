@@ -1,18 +1,11 @@
-const statusCode = require('../statusCode');
-
-function exit (field) {
-  console.error(`Can't working without value for field: ${field}`);
-  process.exit(1);
-}
-
-function successMessage(functionMessage) {
-  return {
-    code: statusCode.ok,
-    message: functionMessage,
-  };
-}
+const auth = require('./auth');
+const common = require('./common');
+const token = require('./token');
+const hash = require('./hash');
 
 module.exports = {
-  exit,
-  successMessage
+  ...auth,
+  ...common,
+  ...token,
+  ...hash
 };
