@@ -1,8 +1,8 @@
 const { createHmac } = require('crypto');
-const config = require('../config');
+const { passwordSecret } = require('../config');
 
 function hashingPassword(password) {
-  const hash = createHmac('sha256', config.passwordSecret)
+  const hash = createHmac('sha256', passwordSecret)
                .update(password)
                .digest('hex');
   return hash;
