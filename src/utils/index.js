@@ -1,9 +1,9 @@
 const common = require('./common');
 const token = require('./token');
-const hash = require('./hash');
+const hashPassword = require('./hashPassword');
 
 module.exports = {
   ...common,
   ...token,
-  ...hash
+  hashPassword
 };

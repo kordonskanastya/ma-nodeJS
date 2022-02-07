@@ -12,7 +12,6 @@ async function loginCheck (body) {
   } catch (err) {
     return { code: unauthorized, message: err.message };
   }
-
 }
 
 module.exports = { loginCheck };
