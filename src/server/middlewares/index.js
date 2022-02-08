@@ -40,17 +40,35 @@ const authenticateToken = (req, res, next) => {
   // eslint-disable-next-line dot-notation
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
-  if (token === null) return res.sendStatus(401);
-  
+  if (token === null) return res.sendStatus(statusCode.unauthorized);
+
   // eslint-disable-next-line consistent-return
   jwt.verify(token, accessTokenSecret, (err, user) => {
     if (err) {
       console.log(err.message || err);
-      return res.sendStatus(403);
+      return res.sendStatus(statusCode.forbidden);
     }
     req.user = user;
     next();
   });
 };
 
-module.exports = { authorization, errorHandler, authenticateToken };
+const joiValidator = (schema, property) => (req, res, next) => {
+  const { error } = schema.validate(req[property]);
+  const valid = error == null;
+  if (valid) {
+    next();
+  } else {
+    const { details } = error;
+    const message = details.map((i) => i.message).join(',');
+    console.log('error', message);
+    res.status(statusCode.unprocessableEntity).json({ error: message });
+  }
+};
+
+module.exports = {
+  authorization,
+  errorHandler,
+  authenticateToken,
+  joiValidator
+};

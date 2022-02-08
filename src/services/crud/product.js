@@ -26,9 +26,6 @@ async function getAllProducts() {
 
 const getProductById = async (id) => {
   try {
-    if (!id) {
-      throw new Error('ERROR: No product id defined');
-    }
     const res = await Product.findByPk(id, {
       attributes: {exclude: ['itemId', 'typeId']},
       include: [
@@ -67,9 +64,6 @@ async function createProduct(obj) {
 
 async function updateProduct({id, ...obj}) {
   try {
-    if (!id) {
-      throw new Error('ERROR: No product id defined');
-    }
     const res = await Product.update(obj,
       {
         where: { id },
@@ -87,16 +81,13 @@ async function updateProduct({id, ...obj}) {
 
 async function deleteProduct(id) {
   try {
-    if (!id) {
-      throw new Error('ERROR: No product id defined');
-    }
     // await db.Product.destroy({ where: { id } });
     const res = await Product.update(
       {
         deletedAt: Date.now()
       },
       {
-        where: id
+        where: { id }
       }
     );
     if (res[0] !== 1) {

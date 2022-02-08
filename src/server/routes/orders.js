@@ -1,12 +1,31 @@
 const express = require('express');
 const controllers = require('../controllers');
+const { joiValidator } = require('../middlewares');
+const schemas = require('../../schemas');
 
 const orders = express.Router();
 
 orders.get('/', controllers.getAllOrders);
-orders.get('/:id', controllers.getOrderById);
-orders.post('/', controllers.createOrder);
-orders.put('/:id', controllers.updateOrder);
-orders.delete('/:id', controllers.deleteOrderIfExists);
+orders.get(
+  '/:id',
+  joiValidator(schemas.idSchema, 'params'),
+  controllers.getOrderById
+);
+orders.post(
+  '/',
+  joiValidator(schemas.orderSchema, 'body'),
+  controllers.createOrder
+);
+orders.put(
+  '/:id',
+  joiValidator(schemas.idSchema, 'params'),
+  joiValidator(schemas.orderSchema, 'body'),
+  controllers.updateOrder
+);
+orders.delete(
+  '/:id',
+  joiValidator(schemas.idSchema, 'params'),
+  controllers.deleteOrderIfExists
+);
 
 module.exports = orders;

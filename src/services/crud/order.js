@@ -26,9 +26,6 @@ async function getAllOrders() {
 
 const getOrderById = async (id) => {
   try {
-    if (!id) {
-      throw new Error('ERROR: No order id defined');
-    }
     const res = await Order.findByPk(id, {
       attributes: {exclude: ['userId', 'productId']},
       include: [
@@ -77,11 +74,8 @@ async function createOrder(obj) {
   }
 }
 
-async function updateOrder({orderId, ...obj}) {
+async function updateOrder({id, ...obj}) {
   try {
-    if (!orderId) {
-      throw new Error('ERROR: No order id defined');
-    }
     const product = await Product.findOne({
       where: {
         id: obj.productId,
@@ -96,7 +90,7 @@ async function updateOrder({orderId, ...obj}) {
     }
     const res = await Order.update(obj,
       {
-        where: { id: orderId },
+        where: { id },
         returning: true
       });
       if (!res[1][0]) {
@@ -111,9 +105,6 @@ async function updateOrder({orderId, ...obj}) {
 
 async function deleteOrder(orderId) {
   try {
-    if (!orderId) {
-      throw new Error('ERROR: No product id defined');
-    }
     // await db.Product.destroy({ where: { id } });
     const res = await Order.update(
       {
