@@ -6,9 +6,8 @@ function exit (field) {
 }
 
 const config = {
+  env: process.env.ENVIRONMENT || exit('env'),
   port: process.env.PORT || 3000,
-  loginEnv: process.env.LOGIN || exit('loginEnv'),
-  passwordEnv: process.env.PASSWORD || exit('passwordEnv'),
   accessTokenSecret:
     process.env.ACCESS_TOKEN_SECRET || exit('accessTokenSecret'),
   refreshTokenSecret:

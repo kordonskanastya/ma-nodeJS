@@ -1,4 +1,5 @@
 const { User, Order, Product} = require('../../db');
+const { env } = require('../../config');
 
 const emptyArray = [];
 
@@ -14,12 +15,14 @@ async function getAllOrders() {
         { model: Product, as: 'product' }
       ]
     });
-    if (!res) {
+    if (!res[0]) {
       return emptyArray;
     }
     return res;
   } catch (err) {
-    console.error(err.message || err);
+    if ( env === 'dev' ) {
+      console.error(err.message || err);
+    }
     throw err;
   }
 }
@@ -38,7 +41,9 @@ const getOrderById = async (id) => {
     }
     return res.dataValues;
   } catch (err) {
-    console.error(err.message || err);
+    if ( env === 'dev' ) {
+      console.error(err.message || err);
+    }
     throw err;
   }
 };
@@ -69,7 +74,9 @@ async function createOrder(obj) {
     }
     return res;
   } catch (err) {
-    console.error(err.message || err);
+    if ( env === 'dev' ) {
+      console.error(err.message || err);
+    }
     throw err;
   }
 }
@@ -98,7 +105,9 @@ async function updateOrder({id, ...obj}) {
       }
       return res[1][0];
   } catch (err) {
-    console.error(err.message || err);
+    if ( env === 'dev' ) {
+      console.error(err.message || err);
+    }
     throw err;
   }
 }
@@ -119,7 +128,9 @@ async function deleteOrder(orderId) {
     }
     return { result: 'Order deleted' };
   } catch (err) {
-    console.error(err.message || err);
+    if ( env === 'dev' ) {
+      console.error(err.message || err);
+    }
     throw err;
   }
 }

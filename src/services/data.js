@@ -4,6 +4,7 @@ const {
 } = require('./helpers/index');
 const createUniqueProduct = require('./helpers/createUniqueProduct');
 const { successMessage } = require('../utils');
+const { env } = require('../config');
 
 function getHomePage() {
   return successMessage({'result': 'hello world!'});
@@ -20,7 +21,9 @@ async function postData(serverGoodsArray) {
       await createUniqueProduct(obj);
     }
   } catch (err) {
-    console.log(err);
+    if ( env === 'dev' ) {
+      console.error(err.message || err);
+    }
     throw new Error('Unable to write file');
   }
 
@@ -32,7 +35,12 @@ async function uploadDataCsv(req) {
     await uploadCsv(req);
     return successMessage({result: 'CSV file convert to JSON'});
   } catch (err) {
-    console.log('Can not convert csv to JSON in helpers', err);
+    if ( env === 'dev' ) {
+      console.error(
+        'Can not convert csv to JSON in helpers',
+        err.message || err
+      );
+    }
     throw new Error('Can not convert csv to JSON');
   }
 }

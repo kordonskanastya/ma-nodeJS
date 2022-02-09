@@ -1,5 +1,6 @@
 const { pipeline } = require('stream');
 const { promisify } = require('util');
+const { env } = require('../../config');
 
 const promisifiedPipeline = promisify(pipeline);
 
@@ -11,7 +12,9 @@ async function uploadCsv(inputStream) {
   try {
     await promisifiedPipeline(inputStream, csvToJson);
   } catch (err) {
-    console.error('Csv pipeline failed', err);
+    if ( env === 'dev' ) {
+      console.error('Csv pipeline failed', err);
+    }
   }
 }
 

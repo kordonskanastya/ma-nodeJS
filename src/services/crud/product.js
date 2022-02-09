@@ -1,4 +1,5 @@
 const { Product, Item, Type} = require('../../db');
+const { env } = require('../../config');
 
 const emptyArray = [];
 
@@ -14,12 +15,14 @@ async function getAllProducts() {
         { model: Type, as: 'type' }
       ]
     });
-    if (!res) {
+    if (!res[0]) {
       return emptyArray;
     }
     return res;
   } catch (err) {
-    console.error(err.message || err);
+    if ( env === 'dev' ) {
+      console.error(err.message || err);
+    }
     throw err;
   }
 }
@@ -38,7 +41,9 @@ const getProductById = async (id) => {
     }
     return res.dataValues;
   } catch (err) {
-    console.error(err.message || err);
+    if ( env === 'dev' ) {
+      console.error(err.message || err);
+    }
     throw err;
   }
 };
@@ -57,7 +62,9 @@ async function createProduct(obj) {
     }
     return res;
   } catch (err) {
-    console.error(err.message || err);
+    if ( env === 'dev' ) {
+      console.error(err.message || err);
+    }
     throw err;
   }
 }
@@ -74,7 +81,9 @@ async function updateProduct({id, ...obj}) {
     }
     return res[1][0];
   } catch (err) {
-    console.error(err.message || err);
+    if ( env === 'dev' ) {
+      console.error(err.message || err);
+    }
     throw err;
   }
 }
@@ -95,7 +104,9 @@ async function deleteProduct(id) {
     }
     return { result: 'Product deleted' };
   } catch (err) {
-    console.error(err.message || err);
+    if ( env === 'dev' ) {
+      console.error(err.message || err);
+    }
     throw err;
   }
 }
@@ -114,7 +125,9 @@ async function deleteProduct(id) {
   });
     return res;
   } catch (err) {
-    console.error(err.message || err);
+    if ( env === 'dev' ) {
+      console.error(err.message || err);
+    }
     throw err;
   }
 }

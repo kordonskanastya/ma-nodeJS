@@ -1,6 +1,7 @@
 const Joi = require('joi');
 
-const orderSchema = Joi.object({
+const productArraySchema = Joi.array().items(
+  Joi.object({
   item: Joi.string().min(3).max(128).required(),
   type: Joi.string().min(3).max(128).required(),
   measure: Joi.string().valid('weight', 'quantity').insensitive().required(),
@@ -14,6 +15,7 @@ const orderSchema = Joi.object({
     .string()
     .pattern(/^["$"][0-9]/)
     .required(),
-});
+  })
+);
 
-module.exports = orderSchema;
+module.exports = productArraySchema;

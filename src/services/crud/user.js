@@ -1,4 +1,5 @@
 const { User } = require('../../db');
+const { env } = require('../../config');
 
 const emptyArray = [];
 
@@ -15,7 +16,9 @@ const getUserByEmail = async (email) => {
     }
     return res.dataValues;
   } catch (err) {
-    console.error(err.message || err);
+    if ( env === 'dev' ) {
+      console.error(err.message || err);
+    }
     throw err;
   }
 };
@@ -34,7 +37,9 @@ async function putRefreshToken(email, refreshToken) {
       }
       return { result: 'token successfully updated' };
   } catch (err) {
-    console.error(err.message || err);
+    if ( env === 'dev' ) {
+      console.error(err.message || err);
+    }
     throw err;
   }
 }
