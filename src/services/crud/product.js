@@ -1,5 +1,6 @@
 const { Product, Item, Type} = require('../../db');
 const { env } = require('../../config');
+const Constants = require('../../Constants');
 
 const emptyArray = [];
 
@@ -20,7 +21,7 @@ async function getAllProducts() {
     }
     return res;
   } catch (err) {
-    if ( env === 'dev' ) {
+    if ( env === Constants.env.dev ) {
       console.error(err.message || err);
     }
     throw err;
@@ -41,7 +42,7 @@ const getProductById = async (id) => {
     }
     return res.dataValues;
   } catch (err) {
-    if ( env === 'dev' ) {
+    if ( env === Constants.env.dev ) {
       console.error(err.message || err);
     }
     throw err;
@@ -62,7 +63,7 @@ async function createProduct(obj) {
     }
     return res;
   } catch (err) {
-    if ( env === 'dev' ) {
+    if ( env === Constants.env.dev ) {
       console.error(err.message || err);
     }
     throw err;
@@ -81,7 +82,7 @@ async function updateProduct({id, ...obj}) {
     }
     return res[1][0];
   } catch (err) {
-    if ( env === 'dev' ) {
+    if ( env === Constants.env.dev ) {
       console.error(err.message || err);
     }
     throw err;
@@ -104,7 +105,7 @@ async function deleteProduct(id) {
     }
     return { result: 'Product deleted' };
   } catch (err) {
-    if ( env === 'dev' ) {
+    if ( env === Constants.env.dev ) {
       console.error(err.message || err);
     }
     throw err;
@@ -125,7 +126,7 @@ async function deleteProduct(id) {
   });
     return res;
   } catch (err) {
-    if ( env === 'dev' ) {
+    if ( env === Constants.env.dev ) {
       console.error(err.message || err);
     }
     throw err;

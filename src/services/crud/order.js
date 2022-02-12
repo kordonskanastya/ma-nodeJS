@@ -1,5 +1,6 @@
 const { User, Order, Product} = require('../../db');
 const { env } = require('../../config');
+const Constants = require('../../Constants');
 
 const emptyArray = [];
 
@@ -20,7 +21,7 @@ async function getAllOrders() {
     }
     return res;
   } catch (err) {
-    if ( env === 'dev' ) {
+    if ( env === Constants.env.dev ) {
       console.error(err.message || err);
     }
     throw err;
@@ -41,7 +42,7 @@ const getOrderById = async (id) => {
     }
     return res.dataValues;
   } catch (err) {
-    if ( env === 'dev' ) {
+    if ( env === Constants.env.dev ) {
       console.error(err.message || err);
     }
     throw err;
@@ -74,7 +75,7 @@ async function createOrder(obj) {
     }
     return res;
   } catch (err) {
-    if ( env === 'dev' ) {
+    if ( env === Constants.env.dev ) {
       console.error(err.message || err);
     }
     throw err;
@@ -105,7 +106,7 @@ async function updateOrder({id, ...obj}) {
       }
       return res[1][0];
   } catch (err) {
-    if ( env === 'dev' ) {
+    if ( env === Constants.env.dev ) {
       console.error(err.message || err);
     }
     throw err;
@@ -128,7 +129,7 @@ async function deleteOrder(orderId) {
     }
     return { result: 'Order deleted' };
   } catch (err) {
-    if ( env === 'dev' ) {
+    if ( env === Constants.env.dev ) {
       console.error(err.message || err);
     }
     throw err;
