@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement: true,
       type: DataTypes.INTEGER
     },
-    login: {
+    email: {
       allowNull: false,
       type: DataTypes.STRING
     },
@@ -14,6 +14,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    refreshToken: {
+      type: DataTypes.STRING
+    }
   }, {timestamps: false});
 
   User.associate = (models) => {

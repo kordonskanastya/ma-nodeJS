@@ -1,9 +1,10 @@
+const jwt = require('jsonwebtoken');
 const config = require('../../config');
 const statusCode = require('../../statusCode');
+const { accessTokenSecret } = require('../../config');
 
 const { loginEnv, passwordEnv } = config;
 
-// eslint-disable-next-line consistent-return
 const authorization = (req, res, next) => {
   const typeAuth = 'Basic';
   if (!req.headers.authorization) {
@@ -17,12 +18,11 @@ const authorization = (req, res, next) => {
     .from(token, 'base64')
     .toString().split(':');
 
-    // !login && !password &&
   if (type !== typeAuth || login !== loginEnv || password !== passwordEnv) {
     return res.status(statusCode.unauthorized)
       .send({ error: 'Not Authorized' });
   }
-  next();
+  return next();
 };
 
 // eslint-disable-next-line no-unused-vars
@@ -33,4 +33,25 @@ const errorHandler = (err, req, res, next) => {
   return res.status(statusCode.serverError).send({ error: err.message });
 };
 
-module.exports = { authorization, errorHandler };
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  const token = authHeader && authHeader.split(' ')[1];
+  if (token === null) {
+    return res.sendStatus(statusCode.unauthorized);
+  }
+
+  return jwt.verify(token, accessTokenSecret, (err, user) => {
+    if (err) {
+      console.log(err.message || err);
+      return res.sendStatus(statusCode.forbidden);
+    }
+    req.user = user;
+    return next();
+  });
+};
+
+module.exports = {
+  authorization,
+  errorHandler,
+  authenticateToken,
+};

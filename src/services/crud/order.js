@@ -1,4 +1,6 @@
 const { User, Order, Product} = require('../../db');
+const { env } = require('../../config');
+const constants = require('../../utils');
 
 const emptyArray = [];
 
@@ -17,18 +19,17 @@ async function getAllOrders() {
     if (!res[0]) {
       return emptyArray;
     }
-    return res[0].dataValues;
+    return res;
   } catch (err) {
-    console.error(err.message || err);
+    if ( env === constants.env.dev ) {
+      console.error(err.message || err);
+    }
     throw err;
   }
 }
 
 const getOrderById = async (id) => {
   try {
-    if (!id) {
-      throw new Error('ERROR: No order id defined');
-    }
     const res = await Order.findByPk(id, {
       attributes: {exclude: ['userId', 'productId']},
       include: [
@@ -41,7 +42,9 @@ const getOrderById = async (id) => {
     }
     return res.dataValues;
   } catch (err) {
-    console.error(err.message || err);
+    if ( env === constants.env.dev ) {
+      console.error(err.message || err);
+    }
     throw err;
   }
 };
@@ -72,16 +75,15 @@ async function createOrder(obj) {
     }
     return res;
   } catch (err) {
-    console.error(err.message || err);
+    if ( env === constants.env.dev ) {
+      console.error(err.message || err);
+    }
     throw err;
   }
 }
 
-async function updateOrder({orderId, ...obj}) {
+async function updateOrder({id, ...obj}) {
   try {
-    if (!orderId) {
-      throw new Error('ERROR: No order id defined');
-    }
     const product = await Product.findOne({
       where: {
         id: obj.productId,
@@ -96,7 +98,7 @@ async function updateOrder({orderId, ...obj}) {
     }
     const res = await Order.update(obj,
       {
-        where: { id: orderId },
+        where: { id },
         returning: true
       });
       if (!res[1][0]) {
@@ -104,16 +106,15 @@ async function updateOrder({orderId, ...obj}) {
       }
       return res[1][0];
   } catch (err) {
-    console.error(err.message || err);
+    if ( env === constants.env.dev ) {
+      console.error(err.message || err);
+    }
     throw err;
   }
 }
 
 async function deleteOrder(orderId) {
   try {
-    if (!orderId) {
-      throw new Error('ERROR: No product id defined');
-    }
     // await db.Product.destroy({ where: { id } });
     const res = await Order.update(
       {
@@ -128,7 +129,9 @@ async function deleteOrder(orderId) {
     }
     return { result: 'Order deleted' };
   } catch (err) {
-    console.error(err.message || err);
+    if ( env === constants.env.dev ) {
+      console.error(err.message || err);
+    }
     throw err;
   }
 }

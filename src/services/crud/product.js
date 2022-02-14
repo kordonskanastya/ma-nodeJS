@@ -1,4 +1,6 @@
 const { Product, Item, Type} = require('../../db');
+const { env } = require('../../config');
+const constants = require('../../utils');
 
 const emptyArray = [];
 
@@ -17,18 +19,17 @@ async function getAllProducts() {
     if (!res[0]) {
       return emptyArray;
     }
-    return res[0].dataValues;
+    return res;
   } catch (err) {
-    console.error(err.message || err);
+    if ( env === constants.env.dev ) {
+      console.error(err.message || err);
+    }
     throw err;
   }
 }
 
 const getProductById = async (id) => {
   try {
-    if (!id) {
-      throw new Error('ERROR: No product id defined');
-    }
     const res = await Product.findByPk(id, {
       attributes: {exclude: ['itemId', 'typeId']},
       include: [
@@ -41,7 +42,9 @@ const getProductById = async (id) => {
     }
     return res.dataValues;
   } catch (err) {
-    console.error(err.message || err);
+    if ( env === constants.env.dev ) {
+      console.error(err.message || err);
+    }
     throw err;
   }
 };
@@ -60,16 +63,15 @@ async function createProduct(obj) {
     }
     return res;
   } catch (err) {
-    console.error(err.message || err);
+    if ( env === constants.env.dev ) {
+      console.error(err.message || err);
+    }
     throw err;
   }
 }
 
 async function updateProduct({id, ...obj}) {
   try {
-    if (!id) {
-      throw new Error('ERROR: No product id defined');
-    }
     const res = await Product.update(obj,
       {
         where: { id },
@@ -80,23 +82,22 @@ async function updateProduct({id, ...obj}) {
     }
     return res[1][0];
   } catch (err) {
-    console.error(err.message || err);
+    if ( env === constants.env.dev ) {
+      console.error(err.message || err);
+    }
     throw err;
   }
 }
 
 async function deleteProduct(id) {
   try {
-    if (!id) {
-      throw new Error('ERROR: No product id defined');
-    }
     // await db.Product.destroy({ where: { id } });
     const res = await Product.update(
       {
         deletedAt: Date.now()
       },
       {
-        where: id
+        where: { id }
       }
     );
     if (res[0] !== 1) {
@@ -104,7 +105,9 @@ async function deleteProduct(id) {
     }
     return { result: 'Product deleted' };
   } catch (err) {
-    console.error(err.message || err);
+    if ( env === constants.env.dev ) {
+      console.error(err.message || err);
+    }
     throw err;
   }
 }
@@ -123,7 +126,9 @@ async function deleteProduct(id) {
   });
     return res;
   } catch (err) {
-    console.error(err.message || err);
+    if ( env === constants.env.dev ) {
+      console.error(err.message || err);
+    }
     throw err;
   }
 }
