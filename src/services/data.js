@@ -3,9 +3,8 @@ const {
   uploadCsv
 } = require('./helpers/index');
 const createUniqueProduct = require('./helpers/createUniqueProduct');
-const { successMessage } = require('../utils');
+const { successMessage, constants } = require('../utils');
 const { env } = require('../config');
-const Constants = require('../Constants');
 
 function getHomePage() {
   return successMessage({'result': 'hello world!'});
@@ -22,7 +21,7 @@ async function postData(serverGoodsArray) {
       await createUniqueProduct(obj);
     }
   } catch (err) {
-    if ( env === Constants.env.dev ) {
+    if ( env === constants.env.dev ) {
       console.error(err.message || err);
     }
     throw new Error('Unable to write file');
@@ -36,7 +35,7 @@ async function uploadDataCsv(req) {
     await uploadCsv(req);
     return successMessage({result: 'CSV file convert to JSON'});
   } catch (err) {
-    if ( env === Constants.env.dev ) {
+    if ( env === constants.env.dev ) {
       console.error(
         'Can not convert csv to JSON in helpers',
         err.message || err

@@ -1,6 +1,6 @@
 const { User } = require('../../db');
 const { env } = require('../../config');
-const Constants = require('../../Constants');
+const constants = require('../../utils');
 
 const emptyArray = [];
 
@@ -17,7 +17,7 @@ const getUserByEmail = async (email) => {
     }
     return res.dataValues;
   } catch (err) {
-    if ( env === Constants.env.dev ) {
+    if ( env === constants.env.dev ) {
       console.error(err.message || err);
     }
     throw err;
@@ -38,7 +38,7 @@ async function putRefreshToken(email, refreshToken) {
       }
       return { result: 'token successfully updated' };
   } catch (err) {
-    if ( env === Constants.env.dev ) {
+    if ( env === constants.env.dev ) {
       console.error(err.message || err);
     }
     throw err;

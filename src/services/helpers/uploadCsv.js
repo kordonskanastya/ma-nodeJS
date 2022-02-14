@@ -1,7 +1,7 @@
 const { pipeline } = require('stream');
 const { promisify } = require('util');
 const { env } = require('../../config');
-const Constants = require('../../Constants');
+const { constants } = require('../../utils');
 
 const promisifiedPipeline = promisify(pipeline);
 
@@ -13,7 +13,7 @@ async function uploadCsv(inputStream) {
   try {
     await promisifiedPipeline(inputStream, csvToJson);
   } catch (err) {
-    if ( env === Constants.env.dev ) {
+    if ( env === constants.env.dev ) {
       console.error('Csv pipeline failed', err);
     }
   }
