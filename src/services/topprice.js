@@ -1,6 +1,6 @@
 const { successMessage } = require('../utils');
 const productService = require('./crud/product');
-const { helper2: mostExpensiveFruit, validator } = require('./helpers/index');
+const { helper2: mostExpensiveFruit } = require('./helpers/index');
 
 async function getTopprice() {
   return successMessage(mostExpensiveFruit(await productService
@@ -8,9 +8,6 @@ async function getTopprice() {
 }
 
 function postTopprice(serverGoodsArray) {
-  if (!validator(serverGoodsArray)) {
-    throw new Error('Not Acceptable');
-  }
   return successMessage(mostExpensiveFruit(serverGoodsArray));
 }
 

@@ -1,6 +1,7 @@
 const { badRequest } = require('../../statusCode');
 const { successMessage } = require('../../utils');
 const orderService = require('../../services/crud/order');
+const order = require('../../services/order');
 
 async function getAllOrders(req, res) {
   try {
@@ -55,10 +56,21 @@ async function deleteOrderIfExists(req, res) {
   }
 }
 
+async function countDeliveryPrice(req, res) {
+  try {
+    const orderPrice = await order.countDeliveryPrice(req.body);
+    const { message, code } = successMessage(orderPrice);
+    res.status(code).send({ deliveryCost: message });
+  } catch (err) {
+    res.status(badRequest).send({error: err.message});
+  }
+}
+
 module.exports = {
   getAllOrders,
   getOrderById,
   createOrder,
   updateOrder,
-  deleteOrderIfExists
+  deleteOrderIfExists,
+  countDeliveryPrice
 };

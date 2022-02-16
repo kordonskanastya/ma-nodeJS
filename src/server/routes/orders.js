@@ -27,5 +27,10 @@ orders.delete(
   joiValidator(schemas.idSchema, 'params'),
   controllers.deleteOrderIfExists
 );
+orders.post(
+  '/price',
+  joiValidator(schemas.orderPriceSchema, 'body'),
+  controllers.countDeliveryPrice
+);
 
 module.exports = orders;

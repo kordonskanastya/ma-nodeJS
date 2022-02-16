@@ -6,7 +6,7 @@ const productArraySchema = require('./productArraySchema');
 
 module.exports = {
   idSchema,
-  orderSchema,
+  ...orderSchema,
   productSchema,
   ...authSchema,
   productArraySchema
