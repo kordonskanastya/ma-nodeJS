@@ -1,8 +1,8 @@
-const { successMessage } = require('../utils');
 const { unauthorized } = require('../statusCode');
-const { env } = require('../config');
-const { hashPassword, constants } = require('../utils');
+const logger = require('../utils/logger');
+const { hashPassword } = require('../utils');
 const {
+  successMessage,
   generateAccessToken,
   generateRefreshToken
  } = require('../utils');
@@ -29,10 +29,8 @@ async function authenticateUser (body) {
     const accessToken = generateAccessToken(email);
     const refreshToken = generateRefreshToken(email);
     await putRefreshToken(email, refreshToken);
-    if ( env === constants.env.dev) {
-      console.log(`Access Token: ${accessToken}`);
-      console.log(`Refresh Token: ${refreshToken}`);
-    }
+    logger.info(`Access Token: ${accessToken}`);
+    logger.info(`Refresh Token: ${refreshToken}`);
   return accessToken;
 }
 

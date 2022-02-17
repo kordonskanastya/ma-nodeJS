@@ -1,7 +1,6 @@
 const { getOrderById } = require('./crud/order');
 const { deliveryPriceNP, getCityCode } = require('../lib/novaPoshta/axios');
-const { env } = require('../config');
-const constants = require('../utils/constants');
+const logger = require('../utils/logger');
 
 async function countDeliveryPrice (data) {
   try {
@@ -15,12 +14,11 @@ async function countDeliveryPrice (data) {
     }
 
     const orderData = await getOrderById(data.orderId);
-    if (!orderData) {
+    if (!orderData || !orderData.id) {
       throw new Error(`There is no such order: ${data.orderId}`);
     }
-    const orderWeight = orderData.quantity
-      * orderData.product.dataValues.measurevalue;
-    const orderPrice = orderData.quantity
+    const orderWeight = orderData.quantity;
+    const orderPrice = orderWeight
       * orderData.product.dataValues.pricevalue.slice(1);
 
     const {data: {data: deliveryCost}} = await deliveryPriceNP({
@@ -30,9 +28,7 @@ async function countDeliveryPrice (data) {
       cityReceiver });
     return deliveryCost[0].Cost;
   } catch (err) {
-    if ( env === constants.env.dev ) {
-      console.error(err.message || err);
-    }
+    logger.error(err);
     throw err;
   }
 };

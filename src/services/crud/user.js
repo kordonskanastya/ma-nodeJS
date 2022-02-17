@@ -1,6 +1,5 @@
 const { User } = require('../../db');
-const { env } = require('../../config');
-const constants = require('../../utils');
+const logger = require('../../utils/logger');
 
 const emptyArray = [];
 
@@ -13,13 +12,12 @@ const getUserByEmail = async (email) => {
       where: { email }
     });
     if (!res || !res.dataValues) {
+      logger.warn('No user with such email was found');
       return emptyArray;
     }
     return res.dataValues;
   } catch (err) {
-    if ( env === constants.env.dev ) {
-      console.error(err.message || err);
-    }
+    logger.error(err);
     throw err;
   }
 };
@@ -38,9 +36,7 @@ async function putRefreshToken(email, refreshToken) {
       }
       return { result: 'token successfully updated' };
   } catch (err) {
-    if ( env === constants.env.dev ) {
-      console.error(err.message || err);
-    }
+    logger.error(err);
     throw err;
   }
 }
