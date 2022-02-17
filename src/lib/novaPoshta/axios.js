@@ -1,6 +1,11 @@
 const axios = require('axios');
 
-module.exports = (body) => axios ({
+const deliveryPriceNP = ({
+  orderWeight,
+  orderPrice,
+  citySender,
+  cityReceiver
+  }) => axios ({
     method: 'post',
     baseURL: 'https://api.novaposhta.ua',
     url: '/v2.0/json/InternetDocument/getDocumentPrice',
@@ -8,11 +13,11 @@ module.exports = (body) => axios ({
       modelName: 'InternetDocument',
       calledMethod: 'getDocumentPrice',
       methodProperties: {
-        CitySender: body.citySender,
-        CityRecipient: body.cityReceiver,
-        Weight: body.orderWeight,
+        CitySender: citySender[0].Ref,
+        CityRecipient: cityReceiver[0].Ref,
+        Weight: orderWeight,
         ServiceType: 'WarehouseWarehouse',
-        Cost: body.orderPrice,
+        Cost: orderPrice,
         CargoType: 'Cargo',
         SeatsAmount: '1'
       }
@@ -20,4 +25,26 @@ module.exports = (body) => axios ({
     headers: {
       'Content-Type': 'application/json',
     }
-  });
+});
+
+const getCityCode = (city) => axios ({
+  method: 'post',
+  baseURL: 'https://api.novaposhta.ua',
+  url: '/v2.0/json/InternetDocument/getDocumentPrice',
+  data: {
+    modelName: 'Address',
+    calledMethod: 'getCities',
+    methodProperties: {
+        FindByString: city
+    }
+  },
+  headers: {
+    'Content-Type': 'application/json',
+  }
+});
+
+
+module.exports = {
+  deliveryPriceNP,
+  getCityCode
+};
