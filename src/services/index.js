@@ -4,7 +4,7 @@ const topprice = require('./topprice');
 const commonPrice = require('./commonPrice');
 const data = require('./data');
 const login = require('./auth');
-const order = require('./order');
+const delivery = require('./delivery');
 
 module.exports = {
   ...data,
@@ -13,5 +13,5 @@ module.exports = {
   ...commonPrice,
   ...discounts,
   ...login,
-  ...order,
+  ...delivery,
 };

@@ -28,7 +28,7 @@ orders.delete(
   controllers.deleteOrderIfExists
 );
 orders.post(
-  '/price',
+  '/deliveryPrice',
   joiValidator(schemas.orderPriceSchema, 'body'),
   controllers.countDeliveryPrice
 );

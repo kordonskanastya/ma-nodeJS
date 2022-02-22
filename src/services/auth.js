@@ -1,5 +1,3 @@
-const { unauthorized } = require('../statusCode');
-const logger = require('../utils/logger');
 const { hashPassword } = require('../utils');
 const {
   successMessage,
@@ -15,34 +13,32 @@ async function checkUserPassword(body) {
   const {email: emailUser, password: passwordUser} = body;
   const userFromDB = await getUserByEmail(emailUser);
   if (userFromDB.length === 0) {
-    throw new Error('No user was found');
+    throw new Error('Email or password is not correct');
   }
   const hashUserPassword = hashPassword(passwordUser);
   if (hashUserPassword !== userFromDB.password) {
-    throw new Error('Password is not correct');
+    throw new Error('Email or password is not correct');
   }
 }
 
 async function authenticateUser (body) {
-    const { email } = body;
-    await checkUserPassword(body);
-    const accessToken = generateAccessToken(email);
-    const refreshToken = generateRefreshToken(email);
-    await putRefreshToken(email, refreshToken);
-    logger.info(`Access Token: ${accessToken}`);
-    logger.info(`Refresh Token: ${refreshToken}`);
+  const { email } = body;
+  await checkUserPassword(body);
+  const accessToken = generateAccessToken(email);
+  const refreshToken = generateRefreshToken(email);
+  await putRefreshToken(email, refreshToken);
   return accessToken;
 }
 
 async function loginCheck (body) {
   try {
     if (!body.email || !body.password) {
-      throw new Error('field email or password is absent');
+      throw new Error('Email or password is absent');
     }
     const accessToken = await authenticateUser(body);
     return successMessage({ accessToken });
   } catch (err) {
-    return { code: unauthorized, message: err.message };
+    throw new Error(err.message);
   }
 }
 

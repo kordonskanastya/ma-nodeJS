@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const config = require('../../config');
 const statusCode = require('../../statusCode');
 const { accessTokenSecret } = require('../../config');
+const logger = require('../../utils/logger');
 
 const { loginEnv, passwordEnv } = config;
 
@@ -20,7 +21,7 @@ const authorization = (req, res, next) => {
 
   if (type !== typeAuth || login !== loginEnv || password !== passwordEnv) {
     return res.status(statusCode.unauthorized)
-      .send({ error: 'Not Authorized' });
+      .send({ error: 'Unauthorized' });
   }
   return next();
 };
@@ -37,13 +38,13 @@ const authenticateToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(' ')[1];
   if (token === null) {
-    return res.sendStatus(statusCode.unauthorized);
+    return res.status(statusCode.unauthorized).send({error: 'Unauthorized'});
   }
 
   return jwt.verify(token, accessTokenSecret, (err, user) => {
     if (err) {
-      console.log(err.message || err);
-      return res.sendStatus(statusCode.forbidden);
+      logger.error(err.message || err);
+      return res.status(statusCode.unauthorized).send({error: 'Unauthorized'});
     }
     req.user = user;
     return next();

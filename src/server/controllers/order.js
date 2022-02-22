@@ -1,7 +1,7 @@
 const { badRequest } = require('../../statusCode');
 const { successMessage } = require('../../utils');
 const orderService = require('../../services/crud/order');
-const order = require('../../services/order');
+const { countDeliveryPrice: deliveryPrice } = require('../../services');
 
 async function getAllOrders(req, res) {
   try {
@@ -58,7 +58,7 @@ async function deleteOrderIfExists(req, res) {
 
 async function countDeliveryPrice(req, res) {
   try {
-    const orderPrice = await order.countDeliveryPrice(req.body);
+    const orderPrice = await deliveryPrice(req.body);
     const { message, code } = successMessage(orderPrice);
     res.status(code).send({ deliveryCost: message });
   } catch (err) {
