@@ -1,6 +1,5 @@
 const { User, Order, Product} = require('../../db');
-const { env } = require('../../config');
-const constants = require('../../utils');
+const logger = require('../../utils/logger');
 
 const emptyArray = [];
 
@@ -17,13 +16,12 @@ async function getAllOrders() {
       ]
     });
     if (!res[0]) {
+      logger.warn('No orders at All!');
       return emptyArray;
     }
     return res;
   } catch (err) {
-    if ( env === constants.env.dev ) {
-      console.error(err.message || err);
-    }
+    logger.error(err);
     throw err;
   }
 }
@@ -38,13 +36,12 @@ const getOrderById = async (id) => {
       ]
     });
     if (!res || !res.dataValues) {
+      logger.warn('No such order');
       return emptyArray;
     }
     return res.dataValues;
   } catch (err) {
-    if ( env === constants.env.dev ) {
-      console.error(err.message || err);
-    }
+    logger.error(err);
     throw err;
   }
 };
@@ -59,6 +56,7 @@ async function createOrder(obj) {
       }
     });
     if (!product) {
+      logger.warn('There is no such product');
       return emptyArray;
     }
     if (product.dataValues.measurevalue < obj.quantity) {
@@ -75,9 +73,7 @@ async function createOrder(obj) {
     }
     return res;
   } catch (err) {
-    if ( env === constants.env.dev ) {
-      console.error(err.message || err);
-    }
+    logger.error(err);
     throw err;
   }
 }
@@ -106,9 +102,7 @@ async function updateOrder({id, ...obj}) {
       }
       return res[1][0];
   } catch (err) {
-    if ( env === constants.env.dev ) {
-      console.error(err.message || err);
-    }
+    logger.error(err);
     throw err;
   }
 }
@@ -117,21 +111,14 @@ async function deleteOrder(orderId) {
   try {
     // await db.Product.destroy({ where: { id } });
     const res = await Order.update(
-      {
-        deletedAt: Date.now()
-      },
-      {
-        where: { id: orderId}
-      }
-    );
+      { deletedAt: Date.now() },
+      { where: { id: orderId } });
     if (res[0] !== 1) {
       throw new Error('Order is not deleted');
     }
     return { result: 'Order deleted' };
   } catch (err) {
-    if ( env === constants.env.dev ) {
-      console.error(err.message || err);
-    }
+    logger.error(err);
     throw err;
   }
 }

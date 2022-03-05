@@ -6,4 +6,13 @@ const orderSchema = Joi.object({
   userId: Joi.number().min(1).positive().required(),
 });
 
-module.exports = orderSchema;
+const orderPriceSchema = Joi.object({
+  orderId: Joi.number().min(1).positive().required(),
+  citySender: Joi.string().min(3).max(128).required(),
+  cityReceiver: Joi.string().min(3).max(128).required(),
+});
+
+module.exports = {
+  orderSchema,
+  orderPriceSchema
+};

@@ -2,6 +2,7 @@
 const { Transform } = require('stream');
 const chunkToJson = require('./chunkToJson');
 const jsonOptimizer = require('./jsonOptimizer');
+const logger = require('../../../utils/logger');
 
 async function pushOptimizedFormattedJson(headersArray, array){
   const lastLine = array[array.length - 1];
@@ -45,7 +46,7 @@ function createCsvToJson() {
   };
 
   const flush = async (callback) => {
-    console.log('No more data to read!');
+    logger.info('No more data to read!');
     callback(null);
   };
 

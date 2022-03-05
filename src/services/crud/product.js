@@ -1,6 +1,5 @@
 const { Product, Item, Type} = require('../../db');
-const { env } = require('../../config');
-const constants = require('../../utils');
+const logger = require('../../utils/logger');
 
 const emptyArray = [];
 
@@ -17,13 +16,12 @@ async function getAllProducts() {
       ]
     });
     if (!res[0]) {
+      logger.warn('No products at All!');
       return emptyArray;
     }
     return res;
   } catch (err) {
-    if ( env === constants.env.dev ) {
-      console.error(err.message || err);
-    }
+    logger.error(err);
     throw err;
   }
 }
@@ -38,13 +36,12 @@ const getProductById = async (id) => {
       ]
     });
     if (!res || !res.dataValues) {
+      logger.warn('No such product');
       return emptyArray;
     }
     return res.dataValues;
   } catch (err) {
-    if ( env === constants.env.dev ) {
-      console.error(err.message || err);
-    }
+    logger.error(err);
     throw err;
   }
 };
@@ -63,9 +60,7 @@ async function createProduct(obj) {
     }
     return res;
   } catch (err) {
-    if ( env === constants.env.dev ) {
-      console.error(err.message || err);
-    }
+    logger.error(err);
     throw err;
   }
 }
@@ -82,9 +77,7 @@ async function updateProduct({id, ...obj}) {
     }
     return res[1][0];
   } catch (err) {
-    if ( env === constants.env.dev ) {
-      console.error(err.message || err);
-    }
+    logger.error(err);
     throw err;
   }
 }
@@ -93,21 +86,14 @@ async function deleteProduct(id) {
   try {
     // await db.Product.destroy({ where: { id } });
     const res = await Product.update(
-      {
-        deletedAt: Date.now()
-      },
-      {
-        where: { id }
-      }
-    );
+      { deletedAt: Date.now() },
+      { where: { id } });
     if (res[0] !== 1) {
       throw new Error('Product is not deleted');
     }
     return { result: 'Product deleted' };
   } catch (err) {
-    if ( env === constants.env.dev ) {
-      console.error(err.message || err);
-    }
+    logger.error(err);
     throw err;
   }
 }
@@ -126,9 +112,7 @@ async function deleteProduct(id) {
   });
     return res;
   } catch (err) {
-    if ( env === constants.env.dev ) {
-      console.error(err.message || err);
-    }
+    logger.error(err);
     throw err;
   }
 }

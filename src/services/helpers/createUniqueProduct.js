@@ -1,12 +1,8 @@
 /* eslint-disable no-return-await */
 const productService = require('../crud/product');
 const db = require('../../db');
-const { validator } = require('./index');
 
 async function dataOptimizerDB (obj) {
-  if (!validator([obj])) {
-    throw new Error('Not Acceptable');
-  }
   const [{ id: itemId }] = await db.Item
       .findOrCreate({
         attributes: ['id'],
